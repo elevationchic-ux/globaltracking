@@ -6,6 +6,7 @@ import { I18nProvider } from './i18n/I18nContext.jsx'
 import HomePage from './pages/HomePage.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
 import CookieConsent from './components/CookieConsent.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { AboutPage, PrivacyPage, TermsPage, LegalNoticePage } from './pages/LegalPages.jsx'
 import { CarrierIndexPage, CarrierLandingPage } from './pages/CarrierPages.jsx'
 import { HelpIndexPage, HelpArticlePage } from './pages/HelpPages.jsx'
@@ -39,9 +40,9 @@ createRoot(document.getElementById('root')).render(
             <Route path="/" element={<HomePage />} />
             <Route path="/track/:number" element={<ResultsPage />} />
             <Route path="/global" element={<GlobalTrackPage />} />
-            <Route path="/pricing" element={<PricingPlans />} />
-            <Route path="/analytics" element={<AnalyticsDashboard />} />
-            <Route path="/trust" element={<TrustSignals />} />
+            <Route path="/pricing" element={<ErrorBoundary section="Pricing"><PricingPlans /></ErrorBoundary>} />
+            <Route path="/analytics" element={<ErrorBoundary section="Analytics"><AnalyticsDashboard /></ErrorBoundary>} />
+            <Route path="/trust" element={<ErrorBoundary section="Trust"><TrustSignals /></ErrorBoundary>} />
             {/* SEO: carrier landing pages (EN + FR paths) */}
             <Route path="/carriers" element={<CarrierIndexPage />} />
             <Route path="/tracking/:slug" element={<CarrierLandingPage />} />

@@ -4,7 +4,7 @@ import { fetchTracking } from '../api.js'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { detectCarrier, CARRIERS } from '../utils/carrierDetection.js'
 import { setMeta, useJsonLd, SITE_ORIGIN } from '../utils/seo.js'
-import { claimUrlFor } from '../utils/carrierHelp.js'
+import { claimUrlFor, trackingUrlFor } from '../utils/carrierHelp.js'
 import { Disclaimer, ReportButton } from '../components/TrustWidgets.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
 import Timeline from '../components/Timeline.jsx'
@@ -15,6 +15,7 @@ const OVERRIDE_KEY = 'globaltrack:carrier-override'
 
 function loadOverrides() {
   try {
+    if (typeof window === 'undefined') return {};
     return JSON.parse(localStorage.getItem(OVERRIDE_KEY)) || {}
   } catch {
     return {}
@@ -194,14 +195,27 @@ export default function ResultsPage() {
           </section>
 
           {/* Escalation: point to the official carrier resolution channel */}
-          <a
-            className="official-help-link"
-            href={claimUrlFor(effectiveCarrier?.name ?? state.data.carrier?.name)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('results.officialHelp')} →
-          </a>
+          <div className="results-actions">
+            <a
+              className="official-help-link"
+              href={claimUrlFor(effectiveCarrier?.name ?? state.data.carrier?.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t('results.officialHelp')} →
+            </a>
+            <a
+              className="official-help-link verify-link"
+              href={trackingUrlFor(
+                effectiveCarrier?.name ?? state.data.carrier?.name,
+                number,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t('carrier.verify')} →
+            </a>
+          </div>
         </>
       )}
 

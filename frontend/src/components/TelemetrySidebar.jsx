@@ -24,7 +24,7 @@ import {
 import { useGlobalTrack } from '../context/GlobalTrackContext';
 import { useI18n } from '../i18n/I18nContext';
 import { formatDistance, formatEventTime, formatInVisitorTz, tzLabel } from '../utils/format';
-import { claimUrlFor } from '../utils/carrierHelp';
+import { claimUrlFor, trackingUrlFor } from '../utils/carrierHelp';
 
 const isLiveStatus = (status) => status === 'IN TRANSIT' || status === 'OUT FOR DELIVERY';
 
@@ -33,6 +33,7 @@ const SAVED_KEY = 'globaltrack:saved';
 
 const loadJson = (key, fallback) => {
   try {
+    if (typeof window === 'undefined') return fallback;
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
   } catch {
     return fallback;
@@ -364,6 +365,9 @@ const SidebarBody = () => {
             <p className="text-xs text-gray-400 mb-3 font-mono">
               Amount due: <span className="text-red-300 font-bold">{s.customs.amount}</span>
             </p>
+            <p className="text-[10px] text-amber-400/80 uppercase tracking-widest mb-2 font-bold">
+              {t('demo.label')}
+            </p>
             {customsPaid ? (
               <p className="text-green-400 text-sm font-medium flex items-center">
                 <CheckCircle className="w-4 h-4 mr-1" />
@@ -387,6 +391,16 @@ const SidebarBody = () => {
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>{t('escalation.stuck')}</span>
+            </a>
+            {/* Verify directly on the carrier's official website */}
+            <a
+              href={trackingUrlFor(s.finalCarrier, s.trackingNumber)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 w-full flex items-center justify-center space-x-1.5 py-2 rounded-lg bg-cyan-900/30 hover:bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>{t('carrier.verify')}</span>
             </a>
           </div>
         )}
@@ -431,6 +445,16 @@ const SidebarBody = () => {
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>{t('escalation.stuck')}</span>
+            </a>
+            {/* Verify directly on the carrier's official website */}
+            <a
+              href={trackingUrlFor(s.finalCarrier, s.trackingNumber)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 w-full flex items-center justify-center space-x-1.5 py-2 rounded-lg bg-cyan-900/30 hover:bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>{t('carrier.verify')}</span>
             </a>
           </div>
         )}

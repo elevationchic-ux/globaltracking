@@ -668,3 +668,51 @@
   font-size: 0.75rem;
   font-weight: 700;
 }
+
+/* ── Recent searches (localStorage, private) ─────────────────────────── */
+.recent-searches {
+  margin-top: 1rem;
+  text-align: left;
+}
+.recent-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #64748b;
+  margin: 0 0 0.5rem;
+}
+.recent-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.recent-chip {
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.recent-chip:hover {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: rgba(34, 211, 238, 0.5);
+}
+.recent-chip code {
+  font-size: 0.75rem;
+  color: #22d3ee;
+  font-family: ui-monospace, monospace;
+}
+.recent-clear {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  line-height: 1;
+}
+.recent-clear:hover {
+  color: #ef4444;
+}

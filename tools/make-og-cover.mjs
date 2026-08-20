@@ -7,7 +7,7 @@
  *
  * Usage:
  *   1. Open tools/render-og.html in any browser (or via browser automation)
- *      and click "Export" — it downloads/copies og-cover.b64 next to it.
+ *      and click "Export"  it downloads/copies og-cover.b64 next to it.
  *   2. node tools/make-og-cover.mjs
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -19,7 +19,7 @@ const b64Path = path.join(root, 'tools', 'og-cover.b64');
 const outPath = path.join(root, 'frontend', 'public', 'og-cover.jpg');
 
 if (!existsSync(b64Path)) {
-  console.error('Missing tools/og-cover.b64 — export it from tools/render-og.html first.');
+  console.error('Missing tools/og-cover.b64  export it from tools/render-og.html first.');
   process.exit(1);
 }
 

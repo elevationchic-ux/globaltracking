@@ -1,4 +1,4 @@
-// GlobalTrack service worker — cache-first for static assets, network-first for navigation.
+// GlobalTrack service worker  cache-first for static assets, network-first for navigation.
 const CACHE = 'globaltrack-v1';
 const PRECACHE = [
   '/',
@@ -34,10 +34,10 @@ self.addEventListener('fetch', (event) => {
   // Only handle same-origin requests
   if (url.origin !== location.origin) return;
 
-  // /api/* — always go to network (tracking data must be fresh)
+  // /api/*  always go to network (tracking data must be fresh)
   if (url.pathname.startsWith('/api/') || url.pathname === '/health') return;
 
-  // Navigation (HTML) — network-first with offline fallback
+  // Navigation (HTML)  network-first with offline fallback
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
@@ -51,7 +51,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets (icons, logos, hashed JS/CSS) — cache-first
+  // Static assets (icons, logos, hashed JS/CSS)  cache-first
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;

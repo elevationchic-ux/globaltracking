@@ -1,10 +1,13 @@
 import React, { Suspense, lazy } from 'react';
 import { GlobalTrackProvider, useGlobalTrack } from '../context/GlobalTrackContext';
 import Header from '../components/Header';
-import GlobeMap from '../components/GlobeMap';
-import TelemetrySidebar from '../components/TelemetrySidebar';
+import ErrorBoundary from '../components/ErrorBoundary';
 import './GlobalTrackMobile.css';
 
+// react-globe.gl + three.js is ~1.9 MB  lazy-load so the cockpit shell
+// paints in <1 s on mobile and the globe loads in the background.
+const GlobeMap = lazy(() => import('../components/GlobeMap'));
+const TelemetrySidebar = lazy(() => import('../components/TelemetrySidebar'));
 // Leaflet is heavy (~150 KB): load it only when the user opens the real map,
 // never on initial cockpit paint (protects LCP / Core Web Vitals).
 const LiveMapView = lazy(() => import('../components/LiveMapView'));
@@ -27,14 +30,22 @@ const GlobalTrackPage = () => {
   return (
     <GlobalTrackProvider>
       <div className="relative w-full h-screen bg-gray-900 overflow-hidden">
-        {/* Full-screen globe background */}
+        {/* Full-screen globe background (lazy + error-bounded) */}
         <div className="absolute inset-0">
-          <GlobeMap />
+          <ErrorBoundary section="GlobeMap">
+            <Suspense fallback={<div className="w-full h-full bg-gray-900" />}>
+              <GlobeMap />
+            </Suspense>
+          </ErrorBoundary>
         </div>
 
         {/* Fixed chrome */}
         <Header />
-        <TelemetrySidebar />
+        <ErrorBoundary section="TelemetrySidebar">
+          <Suspense fallback={null}>
+            <TelemetrySidebar />
+          </Suspense>
+        </ErrorBoundary>
 
         {/* Real geospatial map (Leaflet + OSM / Esri), lazy */}
         <RealMapLayer />

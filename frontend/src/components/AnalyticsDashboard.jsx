@@ -1,8 +1,10 @@
 import React from 'react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Package, Clock, AlertTriangle, CheckCircle, Truck, Plane, Ship } from 'lucide-react';
+import { useI18n } from '../i18n/I18nContext';
 
 const AnalyticsDashboard = () => {
+  const { t } = useI18n();
   const shipmentData = [
     { name: 'Jan', delivered: 65, inTransit: 28, delayed: 7 },
     { name: 'Feb', delivered: 59, inTransit: 35, delayed: 6 },
@@ -37,8 +39,13 @@ const AnalyticsDashboard = () => {
     <div className="bg-gray-900 min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Analytics Dashboard</h1>
-          <p className="text-gray-400">Real-time insights into your logistics performance</p>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 border border-amber-500/50 text-amber-300 uppercase tracking-wider">
+              {t('analytics.demo')}
+            </span>
+          </div>
+          <p className="text-gray-400">{t('analytics.demoNote')}</p>
         </div>
 
         {/* Stats Grid */}

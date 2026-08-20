@@ -388,6 +388,7 @@ export const GlobalTrackProvider = ({ children }) => {
   // The choice is persisted so returning visitors keep their theme.
   const [theme, setThemeState] = useState(() => {
     try {
+      if (typeof window === 'undefined') return 'light';
       return localStorage.getItem(THEME_KEY) || 'light';
     } catch {
       return 'light';
@@ -406,6 +407,7 @@ export const GlobalTrackProvider = ({ children }) => {
   // User-defined aliases ("Nike shoes  birthday") persisted locally.
   const [aliases, setAliases] = useState(() => {
     try {
+      if (typeof window === 'undefined') return {};
       return JSON.parse(localStorage.getItem(ALIASES_KEY)) || {};
     } catch {
       return {};

@@ -36,7 +36,7 @@ const dictionaries = {
     'features.title': 'Every tracking superpower, in one place',
     'features.autoDetect.title': 'Instant carrier detection',
     'features.autoDetect.text':
-      'AI-grade format recognition identifies the carrier the moment you paste a number — no dropdown, no guessing.',
+      'AI-grade format recognition identifies the carrier the moment you paste a number  no dropdown, no guessing.',
     'features.batch.title': 'Batch tracking',
     'features.batch.text':
       'Paste dozens of tracking numbers at once and follow every parcel from a single queue.',
@@ -45,7 +45,7 @@ const dictionaries = {
       'Every scan point, translated into your language with the exact route your parcel travelled.',
     'features.regions.title': 'Border-aware routing',
     'features.regions.text':
-      'Automatic hand-off between international and domestic carriers — USPS, Canada Post, Royal Mail, DHL, La Poste and more.',
+      'Automatic hand-off between international and domestic carriers  USPS, Canada Post, Royal Mail, DHL, La Poste and more.',
     'features.speed.title': 'Instant results',
     'features.speed.text':
       'Direct carrier lookups deliver the first status in seconds, not minutes.',
@@ -137,6 +137,13 @@ const dictionaries = {
     'clock.title': 'Local time across the world’s logistics hubs',
     'clock.note':
       'Live times computed from each hub’s official time zone  daylight saving included.',
+    'analytics.demo': 'Demo',
+    'analytics.demoNote': 'Sample data for illustration. Connect a real tracking API to see live analytics.',
+    'demo.label': 'Demo mode — no real payment',
+    'carrier.verify': 'Verify on carrier website',
+    'recent.title': 'Recent searches',
+    'recent.clear': 'Clear recent searches',
+    'footer.contact': 'Contact',
   },
   fr: {
     'nav.missionControl': 'Mission Control',
@@ -167,7 +174,7 @@ const dictionaries = {
     'features.title': 'Toute la puissance du suivi, réunie en un seul endroit',
     'features.autoDetect.title': 'Détection instantanée du transporteur',
     'features.autoDetect.text':
-      'Une reconnaissance de format de niveau IA identifie le transporteur dès que vous collez un numéro — sans menu déroulant, sans devinette.',
+      'Une reconnaissance de format de niveau IA identifie le transporteur dès que vous collez un numéro  sans menu déroulant, sans devinette.',
     'features.batch.title': 'Suivi par lot',
     'features.batch.text':
       'Collez des dizaines de numéros de suivi d’un coup et suivez chaque colis depuis une file unique.',
@@ -176,7 +183,7 @@ const dictionaries = {
       'Chaque point de scan, traduit dans votre langue, avec l’itinéraire exact parcouru par votre colis.',
     'features.regions.title': 'Routage intelligent aux frontières',
     'features.regions.text':
-      'Relais automatique entre transporteurs internationaux et nationaux — USPS, Postes Canada, Royal Mail, DHL, La Poste et plus.',
+      'Relais automatique entre transporteurs internationaux et nationaux  USPS, Postes Canada, Royal Mail, DHL, La Poste et plus.',
     'features.speed.title': 'Résultats instantanés',
     'features.speed.text':
       'La consultation directe des transporteurs affiche le premier statut en quelques secondes.',
@@ -268,6 +275,13 @@ const dictionaries = {
     'clock.title': 'Heure locale dans les grands hubs logistiques mondiaux',
     'clock.note':
       'Heures en direct calculées depuis le fuseau horaire officiel de chaque hub  heure d’été incluse.',
+    'analytics.demo': 'Démo',
+    'analytics.demoNote': 'Données d’exemple. Connectez une API de suivi réelle pour voir les analytiques en direct.',
+    'demo.label': 'Mode démo — aucun paiement réel',
+    'carrier.verify': 'Vérifier sur le site du transporteur',
+    'recent.title': 'Recherches récentes',
+    'recent.clear': 'Effacer les recherches récentes',
+    'footer.contact': 'Contact',
   },
   es: {
     'nav.missionControl': 'Control de misión',
@@ -298,7 +312,7 @@ const dictionaries = {
     'features.title': 'Todo el poder del seguimiento, en un solo lugar',
     'features.autoDetect.title': 'Detección instantánea del transportista',
     'features.autoDetect.text':
-      'El reconocimiento de formato identifica el transportista en cuanto pegas un número — sin menús ni conjeturas.',
+      'El reconocimiento de formato identifica el transportista en cuanto pegas un número  sin menús ni conjeturas.',
     'features.batch.title': 'Seguimiento por lotes',
     'features.batch.text':
       'Pega decenas de números de seguimiento a la vez y controla cada paquete desde una sola cola.',
@@ -307,7 +321,7 @@ const dictionaries = {
       'Cada punto de escaneo, traducido a tu idioma, con la ruta exacta que recorrió tu paquete.',
     'features.regions.title': 'Enrutamiento inteligente en fronteras',
     'features.regions.text':
-      'Transferencia automática entre transportistas internacionales y locales — USPS, Canada Post, Royal Mail, DHL, La Poste y más.',
+      'Transferencia automática entre transportistas internacionales y locales  USPS, Canada Post, Royal Mail, DHL, La Poste y más.',
     'features.speed.title': 'Resultados instantáneos',
     'features.speed.text':
       'La consulta directa al transportista entrega el primer estado en segundos, no minutos.',
@@ -399,6 +413,13 @@ const dictionaries = {
     'clock.title': 'Hora local en los grandes hubs logísticos del mundo',
     'clock.note':
       'Horas en vivo calculadas con el huso horario oficial de cada hub  horario de verano incluido.',
+    'analytics.demo': 'Demo',
+    'analytics.demoNote': 'Datos de ejemplo. Conecta una API de seguimiento real para ver analíticas en vivo.',
+    'demo.label': 'Modo demo — ningún pago real',
+    'carrier.verify': 'Verificar en el sitio del transportista',
+    'recent.title': 'Búsquedas recientes',
+    'recent.clear': 'Borrar búsquedas recientes',
+    'footer.contact': 'Contacto',
   },
   de: {
     'nav.missionControl': 'Mission Control',
@@ -429,7 +450,7 @@ const dictionaries = {
     'features.title': 'Die ganze Power des Trackings, an einem Ort',
     'features.autoDetect.title': 'Sofortige Carrier-Erkennung',
     'features.autoDetect.text':
-      'Die Formaterkennung identifiziert den Carrier, sobald du eine Nummer einfügst — kein Dropdown, kein Raten.',
+      'Die Formaterkennung identifiziert den Carrier, sobald du eine Nummer einfügst  kein Dropdown, kein Raten.',
     'features.batch.title': 'Sammel-Tracking',
     'features.batch.text':
       'Füge Dutzende Sendungsnummern auf einmal ein und verfolge jedes Paket in einer einzigen Warteschlange.',
@@ -438,7 +459,7 @@ const dictionaries = {
       'Jeder Scan-Punkt in deiner Sprache, mit der exakten Route deines Pakets.',
     'features.regions.title': 'Grenzintelligentes Routing',
     'features.regions.text':
-      'Automatische Übergabe zwischen internationalen und lokalen Carriern — USPS, Canada Post, Royal Mail, DHL, La Poste u. v. m.',
+      'Automatische Übergabe zwischen internationalen und lokalen Carriern  USPS, Canada Post, Royal Mail, DHL, La Poste u. v. m.',
     'features.speed.title': 'Sofortige Ergebnisse',
     'features.speed.text':
       'Direkte Carrier-Abfragen liefern den ersten Status in Sekunden, nicht Minuten.',
@@ -530,6 +551,13 @@ const dictionaries = {
     'clock.title': 'Ortszeit in den großen Logistik-Hubs der Welt',
     'clock.note':
       'Live-Zeiten aus der offiziellen Zeitzone jedes Hubs berechnet  Sommerzeit inbegriffen.',
+    'analytics.demo': 'Demo',
+    'analytics.demoNote': 'Beispieldaten zur Veranschaulichung. Verbinde eine echte Tracking-API für Live-Analysen.',
+    'demo.label': 'Demo-Modus — keine echte Zahlung',
+    'carrier.verify': 'Auf der Carrier-Website überprüfen',
+    'recent.title': 'Letzte Suchen',
+    'recent.clear': 'Letzte Suchen löschen',
+    'footer.contact': 'Kontakt',
   },
 }
 

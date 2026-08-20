@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Package, Truck, Plane, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { useGlobalTrack } from '../context/GlobalTrackContext';
+import { useI18n } from '../i18n/I18nContext';
 
 const Header = () => {
   const { theme, setTheme, shipments, selectShipment } = useGlobalTrack();
+  const { t } = useI18n();
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchSubmit = (e) => {
@@ -55,7 +57,7 @@ const Header = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Entrez un code de suivi..."
+                placeholder={t('hero.placeholder')}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={handleSearchSubmit}

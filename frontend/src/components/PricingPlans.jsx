@@ -1,7 +1,9 @@
 import React from 'react';
 import { Check, X, Star, Zap, Globe, Lock, Headphones, BarChart, Zap as ZapIcon } from 'lucide-react';
+import { useI18n } from '../i18n/I18nContext';
 
 const PricingPlans = () => {
+  const { t } = useI18n();
   const plans = [
     {
       name: 'Basic',
@@ -141,6 +143,15 @@ const PricingPlans = () => {
                     ? 'bg-white text-indigo-600 hover:bg-gray-100'
                     : 'bg-indigo-600 text-white hover:bg-indigo-700'
                 }`}
+                onClick={() => {
+                  if (plan.name === 'Enterprise') {
+                    window.location.href = 'mailto:support@globaltracking.vercel.app?subject=Enterprise%20Plan%20Inquiry';
+                  } else if (plan.name === 'Premium') {
+                    window.location.href = '/help?topic=premium';
+                  } else {
+                    window.location.href = '/';
+                  }
+                }}
               >
                 {plan.cta}
               </button>

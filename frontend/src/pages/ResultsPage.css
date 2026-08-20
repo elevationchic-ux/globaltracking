@@ -206,3 +206,20 @@
 .official-help-link:hover {
   background: var(--surface);
 }
+
+/* ── Action buttons row (carrier support + verify) ───────────────────── */
+.results-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.verify-link {
+  border-color: rgba(34, 211, 238, 0.4);
+  color: #22d3ee;
+}
+
+.verify-link:hover {
+  background: rgba(34, 211, 238, 0.08);
+}

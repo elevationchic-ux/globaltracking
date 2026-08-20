@@ -51,10 +51,29 @@ const TRUST_CARRIERS = [
   { name: 'GLS', logo: '/logos/gls.png' },
 ]
 
+const RECENT_KEY = 'globaltrack:recent'
+
+function loadRecent() {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_KEY)) || []
+  } catch {
+    return []
+  }
+}
+
+function saveRecent(number) {
+  try {
+    const list = loadRecent().filter((n) => n !== number)
+    list.unshift(number)
+    localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 8)))
+  } catch { /* ignore */ }
+}
+
 export default function HomePage() {
   const { t } = useI18n()
   const [input, setInput] = useState('')
   const navigate = useNavigate()
+  const [recent, setRecent] = useState(loadRecent)
 
   const numbers = useMemo(() => parseTrackingNumbers(input), [input])
   const primary = numbers[0] ?? ''
@@ -77,7 +96,11 @@ export default function HomePage() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    if (primary) navigate(`/track/${encodeURIComponent(normalizeTrackingNumber(primary))}`)
+    if (primary) {
+      saveRecent(normalizeTrackingNumber(primary))
+      setRecent(loadRecent())
+      navigate(`/track/${encodeURIComponent(normalizeTrackingNumber(primary))}`)
+    }
   }
 
   // CSV import (bulk): first column of each row is treated
@@ -143,6 +166,38 @@ export default function HomePage() {
               onChange={handleCsvImport}
             />
           </p>
+
+          {/* Recent searches (local, private) */}
+          {recent.length > 0 && (
+            <div className="recent-searches">
+              <p className="recent-title">{t('recent.title')}</p>
+              <div className="recent-chips">
+                {recent.map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    className="recent-chip"
+                    onClick={() => {
+                      navigate(`/track/${encodeURIComponent(num)}`)
+                    }}
+                  >
+                    <code>{num}</code>
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className="recent-clear"
+                  onClick={() => {
+                    try { localStorage.removeItem(RECENT_KEY) } catch {}
+                    setRecent([])
+                  }}
+                  aria-label={t('recent.clear')}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Live carrier detection readout */}
           <div className="detect-readout" aria-live="polite">
@@ -294,6 +349,7 @@ export default function HomePage() {
           <Link to="/trust">Trust</Link>
           <Link to="/carriers">{t('footer.carriers')}</Link>
           <Link to="/help">{t('footer.help')}</Link>
+          <Link to="/help/contact">{t('footer.contact')}</Link>
         </nav>
         <nav className="footer-links" aria-label="Legal">
           <Link to="/about">{t('footer.about')}</Link>
