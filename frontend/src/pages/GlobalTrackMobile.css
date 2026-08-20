@@ -6,28 +6,76 @@
  */
 
 @media (max-width: 768px) {
-  /* Sidebar → bottom sheet (globe visible above it) */
+  /* ── Header: single compact row ────────────────────────────────────── */
+  /* The theme row is now hidden via Tailwind hidden md:flex in Header.jsx */
+
+  /* ── Sidebar → bottom sheet (globe visible above it) ───────────────── */
   .telemetry-sidebar {
     top: auto !important;
     left: 0 !important;
     right: 0 !important;
     bottom: 0;
     width: 100% !important;
-    max-height: 62vh;
+    max-height: 55vh;
     border-left: none !important;
     border-top: 1px solid rgb(31 41 55);
     border-radius: 14px 14px 0 0;
     z-index: 45;
   }
 
+  /* Drag handle for the bottom sheet */
+  .telemetry-sidebar::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(148, 163, 184, 0.4);
+    margin: 8px auto 0;
+  }
+
   /* The desktop pt-36 (header clearance) is useless in a bottom sheet */
   .telemetry-sidebar > div {
-    padding-top: 1rem !important;
+    padding-top: 0.5rem !important;
     padding-bottom: 2rem;
   }
 
-  /* Compact header: wrap the search under the logo row */
   .telemetry-sidebar::-webkit-scrollbar {
     width: 4px;
+  }
+
+  /* ── Globe overlays: hide on mobile (they duplicate the sidebar) ──── */
+  .globe-route-overlay,
+  .globe-legend {
+    display: none !important;
+  }
+
+  /* ── Sidebar sections: tighter spacing on mobile ────────────────────── */
+  .telemetry-sidebar .space-y-6 {
+    gap: 0.75rem !important;
+  }
+  .telemetry-sidebar .p-4 {
+    padding: 0.75rem !important;
+  }
+  .telemetry-sidebar .p-6 {
+    padding: 0.75rem !important;
+  }
+  .telemetry-sidebar .mb-4 {
+    margin-bottom: 0.5rem !important;
+  }
+  .telemetry-sidebar .text-lg {
+    font-size: 0.95rem !important;
+  }
+  /* Hide simulation controls on mobile (niche feature, saves space) */
+  .telemetry-sidebar button:has(> svg.lucide-play),
+  .telemetry-sidebar button:has(> svg.lucide-pause) {
+    display: none !important;
+  }
+}
+
+/* ── Extra-small phones: even more aggressive compaction ─────────────── */
+@media (max-width: 400px) {
+  .telemetry-sidebar {
+    max-height: 50vh;
   }
 }

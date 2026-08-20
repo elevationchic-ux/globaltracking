@@ -38,30 +38,30 @@ const Header = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
-      <div className="max-w-full mx-auto px-4 py-3">
+      <div className="max-w-full mx-auto px-3 py-2 md:px-4 md:py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 md:space-x-3">
             <div className="flex items-center space-x-2">
-              <GlobeIcon className="w-8 h-8 text-cyan-400" />
+              <GlobeIcon className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
               <div>
-                <h1 className="text-xl font-bold text-white tracking-wider">GLOBALTRACK</h1>
-                <p className="text-xs text-cyan-400 tracking-widest">REAL-TIME WORLDWIDE TRACKING · FREE</p>
+                <h1 className="text-sm md:text-xl font-bold text-white tracking-wider">GLOBALTRACK</h1>
+                <p className="hidden md:block text-xs text-cyan-400 tracking-widest">REAL-TIME WORLDWIDE TRACKING · FREE</p>
               </div>
             </div>
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
+          <div className="flex-1 max-w-md mx-2 md:max-w-2xl md:mx-8">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 w-4 md:w-5 h-4 md:h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder={t('hero.placeholder')}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={handleSearchSubmit}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 text-sm md:text-base text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono"
               />
             </div>
           </div>
@@ -78,8 +78,8 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Theme Selector */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-800">
+        {/* Theme Selector  desktop only */}
+        <div className="hidden md:flex items-center justify-between mt-3 pt-3 border-t border-gray-800">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-400">Map Theme:</span>
             <div className="flex space-x-1">

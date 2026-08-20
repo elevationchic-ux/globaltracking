@@ -307,7 +307,7 @@ const GlobeMap = () => {
 
       {/* Selected shipment overlay (synced with sidebar via context) */}
       {selectedShipment && overlayOpen && (
-        <div className="absolute top-32 left-4 bg-gray-900/90 backdrop-blur-md border border-cyan-500/60 neon-glow rounded-lg p-4 max-w-sm z-50">
+        <div className="globe-route-overlay absolute top-32 left-4 bg-gray-900/90 backdrop-blur-md border border-cyan-500/60 neon-glow rounded-lg p-4 max-w-sm z-50">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-white font-bold neon-text-cyan">Route Details</h3>
             <button
@@ -370,7 +370,7 @@ const GlobeMap = () => {
       )}
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 bg-gray-900/85 backdrop-blur-md border border-gray-700 rounded-lg p-3 z-50">
+      <div className="globe-legend absolute bottom-4 left-4 bg-gray-900/85 backdrop-blur-md border border-gray-700 rounded-lg p-3 z-50">
         <h4 className="text-white text-sm font-bold mb-2 tracking-wider">Route Status</h4>
         <div className="space-y-1 text-xs font-mono">
           <div className="flex items-center space-x-2">
