@@ -461,6 +461,7 @@ export default function HomePage() {
           <Link to="/privacy">{t('footer.privacy')}</Link>
           <Link to="/terms">{t('footer.terms')}</Link>
           <Link to="/legal">{t('footer.legalNotice')}</Link>
+          <Link to="/manifest">{t('manifest.documentTitle')}</Link>
         </nav>
         <p className="footer-legal">{t('footer.legal')}</p>
       </footer>

@@ -21,6 +21,7 @@ export default function SiteFooter() {
         <Link to="/privacy">{t('footer.privacy')}</Link>
         <Link to="/terms">{t('footer.terms')}</Link>
         <Link to="/legal">{t('footer.legalNotice')}</Link>
+        <Link to="/manifest">{t('manifest.documentTitle')}</Link>
       </nav>
       <p className="footer-fineprint">{t('footer.legal')}</p>
     </footer>
