@@ -40,7 +40,37 @@ const TOPICS = [
       ],
       tips: [
         'Gardez la confirmation de commande / facture  la douane la demande souvent.',
-        'Ne payez jamais de « frais de douane » via un lien reçu par SMS d’un expéditeur inconnu : payez uniquement sur le site officiel du transporteur.',
+        'Ne payez jamais de « frais de douane » via un lien reçu par SMS d\'un expéditeur inconnu : payez uniquement sur le site officiel du transporteur.',
+      ],
+    },
+    es: {
+      title: '¿Qué significa "Customs Clearance" (despacho de aduanas)?',
+      short: 'Tu paquete está siendo inspeccionado o gravado en la frontera.',
+      meta: 'Tu paquete muestra "Customs Clearance" o "retention en aduanas"? Qué significa, cuánto tarda y cuándo debes pagar aranceles.',
+      paragraphs: [
+        'Todo paquete que cruza una frontera internacional pasa por la aduana del país de destino. El estado "Customs Clearance" significa que tu paquete llegó a una instalación aduanera (JFK en Nueva York, CDG en París…) y está esperando ser liberado.',
+        'La mayoría de los paquetes se despachan en pocas horas a 2 días sin acción necesaria. Los escaneos como "Import clearance started" son pasos normales.',
+        'Si el estado cambia a "Held in customs" o menciona una tarifa, se deben aranceles de importación o IVA. El transportista muestra el monto y permite pagar en línea; una vez pagado, el paquete se libera generalmente en 24 horas.',
+        'Si la retención dura más de 5 días, contacta al transportista con tu número de seguimiento: puede faltar una factura o un artículo requerir documentos del vendedor.',
+      ],
+      tips: [
+        'Guarda la confirmación del pedido / factura, la aduana spesso la solicita.',
+        'Nunca pagues "gastos de aduana" a través de enlaces recibidos por SMS de remitentes desconocidos.',
+      ],
+    },
+    de: {
+      title: 'Was bedeutet "Customs Clearance" (Zollabfertigung)?',
+      short: 'Ihr Paket wird an der Grenze inspiziert oder besteuert.',
+      meta: 'Ihr Paket zeigt "Customs Clearance" oder "Im Zoll festgehalten"? Was es bedeutet, wie lange es dauert und wann Sie Einfuhrabgaben zahlen müssen.',
+      paragraphs: [
+        'Jedes Paket, das eine internationale Grenze überquert, durchläuft den Zoll des Ziellandes. Der Status "Customs Clearance" bedeutet, dass Ihr Paket in einer Zolleinrichtung eingetroffen ist und auf Freigabe wartet.',
+        'Die meisten Pakete werden innerhalb weniger Stunden bis 2 Tage ohne Aktion abgefertigt. Scans wie "Import clearance started" sind normale Zwischenschritte.',
+        'Wenn der Status zu "Held in customs" wird oder eine Gebühr erwähnt, sind Einfuhrzölle oder MwSt. fällig. Der Spediteur zeigt den Betrag an und ermöglicht Online-Zahlung – nach Zahlung wird das Paket normalerweise innerhalb von 24 Stunden freigegeben.',
+        'Wenn die Festhaltung länger als 5 Tage dauert, kontaktieren Sie den Spediteur mit Ihrer Sendungsnummer.',
+      ],
+      tips: [
+        'Bewahren Sie die Bestellbestätigung / Rechnung auf – der Zoll fordert sie oft an.',
+        'Zahlen Sie niemals "Zollgebühren" über per SMS erhaltene Links von unbekannten Absendern.',
       ],
     },
   },
@@ -72,8 +102,38 @@ const TOPICS = [
         'Dans la plupart des cas, le transporteur retente automatiquement sous 1 à 3 jours ouvrés. Si l’incident n’a pas de détail après 48 h, contactez le transporteur avec votre numéro de suivi.',
       ],
       tips: [
-        'Vérifiez l’adresse fournie au vendeur  les fautes de frappe sont la cause n°1.',
+        'Vérifiez l\'adresse fournie au vendeur  les fautes de frappe sont la cause n°1.',
         'Un incident après « Out for delivery » signifie en général une nouvelle tentative le jour ouvré suivant.',
+      ],
+    },
+    es: {
+      title: '¿Qué significa "Delivery Exception" (incidencia de entrega)?',
+      short: 'Algo interrumpió la entrega, generalmente es solucionable.',
+      meta: 'Tu seguimiento muestra una excepción de entrega? Qué significa, las causas más frecuentes y cómo reaccionar.',
+      paragraphs: [
+        'Una "Delivery Exception" significa que el flujo normal de entrega se interrumpió. No significa que tu paquete esté perdido, el transportista necesita información o tiempo para continuar.',
+        'Las causas más comunes: dirección incompleta o incorrecta, intento de entrega fallido, retención en aduana, interrupción climática o etiqueta dañada.',
+        'Consulta el detalle de la excepción en tu página de seguimiento: GlobalTrack muestra la razón y ofrece acciones como reprogramar o corregir la dirección.',
+        'En la mayoría de los casos, el transportista reintenta automáticamente en 1-3 días hábiles. Si la excepción no tiene detalle después de 48 horas, contacta al transportista.',
+      ],
+      tips: [
+        'Verifica la dirección proporcionada al vendedor, los errores tipográficos son la causa n°1.',
+        'Una incidencia después de "Out for delivery" generalmente significa un nuevo intento al día hábil siguiente.',
+      ],
+    },
+    de: {
+      title: 'Was bedeutet "Delivery Exception" (Lieferausnahme)?',
+      short: 'Etwas hat die Lieferung unterbrochen – es ist normalerweise behebbar.',
+      meta: 'Ihr Tracking zeigt eine Lieferausnahme? Was der Status bedeutet, die häufigsten Ursachen und wie Sie reagieren.',
+      paragraphs: [
+        'Eine "Delivery Exception" bedeutet, dass der normale Lieferfluss unterbrochen wurde. Es bedeutet nicht, dass Ihr Paket verloren ist – der Spediteur benötigt Informationen oder Zeit.',
+        'Die häufigsten Ursachen: unvollständige oder falsche Adresse, fehlgeschlagener Zustellversuch, Zollfesthaltung, Wetterstörung oder beschädigtes Etikett.',
+        'Überprüfen Sie die Ausnahmedetails auf Ihrer Tracking-Seite: GlobalTrack zeigt den Grund und bietet Aktionen wie Umbuchung oder Adresskorrektur.',
+        'In den meisten Fällen unternimmt der Spediteur automatisch innerhalb von 1-3 Werktagen einen neuen Versuch.',
+      ],
+      tips: [
+        'Überprüfen Sie die dem Verkäufer angegebene Adresse – Tippfehler sind Ursache Nr. 1.',
+        'Eine Ausnahme nach "Out for delivery" bedeutet normalerweise einen neuen Versuch am nächsten Werktag.',
       ],
     },
   },
@@ -106,7 +166,37 @@ const TOPICS = [
       ],
       tips: [
         'Gardez votre téléphone à portée  les livreurs appellent ou envoient un SMS à la porte.',
-        'Consultez la carte de tentative de livraison pour l’adresse du point relais et le code PIN le cas échéant.',
+        'Consultez la carte de tentative de livraison pour l\'adresse du point relais et le code PIN le cas échéant.',
+      ],
+    },
+    es: {
+      title: '¿Qué significa "Out for Delivery" (en reparto)?',
+      short: 'Tu paquete está en la furgoneta del repartidor, esperalo hoy.',
+      meta: 'Tu paquete está en reparto: qué significa el estado, horarios habituales y qué pasa si no estás en casa.',
+      paragraphs: [
+        '"Out for delivery" significa que tu paquete salió del depósito local esta mañana y está cargado en el vehículo de un repartidor. La entrega ocurre el mismo día, generalmente entre las 8:00 y las 20:00.',
+        'En redes compatibles (DPD Predict, UPS MyChoice, PostNL…), la página de seguimiento precisa la ventana a una hora.',
+        'Si no estás en casa, el repartidor deja el paquete en un lugar seguro, con un vecino o lo lleva a un punto de recogida.',
+        'Si el estado permanece "Out for delivery" pasada la noche, la ruta se extendió: espera un nuevo intento al día hábil siguiente.',
+      ],
+      tips: [
+        'Mantén tu teléfono cerca, los repartidores suelen llamar o enviar SMS.',
+        'Consulta la tarjeta de intento de entrega para la dirección del punto de recogida.',
+      ],
+    },
+    de: {
+      title: 'Was bedeutet "Out for Delivery" (in Zustellung)?',
+      short: 'Ihr Paket ist im Lieferfahrzeug – erwarten Sie es heute.',
+      meta: 'Ihr Paket ist in Zustellung: was der Status bedeutet, übliche Lieferzeiten und was passiert wenn Sie nicht zu Hause sind.',
+      paragraphs: [
+        '"Out for delivery" bedeutet, dass Ihr Paket das lokale Depot verlassen hat und im Fahrzeug eines Zustellers geladen ist. Die Zustellung erfolgt am selben Tag, normalerweise zwischen 8:00 und 20:00 Uhr.',
+        'Bei unterstützten Netzwerken (DPD Predict, UPS MyChoice, PostNL…) wird das Zeitfenster auf eine Stunde präzisiert.',
+        'Wenn Sie nicht zu Hause sind, hinterlässt der Zusteller das Paket an einem sicheren Ort, bei einem Nachbarn oder bringt es zu einem Abholpunkt.',
+        'Wenn der Status "Out for delivery" abends unverändert bleibt, wurde die Route verlängert: neuer Versuch am nächsten Werktag.',
+      ],
+      tips: [
+        'Halten Sie Ihr Telefon bereit – Zusteller rufen oft an oder senden SMS.',
+        'Überprüfen Sie die Zustellkarte für die Abholpunkt-Adresse.',
       ],
     },
   },
@@ -138,8 +228,38 @@ const TOPICS = [
         'Ne vous inquiétez que si le statut ne change pas pendant plus de 7 jours (international) ou 3 jours (domestique)  contactez alors le transporteur.',
       ],
       tips: [
-        'L’ETA affichée sur votre page de suivi intègre déjà le délai habituel de relais frontière.',
+        'L\'ETA affichée sur votre page de suivi intègre déjà le délai habituel de relais frontière.',
         'Le fret aérien peut être dérouté pour cause de météo  un jour de silence est fréquent.',
+      ],
+    },
+    es: {
+      title: '¿Qué significa "In Transit" (en tránsito)?',
+      short: 'Tu paquete se mueve entre centros hacia ti.',
+      meta: 'Tu seguimiento muestra "In Transit" sin nuevo escaneo? Qué significa, por qué se pausan los escaneos y cuándo preocuparse.',
+      paragraphs: [
+        '"In Transit" significa que el transportista tiene tu paquete y circula por la red, en camión entre depósitos o en avión entre países.',
+        'Los escaneos no son continuos: entre dos centros (ej. Shanghái → París CDG), un paquete puede viajar 24-72 horas sin nuevo escaneo. Esto es normal.',
+        'Los paquetes internacionales también cambian de transportista en la frontera. GlobalTrack sigue el relevo automáticamente.',
+        'Preocúpate solo si el estado no cambia más de 7 días (internacional) o 3 días (nacional) – entonces contacta al transportista.',
+      ],
+      tips: [
+        'La ETA en tu página de seguimiento ya incluye el retraso habitual de relevo fronterizo.',
+        'El carga aérea puede desviarse por clima – un día de silencio es común.',
+      ],
+    },
+    de: {
+      title: 'Was bedeutet "In Transit" (in Transit)?',
+      short: 'Ihr Paket bewegt sich zwischen Hubs zu Ihnen.',
+      meta: 'Ihr Tracking zeigt "In Transit" ohne neuen Scan? Was der Status bedeutet, warum Scans pausieren und wann Sie sich Sorgen machen sollten.',
+      paragraphs: [
+        '"In Transit" bedeutet, dass der Spediteur Ihr Paket hat und es sich durch das Netzwerk bewegt – per LKW zwischen Depots oder per Flugzeug zwischen Ländern.',
+        'Scans sind nicht kontinuierlich: zwischen zwei Hubs (z.B. Shanghai → Paris CDG) kann ein Paket 24-72 Stunden ohne neuen Scan reisen. Das ist normal.',
+        'Internationale Pakete wechseln auch an der Grenze den Spediteur. GlobalTrack verfolgt den Wechsel automatisch.',
+        'Sorgen Sie sich nur, wenn sich der Status länger als 7 Tage (international) oder 3 Tage (national) nicht ändert.',
+      ],
+      tips: [
+        'Die ETA auf Ihrer Tracking-Seite berücksichtigt bereits die übliche Grenzübergabe-Verzögerung.',
+        'Luftfracht kann wetterbedingt umgeleitet werden – ein Tag Stille ist häufig.',
       ],
     },
   },
@@ -171,8 +291,38 @@ const TOPICS = [
         'Note : certaines marketplaces génèrent des étiquettes en masse ; le vrai trajet commence au premier scan « Picked up » ou hub.',
       ],
       tips: [
-        'Un statut « étiquette seule » pendant des jours est le signal n°1 d’arnaque dropshipping.',
-        'Faites une capture de l’historique avant d’ouvrir un litige avec le vendeur ou la plateforme.',
+        'Un statut « étiquette seule » pendant des jours est le signal n°1 d\'arnaque dropshipping.',
+        'Faites une capture de l\'historique avant d\'ouvrir un litige avec le vendeur ou la plateforme.',
+      ],
+    },
+    es: {
+      title: '¿Qué significa "Shipment information received"?',
+      short: 'La etiqueta se creó pero el transportista aún no tiene el paquete.',
+      meta: 'Tu seguimiento dice "Shipment information received" y nada se mueve? Qué significa y cuándo envió realmente el vendedor.',
+      paragraphs: [
+        '"Shipment information received" (o "Label created") significa que el vendedor generó una etiqueta de envío, pero el transportista aún no ha recibido físicamente el paquete.',
+        'Este es el estado a vigilar cuando sospechas que un vendedor no envió: debería evolucionar a "Picked up" en 1-3 días hábiles.',
+        'Si permanece así por más de 5 días hábiles, contacta al vendedor y usa el botón de "Reportar paquete sospechoso".',
+        'Nota: algunas marketplaces generan etiquetas en masa; el viaje real comienza en el primer escaneo "Picked up" o de hub.',
+      ],
+      tips: [
+        'Un estado de solo etiqueta durante días es la señal n°1 de estafa de dropshipping.',
+        'Haz una captura del historial antes de abrir una disputa.',
+      ],
+    },
+    de: {
+      title: 'Was bedeutet "Shipment information received"?',
+      short: 'Das Etikett wurde erstellt, aber der Spediteur hat das Paket noch nicht.',
+      meta: 'Ihr Tracking sagt "Shipment information received" und nichts bewegt sich? Was es bedeutet und wann der Verkäufer wirklich versendet hat.',
+      paragraphs: [
+        '"Shipment information received" (oder "Label Created") bedeutet, dass der Verkäufer ein Versandetikett erstellt hat, aber der Spediteur das Paket noch nicht physisch erhalten hat.',
+        'Dies ist der Status, den Sie beobachten sollten, wenn Sie vermuten, dass ein Verkäufer nicht versendet hat: er sollte innerhalb von 1-3 Werktagen zu "Picked up" werden.',
+        'Wenn es länger als 5 Werktage unverändert bleibt, kontaktieren Sie den Verkäufer.',
+        'Hinweis: Einige Marketplaces generieren Etiketten in Massen; die echte Reise beginnt beim ersten "Picked up" oder Hub-Scan.',
+      ],
+      tips: [
+        'Ein Nur-Etikett-Status über Tage ist das Nr. 1 Dropshipping-Betrugssignal.',
+        'Machen Sie einen Screenshot des Verlaufs bevor Sie einen Streit eröffnen.',
       ],
     },
   },
@@ -206,6 +356,36 @@ const TOPICS = [
       tips: [
         'La position GPS de la preuve de livraison révèle si le dépôt a bien eu lieu chez vous.',
         'Agissez vite : la plupart des plateformes ferment les litiges 30 jours après « livré ».',
+      ],
+    },
+    es: {
+      title: '¿Marcado "Entregado" pero nada recibido?',
+      short: 'Verifica vecinos, puntos de recogida y prueba de entrega.',
+      meta: 'Tu seguimiento dice entregado pero no recibiste nada? Las 5 verificaciones antes de contactar al transportista o vendedor.',
+      paragraphs: [
+        'Cuando el seguimiento dice "Delivered", el transportista registró una prueba de entrega: firma, foto o posición GPS. Consúltala primero – GlobalTrack la muestra cuando está disponible.',
+        'Verifica en orden: la recepción de tu edificio, vecinos, el aviso de paso en tu buzón, y cualquier punto de recogida mencionado en los últimos escaneos.',
+        'Los repartidores a veces escanean "Delivered" hasta 24 horas antes de la entrega real – si nada aparece al día siguiente, contacta al transportista.',
+        'Si el transportista confirma la entrega en la dirección correcta y aún no tienes nada, abre una disputa con el vendedor: el vendedor es legalmente responsable hasta que recibas físicamente los bienes.',
+      ],
+      tips: [
+        'La posición GPS de la prueba de entrega revela si la entrega fue en tu dirección.',
+        'Actúa rápido: la mayoría de las plataformas cierran disputas 30 días después de "entregado".',
+      ],
+    },
+    de: {
+      title: 'Als "Zugestellt" markiert, aber nichts erhalten?',
+      short: 'Überprüfen Sie Nachbarn, Abholpunkte und den Liefernachweis.',
+      meta: 'Ihr Tracking sagt zugestellt, aber Sie haben nichts erhalten? Die 5 Überprüfungen bevor Sie den Spediteur oder Verkäufer kontaktieren.',
+      paragraphs: [
+        'Wenn das Tracking "Delivered" anzeigt, hat der Spediteur einen Liefernachweis erfasst: Unterschrift, Foto oder GPS-Position. Überprüfen Sie diese zuerst – GlobalTrack zeigt sie an, wenn verfügbar.',
+        'Überprüfen Sie der Reihe nach: Ihr Gebäude-Foyer, Nachbarn, den Zustellhinweis in Ihrem Briefkasten und jeden erwähnten Abholpunkt.',
+        'Zusteller scannen manchmal "Delivered" bis zu 24 Stunden vor der tatsächlichen Übergabe – wenn bis zum nächsten Abend nichts erscheint, kontaktieren Sie den Spediteur.',
+        'Wenn der Spediteur die Lieferung an die richtige Adresse bestätigt und Sie immer noch nichts haben, eröffnen Sie einen Streit beim Verkäufer.',
+      ],
+      tips: [
+        'Die GPS-Position des Liefernachweises zeigt, ob die Zustellung an Ihrer Adresse erfolgte.',
+        'Handeln Sie schnell: die meisten Plattformen schließen Streitigkeiten 30 Tage nach "zugestellt".',
       ],
     },
   },

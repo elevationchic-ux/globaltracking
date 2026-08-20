@@ -3,18 +3,18 @@ import { requireAuth } from '../middleware/authGuard.js';
 import {
   getCreditBalance, getCreditsByUser, addCreditPack, deductCredit, hasEnoughCredits,
   getApiKeysByUser, createApiKey, revokeApiKey, findApiKey, incrementApiUsage,
-  getAlertsByUser, createAlert, deactivateAlert,
+  getAlertsByUser, createAlert, deactivateAlert, hasPurchasedApiPack,
 } from '../data/db.js';
 
 const router = Router();
 
-// --- Credit Packs (predefined) ---
+// --- Credit Packs (predefined) with feature flags ---
 const CREDIT_PACKS = [
-  { id: 'starter', name: 'Starter', amount: 10, price: 1.99 },
-  { id: 'basic', name: 'Basic', amount: 50, price: 5.99 },
-  { id: 'pro', name: 'Pro', amount: 100, price: 9.99 },
-  { id: 'business', name: 'Business', amount: 500, price: 39.99 },
-  { id: 'enterprise', name: 'Enterprise', amount: 2000, price: 129.99 },
+  { id: 'starter', name: 'Starter', amount: 10, price: 1.99, apiAccess: false, alerts: false, maxSimultaneous: 5, fullHistory: true },
+  { id: 'basic', name: 'Basic', amount: 50, price: 5.99, apiAccess: false, alerts: true, maxSimultaneous: 10, fullHistory: true },
+  { id: 'pro', name: 'Pro', amount: 100, price: 9.99, apiAccess: false, alerts: true, maxSimultaneous: 25, fullHistory: true },
+  { id: 'business', name: 'Business', amount: 500, price: 39.99, apiAccess: true, alerts: true, maxSimultaneous: 100, fullHistory: true },
+  { id: 'enterprise', name: 'Enterprise', amount: 2000, price: 129.99, apiAccess: true, alerts: true, maxSimultaneous: -1, fullHistory: true },
 ];
 
 // --- Credits ---
@@ -67,6 +67,13 @@ router.get('/keys', requireAuth, (req, res) => {
 });
 
 router.post('/keys', requireAuth, (req, res) => {
+  // Only allow API key creation if user has purchased an API-enabled pack
+  if (!hasPurchasedApiPack(req.user.id)) {
+    return res.status(403).json({
+      error: 'API_ACCESS_REQUIRED',
+      message: 'API keys require a Business or Enterprise pack. Please purchase one first.',
+    });
+  }
   const { name } = req.body;
   const key = createApiKey(req.user.id, name);
   res.status(201).json({ key });
@@ -113,6 +120,12 @@ router.delete('/alerts/:id', requireAuth, (req, res) => {
   const alert = deactivateAlert(req.params.id);
   if (!alert) return res.status(404).json({ error: 'NOT_FOUND' });
   res.json({ success: true });
+});
+
+// --- Check if user has API access ---
+router.get('/api-access', requireAuth, (req, res) => {
+  const hasAccess = hasPurchasedApiPack(req.user.id);
+  res.json({ hasApiAccess: hasAccess });
 });
 
 export { CREDIT_PACKS };

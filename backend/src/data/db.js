@@ -325,14 +325,25 @@ export function hasEnoughCredits(userId, count = 1) {
   return getCreditBalance(userId) >= count;
 }
 
+export function hasPurchasedApiPack(userId) {
+  const userCredits = getCreditsByUser(userId);
+  return userCredits.some((c) => {
+    // Match by packName to Business or Enterprise (the API-enabled packs)
+    return c.packName === 'Business' || c.packName === 'Enterprise';
+  });
+}
+
 // --- API Keys ---
 export function getApiKeysByUser(userId) {
   return db.apiKeys.filter((k) => k.userId === userId);
 }
 
 export function createApiKey(userId, name) {
+  // Generate a real cryptographic API key: gt_live_<32 bytes hex>
+  const secret = randomBytes(32).toString('hex');
+  const keyId = `gt_live_${secret}`;
   const key = {
-    id: `key-${randomBytes(8).toString('hex')}`,
+    id: keyId,
     userId,
     name: name || 'Default',
     active: true,

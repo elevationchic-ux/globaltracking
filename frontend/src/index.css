@@ -1116,6 +1116,18 @@ body {
   color: #f1f5f9;
   margin: 0 0 0.5rem;
 }
+.pricing-tier-badge {
+  display: inline-block;
+  background: #334155;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
 .pricing-price {
   display: flex;
   align-items: baseline;
@@ -1139,15 +1151,35 @@ body {
 .pricing-features {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 1.5rem;
 }
 .pricing-features li {
   padding: 0.35rem 0;
   font-size: 0.9rem;
   color: #cbd5e1;
 }
+.pricing-feat-check {
+  color: #4ade80 !important;
+}
 .pricing-feat-disabled {
   color: #475569 !important;
+}
+.pricing-tier-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.pricing-tier-btn-free {
+  background: #334155;
+  color: #94a3b8;
+}
+.pricing-tier-btn-free:hover {
+  background: #475569;
 }
 
 /* Token packs grid */
@@ -1232,6 +1264,68 @@ body {
 .pricing-token-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.pricing-token-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  text-align: left;
+}
+.pricing-token-features li {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  padding: 0.2rem 0;
+}
+
+/* Comparison table */
+.pricing-comparison-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.pricing-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 700px;
+}
+.pricing-comparison-table th {
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 2px solid #334155;
+}
+.pricing-comparison-table th:first-child {
+  text-align: left;
+  padding-left: 1rem;
+}
+.pricing-th-highlight {
+  background: #10b981 !important;
+  color: white !important;
+}
+.pricing-comparison-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid #1e293b;
+}
+.pricing-td-label {
+  text-align: left !important;
+  padding-left: 1rem !important;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+.pricing-td-check {
+  color: #4ade80;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.pricing-td-cross {
+  color: #475569;
+}
+.pricing-td-value {
+  color: #e2e8f0;
+  font-weight: 500;
 }
 
 /* Micro-transactions */
@@ -1337,13 +1431,58 @@ body {
   font-weight: 500;
   margin-bottom: 1rem;
 }
-.pricing-payment-icons {
+.pricing-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.pricing-payment-item {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  color: #64748b;
+  align-items: center;
+  gap: 0.5rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  transition: border-color 0.2s;
+}
+.pricing-payment-item:hover {
+  border-color: #475569;
+}
+.pricing-payment-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.pricing-payment-name {
+  white-space: nowrap;
+}
+.pricing-payment-note {
+  color: #475569;
+  font-size: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* API badge */
+.pricing-api-badge {
+  display: inline-block;
+  background: #f59e0b22;
+  color: #f59e0b;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+.pricing-api-note {
+  color: #94a3b8;
   font-size: 0.85rem;
+  margin-bottom: 1rem;
 }
 
 /* ── User Wallet / Dashboard ─────────────────────────────── */
@@ -1506,6 +1645,15 @@ body {
   font-size: 0.85rem;
   text-align: center;
   padding: 1.5rem;
+}
+.wallet-api-locked {
+  background: #1e293b;
+  border: 1px dashed #f59e0b;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
 /* ── Bulk Paywall Modal ──────────────────────────────────── */

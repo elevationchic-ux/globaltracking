@@ -12,6 +12,7 @@ export default function UserWallet() {
   const [alerts, setAlerts] = useState([]);
   const [newKeyName, setNewKeyName] = useState('');
   const [msg, setMsg] = useState(null);
+  const [hasApiAccess, setHasApiAccess] = useState(false);
 
   const fetchAll = useCallback(async () => {
     try {
@@ -32,6 +33,12 @@ export default function UserWallet() {
       if (alertsRes.ok) {
         const alertsData = await alertsRes.json().catch(() => null);
         setAlerts(alertsData?.alerts ?? []);
+      }
+      // Check API access
+      const apiRes = await authFetch('/api/credits/api-access');
+      if (apiRes.ok) {
+        const apiData = await apiRes.json().catch(() => null);
+        setHasApiAccess(apiData?.hasApiAccess ?? false);
       }
     } catch { /* ignore */ }
   }, [authFetch]);
@@ -117,41 +124,52 @@ export default function UserWallet() {
       {/* API Keys */}
       <div className="wallet-section">
         <h2>{t('wallet.apiKeys')}</h2>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', alignItems: 'center' }}>
-          <input
-            className="wallet-input"
-            value={newKeyName}
-            onChange={(e) => setNewKeyName(e.target.value)}
-            placeholder={t('wallet.keyNamePlaceholder')}
-          />
-          <button className="wallet-btn wallet-btn-primary" onClick={handleCreateKey}>
-            {t('wallet.generateKey')}
-          </button>
-        </div>
-        {keys.length === 0 ? (
-          <p className="wallet-empty">{t('wallet.noKeys')}</p>
-        ) : (
-          <div className="wallet-keys-list">
-            {keys.map((k) => (
-              <div key={k.id} className="wallet-key-item">
-                <div className="wallet-key-info">
-                  <div className="wallet-key-name">{k.name}</div>
-                  <div className="wallet-key-id">{k.id}</div>
-                  <div className="wallet-key-stats">
-                    {k.usageCount} {t('wallet.calls')} · {k.active ? t('wallet.activeKey') : t('wallet.revokedKey')}
-                    {k.lastUsedAt && ` · ${t('wallet.lastUsed')} ${new Date(k.lastUsedAt).toLocaleDateString()}`}
-                  </div>
-                </div>
-                <div className="wallet-key-actions">
-                  {k.active && (
-                    <button className="wallet-btn wallet-btn-danger" onClick={() => handleRevokeKey(k.id)}>
-                      {t('wallet.revoke')}
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+        {!hasApiAccess ? (
+          <div className="wallet-api-locked">
+            <p>{t('wallet.apiAccessRequired')}</p>
+            <Link to="/pricing" className="wallet-btn wallet-btn-primary" style={{ textDecoration: 'none', display: 'inline-block', marginTop: '0.5rem' }}>
+              {t('wallet.upgradeForApi')}
+            </Link>
           </div>
+        ) : (
+          <>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', alignItems: 'center' }}>
+              <input
+                className="wallet-input"
+                value={newKeyName}
+                onChange={(e) => setNewKeyName(e.target.value)}
+                placeholder={t('wallet.keyNamePlaceholder')}
+              />
+              <button className="wallet-btn wallet-btn-primary" onClick={handleCreateKey}>
+                {t('wallet.generateKey')}
+              </button>
+            </div>
+            {keys.length === 0 ? (
+              <p className="wallet-empty">{t('wallet.noKeys')}</p>
+            ) : (
+              <div className="wallet-keys-list">
+                {keys.map((k) => (
+                  <div key={k.id} className="wallet-key-item">
+                    <div className="wallet-key-info">
+                      <div className="wallet-key-name">{k.name}</div>
+                      <div className="wallet-key-id">{k.id}</div>
+                      <div className="wallet-key-stats">
+                        {k.usageCount} {t('wallet.calls')} · {k.active ? t('wallet.activeKey') : t('wallet.revokedKey')}
+                        {k.lastUsedAt && ` · ${t('wallet.lastUsed')} ${new Date(k.lastUsedAt).toLocaleDateString()}`}
+                      </div>
+                    </div>
+                    <div className="wallet-key-actions">
+                      {k.active && (
+                        <button className="wallet-btn wallet-btn-danger" onClick={() => handleRevokeKey(k.id)}>
+                          {t('wallet.revoke')}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 

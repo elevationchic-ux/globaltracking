@@ -3,17 +3,26 @@ import { useI18n } from '../i18n/I18nContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const TOKEN_PACKS = [
-  { id: 'starter', name: 'Starter', tokens: 10, price: '€1.99', perUnit: '€0.20', color: '#3b82f6' },
-  { id: 'basic', name: 'Basic', tokens: 50, price: '€5.99', perUnit: '€0.12', color: '#8b5cf6', popular: true },
-  { id: 'pro', name: 'Pro', tokens: 100, price: '€9.99', perUnit: '€0.10', color: '#06b6d4' },
-  { id: 'business', name: 'Business', tokens: 500, price: '€39.99', perUnit: '€0.08', color: '#10b981' },
-  { id: 'enterprise', name: 'Enterprise', tokens: 2000, price: '€129.99', perUnit: '€0.065', color: '#f59e0b' },
+  { id: 'starter', name: 'Starter', tokens: 10, price: '€1.99', perUnit: '€0.20', color: '#3b82f6', features: ['pricing.feat.simultaneous.5', 'pricing.feat.history', 'pricing.feat.carriers'] },
+  { id: 'basic', name: 'Basic', tokens: 50, price: '€5.99', perUnit: '€0.12', color: '#8b5cf6', popular: true, features: ['pricing.feat.simultaneous.10', 'pricing.feat.history', 'pricing.feat.carriers', 'pricing.feat.whatsapp'] },
+  { id: 'pro', name: 'Pro', tokens: 100, price: '€9.99', perUnit: '€0.10', color: '#06b6d4', features: ['pricing.feat.simultaneous.25', 'pricing.feat.history', 'pricing.feat.carriers', 'pricing.feat.whatsapp', 'pricing.feat.sms'] },
+  { id: 'business', name: 'Business', tokens: 500, price: '€39.99', perUnit: '€0.08', color: '#10b981', features: ['pricing.feat.simultaneous.100', 'pricing.feat.history', 'pricing.feat.carriers', 'pricing.feat.whatsapp', 'pricing.feat.sms', 'pricing.feat.api'] },
+  { id: 'enterprise', name: 'Enterprise', tokens: 2000, price: '€129.99', perUnit: '€0.065', color: '#f59e0b', features: ['pricing.feat.simultaneous.unlimited', 'pricing.feat.history', 'pricing.feat.carriers', 'pricing.feat.whatsapp', 'pricing.feat.sms', 'pricing.feat.api', 'pricing.feat.priority'] },
 ];
 
-const MICRO_TX = [
-  { id: 'whatsapp', icon: '💬', name: 'pricing.whatsappAlert', desc: 'pricing.whatsappDesc', price: '€0.99', unit: 'pricing.perPackage' },
-  { id: 'sms', icon: '📱', name: 'pricing.smsAlert', desc: 'pricing.smsDesc', price: '€0.99', unit: 'pricing.perPackage' },
-  { id: 'bulk', icon: '📦', name: 'pricing.bulkProcess', desc: 'pricing.bulkDesc', price: '€2.99', unit: 'pricing.perFile' },
+const PAYMENT_METHODS = [
+  { name: 'Visa', icon: '💳' },
+  { name: 'Mastercard', icon: '💳' },
+  { name: 'American Express', icon: '💳' },
+  { name: 'PayPal', icon: '🅿️' },
+  { name: 'Apple Pay', icon: '🍎' },
+  { name: 'Google Pay', icon: '🔵' },
+  { name: 'Stripe', icon: '🟣' },
+  { name: 'Orange Money', icon: '🍊' },
+  { name: 'MTN MoMo', icon: '🟡' },
+  { name: 'M-Pesa', icon: '🟢' },
+  { name: 'SEPA', icon: '🏦' },
+  { name: 'Crypto (USDC)', icon: '₿' },
 ];
 
 export default function PricingPlans() {
@@ -45,6 +54,19 @@ export default function PricingPlans() {
     setPurchasing(null);
   }
 
+  // Feature comparison rows for the table
+  const comparisonFeatures = [
+    { key: 'simultaneous', free: '2', starter: '5', basic: '10', pro: '25', business: '100', enterprise: 'pricing.feat.unlimited' },
+    { key: 'carriers', free: '400+', starter: '2,400+', basic: '2,400+', pro: '2,400+', business: '2,400+', enterprise: '2,400+' },
+    { key: 'history', free: false, starter: true, basic: true, pro: true, business: true, enterprise: true },
+    { key: 'languages', free: true, starter: true, basic: true, pro: true, business: true, enterprise: true },
+    { key: 'whatsapp', free: false, starter: false, basic: true, pro: true, business: true, enterprise: true },
+    { key: 'sms', free: false, starter: false, basic: false, pro: true, business: true, enterprise: true },
+    { key: 'bulk', free: false, starter: false, basic: false, pro: true, business: true, enterprise: true },
+    { key: 'api', free: false, starter: false, basic: false, pro: false, business: true, enterprise: true },
+    { key: 'priority', free: false, starter: false, basic: false, pro: false, business: false, enterprise: true },
+  ];
+
   return (
     <div className="pricing-page">
       <div className="pricing-hero">
@@ -63,7 +85,7 @@ export default function PricingPlans() {
       <section className="pricing-section">
         <div className="pricing-tier pricing-tier-free">
           <div className="pricing-tier-header">
-            <h3>{t('pricing.freeTitle')}</h3>
+            <span className="pricing-tier-badge">{t('pricing.freeTitle')}</span>
             <div className="pricing-price">
               <span className="pricing-amount">€0</span>
               <span className="pricing-period">{t('pricing.forever')}</span>
@@ -71,13 +93,14 @@ export default function PricingPlans() {
             <p className="pricing-desc">{t('pricing.freeDesc')}</p>
           </div>
           <ul className="pricing-features">
-            <li>✓ {t('pricing.freeFeat1')}</li>
-            <li>✓ {t('pricing.freeFeat2')}</li>
-            <li>✓ {t('pricing.freeFeat3')}</li>
-            <li>✓ {t('pricing.freeFeat4')}</li>
+            <li className="pricing-feat-check">✓ {t('pricing.freeFeat1')}</li>
+            <li className="pricing-feat-check">✓ {t('pricing.freeFeat2')}</li>
+            <li className="pricing-feat-check">✓ {t('pricing.freeFeat4')}</li>
             <li className="pricing-feat-disabled">✕ {t('pricing.freeLimit1')}</li>
             <li className="pricing-feat-disabled">✕ {t('pricing.freeLimit2')}</li>
+            <li className="pricing-feat-disabled">✕ {t('pricing.freeLimit3')}</li>
           </ul>
+          <button className="pricing-tier-btn pricing-tier-btn-free">{t('pricing.getStarted')}</button>
         </div>
       </section>
 
@@ -95,6 +118,11 @@ export default function PricingPlans() {
               <div className="pricing-token-label">{t('pricing.requests')}</div>
               <div className="pricing-token-price">{pack.price}</div>
               <div className="pricing-token-unit">{pack.perUnit} {t('pricing.perRequest')}</div>
+              <ul className="pricing-token-features">
+                {pack.features.map((feat) => (
+                  <li key={feat}>✓ {t(feat)}</li>
+                ))}
+              </ul>
               <button
                 className="pricing-token-btn"
                 style={{ background: pack.color }}
@@ -108,29 +136,79 @@ export default function PricingPlans() {
         </div>
       </section>
 
+      {/* ── Feature Comparison Table ──────────────────── */}
+      <section className="pricing-section">
+        <h2 className="pricing-section-title">{t('pricing.compareTitle')}</h2>
+        <p className="pricing-section-desc">{t('pricing.compareDesc')}</p>
+        <div className="pricing-comparison-wrapper">
+          <table className="pricing-comparison-table">
+            <thead>
+              <tr>
+                <th>{t('pricing.feature')}</th>
+                <th>{t('pricing.freeTitle')}</th>
+                <th>Starter</th>
+                <th>Basic</th>
+                <th>Pro</th>
+                <th className="pricing-th-highlight">Business</th>
+                <th>Enterprise</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonFeatures.map((feat) => (
+                <tr key={feat.key}>
+                  <td className="pricing-td-label">{t(`pricing.compare.${feat.key}`)}</td>
+                  {['free', 'starter', 'basic', 'pro', 'business', 'enterprise'].map((tier) => {
+                    const val = feat[tier];
+                    if (val === true) return <td key={tier} className="pricing-td-check">✓</td>;
+                    if (val === false) return <td key={tier} className="pricing-td-cross">✕</td>;
+                    return <td key={tier} className="pricing-td-value">{val === 'pricing.feat.unlimited' ? t('pricing.feat.unlimited') : val}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       {/* ── Micro-transactions ────────────────────────── */}
       <section className="pricing-section">
         <h2 className="pricing-section-title">{t('pricing.microTitle')}</h2>
         <p className="pricing-section-desc">{t('pricing.microDesc')}</p>
-
         <div className="pricing-micro-grid">
-          {MICRO_TX.map((item) => (
-            <div key={item.id} className="pricing-micro-card">
-              <div className="pricing-micro-icon">{item.icon}</div>
-              <h4>{t(item.name)}</h4>
-              <p>{t(item.desc)}</p>
-              <div className="pricing-micro-price">
-                <span className="pricing-micro-amount">{item.price}</span>
-                <span className="pricing-micro-unit">{t(item.unit)}</span>
-              </div>
+          <div className="pricing-micro-card">
+            <div className="pricing-micro-icon">💬</div>
+            <h4>{t('pricing.whatsappAlert')}</h4>
+            <p>{t('pricing.whatsappDesc')}</p>
+            <div className="pricing-micro-price">
+              <span className="pricing-micro-amount">€0.99</span>
+              <span className="pricing-micro-unit">{t('pricing.perPackage')}</span>
             </div>
-          ))}
+          </div>
+          <div className="pricing-micro-card">
+            <div className="pricing-micro-icon">📱</div>
+            <h4>{t('pricing.smsAlert')}</h4>
+            <p>{t('pricing.smsDesc')}</p>
+            <div className="pricing-micro-price">
+              <span className="pricing-micro-amount">€0.99</span>
+              <span className="pricing-micro-unit">{t('pricing.perPackage')}</span>
+            </div>
+          </div>
+          <div className="pricing-micro-card">
+            <div className="pricing-micro-icon">📦</div>
+            <h4>{t('pricing.bulkProcess')}</h4>
+            <p>{t('pricing.bulkDesc')}</p>
+            <div className="pricing-micro-price">
+              <span className="pricing-micro-amount">€2.99</span>
+              <span className="pricing-micro-unit">{t('pricing.perFile')}</span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── API Pay-As-You-Go ─────────────────────────── */}
       <section className="pricing-section">
         <div className="pricing-api-section">
+          <div className="pricing-api-badge">{t('pricing.apiBadge')}</div>
           <h2 className="pricing-section-title">{t('pricing.apiTitle')}</h2>
           <p className="pricing-section-desc">{t('pricing.apiDesc')}</p>
           <div className="pricing-api-features">
@@ -156,15 +234,16 @@ export default function PricingPlans() {
               </div>
             </div>
             <div className="pricing-api-feat">
-              <span className="pricing-api-feat-icon">📱</span>
+              <span className="pricing-api-feat-icon">🛡️</span>
               <div>
-                <h4>{t('pricing.apiFeat4Title')}</h4>
-                <p>{t('pricing.apiFeat4Desc')}</p>
+                <h4>{t('pricing.apiFeat5Title')}</h4>
+                <p>{t('pricing.apiFeat5Desc')}</p>
               </div>
             </div>
           </div>
           <div className="pricing-api-cta">
-            <a href="/help?topic=api" className="pricing-api-btn">{t('pricing.apiContact')}</a>
+            <p className="pricing-api-note">{t('pricing.apiNote')}</p>
+            <a href="/pricing" className="pricing-api-btn">{t('pricing.apiCta')}</a>
           </div>
         </div>
       </section>
@@ -172,14 +251,15 @@ export default function PricingPlans() {
       {/* ── Payment Methods ───────────────────────────── */}
       <section className="pricing-section pricing-payment-methods">
         <h3>{t('pricing.paymentMethods')}</h3>
-        <div className="pricing-payment-icons">
-          <span title="Visa">💳 Visa</span>
-          <span title="Mastercard">💳 Mastercard</span>
-          <span title="Mobile Money">📲 Mobile Money</span>
-          <span title="PayPal">🅿️ PayPal</span>
-          <span title="Orange Money">🍊 Orange Money</span>
-          <span title="MTN MoMo">🟡 MTN MoMo</span>
+        <div className="pricing-payment-grid">
+          {PAYMENT_METHODS.map((pm) => (
+            <div key={pm.name} className="pricing-payment-item">
+              <span className="pricing-payment-icon">{pm.icon}</span>
+              <span className="pricing-payment-name">{pm.name}</span>
+            </div>
+          ))}
         </div>
+        <p className="pricing-payment-note">{t('pricing.paymentNote')}</p>
       </section>
     </div>
   );
