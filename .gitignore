@@ -9,3 +9,4 @@ dist/
 tools/og-cover.b64
 e2e-*.png
 seo-e2e-*.png
+.vercel

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { CARRIERS } from '../utils/carrierDetection.js'
@@ -101,7 +101,7 @@ export function CarrierIndexPage() {
       '@type': 'ListItem',
       position: i + 1,
       name: carrier.name,
-      url: `https://globaltrack.example.com/tracking/${carrierSlug(carrier)}/`,
+      url: `https://tracking-app-liart-eight.vercel.app/tracking/${carrierSlug(carrier)}/`,
     })),
   })
 

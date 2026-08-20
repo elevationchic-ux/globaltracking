@@ -1,11 +1,25 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build --workspace frontend",
-  "outputDirectory": "frontend/dist",
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
+  "services": {
+    "frontend": {
+      "root": "frontend/",
+      "framework": "vite",
+      "rewrites": [
+        {
+          "source": "/((?!assets/|logos/|favicon\\.svg|icons\\.svg|robots\\.txt|sitemap\\.xml|og-cover\\.jpg).*)",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "backend": {
+      "root": "backend/",
+      "framework": "express",
+      "entrypoint": "src/app.js",
+      "functions": {
+        "src/app.js": {
+          "maxDuration": 30
+        }
+      }
     }
   },
   "headers": [
@@ -24,11 +38,8 @@
     }
   ],
   "rewrites": [
-    { "source": "/api/:match*", "destination": "/api" },
-    { "source": "/health", "destination": "/api" },
-    {
-      "source": "/((?!assets/|favicon\\.svg|icons\\.svg|robots\\.txt|sitemap\\.xml|og-cover\\.jpg).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/api/:match*", "destination": { "service": "backend" } },
+    { "source": "/health", "destination": { "service": "backend", "path": "/health" } },
+    { "source": "/(.*)", "destination": { "service": "frontend" } }
   ]
 }

@@ -1,5 +1,5 @@
-# GlobalTrack  replace the domain below with your production domain
+﻿# GlobalTrack  replace the domain below with your production domain
 User-agent: *
 Allow: /
 
-Sitemap: https://globaltrack.example.com/sitemap.xml
+Sitemap: https://tracking-app-liart-eight.vercel.app/sitemap.xml
