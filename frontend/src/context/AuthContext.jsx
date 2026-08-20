@@ -37,8 +37,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.message || 'Login failed')
+    const data = await res.json().catch(() => null)
+    if (!res.ok) throw new Error(data?.message || 'Login failed')
     localStorage.setItem(TOKEN_KEY, data.token)
     localStorage.setItem(USER_KEY, JSON.stringify(data.user))
     setToken(data.token)
@@ -52,8 +52,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, name }),
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.message || 'Registration failed')
+    const data = await res.json().catch(() => null)
+    if (!res.ok) throw new Error(data?.message || 'Registration failed')
     localStorage.setItem(TOKEN_KEY, data.token)
     localStorage.setItem(USER_KEY, JSON.stringify(data.user))
     setToken(data.token)

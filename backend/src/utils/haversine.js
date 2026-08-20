@@ -1,5 +1,5 @@
 /**
- * Haversine formula — calculates the great-circle distance between two
+ * Haversine formula  calculates the great-circle distance between two
  * points on Earth given their latitude/longitude coordinates.
  * Also estimates transit duration based on average cargo speeds.
  */

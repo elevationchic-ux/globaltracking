@@ -21,7 +21,7 @@ function load() {
       return JSON.parse(raw);
     }
   } catch {
-    // corrupted file — start fresh
+    // corrupted file  start fresh
   }
   const db = { ...DEFAULT_DB, users: [], agents: [], messages: [], trackingRequests: [], stats: { ...DEFAULT_DB.stats } };
   save(db);
@@ -29,7 +29,11 @@ function load() {
 }
 
 function save(db) {
-  writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8');
+  try {
+    writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8');
+  } catch {
+    // Read-only filesystem (e.g. Vercel serverless)  data stays in-memory only.
+  }
 }
 
 // --- Seed default admin + agent on first run ---
