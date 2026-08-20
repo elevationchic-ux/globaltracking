@@ -68,3 +68,10 @@ createRoot(document.getElementById('root')).render(
     </I18nProvider>
   </StrictMode>,
 )
+
+// PWA: register the service worker in production only (dev server would cache stale bundles).
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}

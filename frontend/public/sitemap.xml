@@ -3,102 +3,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/</loc>
+    <loc>https://globaltracking.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="en-CA" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="en-GB" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="fr-FR" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="es-ES" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="es-419" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="de-DE" href="https://tracking-app-liart-eight.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tracking-app-liart-eight.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr-FR" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="es-ES" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="es-419" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://globaltracking.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://globaltracking.vercel.app/"/>
   </url>
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/global</loc>
+    <loc>https://globaltracking.vercel.app/global</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/pricing</loc>
+    <loc>https://globaltracking.vercel.app/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/analytics</loc>
+    <loc>https://globaltracking.vercel.app/analytics</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/trust</loc>
+    <loc>https://globaltracking.vercel.app/trust</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Carrier landing pages (SEO acquisition: "USPS tracking", "suivi Colissimo") -->
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/carriers</loc>
+    <loc>https://globaltracking.vercel.app/carriers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/ups/</loc><priority>0.9</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/fedex/</loc><priority>0.9</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/usps/</loc><priority>0.9</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/canada-post/</loc><priority>0.9</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/purolator/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/dhl/</loc><priority>0.9</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/la-poste-colissimo/</loc><priority>0.9</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/royal-mail/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/dpd/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/gls/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/postnl/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/china-post/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/ups/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/fedex/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/usps/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/canada-post/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/purolator/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/dhl/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/la-poste-colissimo/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/royal-mail/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/dpd/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/gls/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/postnl/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/china-post/</loc><priority>0.8</priority></url>
 
   <!-- Help / status lexicon (captures stressed-user searches) -->
   <url>
-    <loc>https://tracking-app-liart-eight.vercel.app/help</loc>
+    <loc>https://globaltracking.vercel.app/help</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/help/customs-clearance/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/help/exception/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/help/out-for-delivery/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/help/in-transit/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/help/info-received/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/help/delivered/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/help/customs-clearance/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/help/exception/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/help/out-for-delivery/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/help/in-transit/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/help/info-received/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/help/delivered/</loc><priority>0.7</priority></url>
 
   <!-- International corridors (pSEO: "track package from China to France") -->
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/china-to-france/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/china-to-usa/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/china-to-canada/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/france-to-usa/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/usa-to-canada/</loc><priority>0.8</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/usa-to-france/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/uk-to-canada/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/germany-to-france/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/germany-to-usa/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/corridors/japan-to-uk/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/china-to-france/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/china-to-usa/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/china-to-canada/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/france-to-usa/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/usa-to-canada/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/usa-to-france/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/uk-to-canada/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/germany-to-france/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/germany-to-usa/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/corridors/japan-to-uk/</loc><priority>0.7</priority></url>
 
   <!-- Carrier × status silo (sample of 72 programmatic pages) -->
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/usps/status/customs-clearance/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/usps/status/exception/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/dhl/status/customs-clearance/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/la-poste-colissimo/status/customs-clearance/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/fedex/status/exception/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/ups/status/out-for-delivery/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/canada-post/status/customs-clearance/</loc><priority>0.7</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/tracking/royal-mail/status/delivered/</loc><priority>0.6</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/usps/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/usps/status/exception/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/dhl/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/la-poste-colissimo/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/fedex/status/exception/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/ups/status/out-for-delivery/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/canada-post/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltracking.vercel.app/tracking/royal-mail/status/delivered/</loc><priority>0.6</priority></url>
 
   <!-- Legal / institutional trust pages -->
-  <url><loc>https://tracking-app-liart-eight.vercel.app/about</loc><priority>0.5</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/privacy</loc><priority>0.5</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/terms</loc><priority>0.5</priority></url>
-  <url><loc>https://tracking-app-liart-eight.vercel.app/legal</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltracking.vercel.app/about</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltracking.vercel.app/privacy</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltracking.vercel.app/terms</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltracking.vercel.app/legal</loc><priority>0.5</priority></url>
 </urlset>

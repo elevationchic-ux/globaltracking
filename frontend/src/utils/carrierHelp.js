@@ -20,4 +20,4 @@ export const CARRIER_CLAIM_URLS = {
 };
 
 export const claimUrlFor = (carrierName) =>
-  CARRIER_CLAIM_URLS[carrierName] || 'https://www.17track.net/en';
+  CARRIER_CLAIM_URLS[carrierName] || '/help';

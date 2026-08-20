@@ -101,7 +101,7 @@ export function CarrierIndexPage() {
       '@type': 'ListItem',
       position: i + 1,
       name: carrier.name,
-      url: `https://tracking-app-liart-eight.vercel.app/tracking/${carrierSlug(carrier)}/`,
+      url: `https://globaltracking.vercel.app/tracking/${carrierSlug(carrier)}/`,
     })),
   })
 

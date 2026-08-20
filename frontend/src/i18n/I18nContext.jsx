@@ -33,25 +33,25 @@ const dictionaries = {
     'coverage.region.CANADA': 'Canada',
     'coverage.region.EUROPE': 'Europe',
     'coverage.note': 'Official carrier data · auto hand-off at border & final mile',
-    'features.title': 'The best of every tracking platform, unified',
+    'features.title': 'Every tracking superpower, in one place',
     'features.autoDetect.title': 'Instant carrier detection',
     'features.autoDetect.text':
-      'AI-grade format recognition identifies the carrier the moment you paste a number  no dropdown, no guessing (17TRACK / Ship24 strength).',
+      'AI-grade format recognition identifies the carrier the moment you paste a number — no dropdown, no guessing.',
     'features.batch.title': 'Batch tracking',
     'features.batch.text':
-      'Paste dozens of tracking numbers at once and follow every parcel from a single queue (PKGE.NET / TrackTry strength).',
+      'Paste dozens of tracking numbers at once and follow every parcel from a single queue.',
     'features.timeline.title': 'Translated full history',
     'features.timeline.text':
-      'Every scan point, translated into your language with the exact route your parcel travelled (Ordertracker strength).',
+      'Every scan point, translated into your language with the exact route your parcel travelled.',
     'features.regions.title': 'Border-aware routing',
     'features.regions.text':
-      'Automatic hand-off between international and domestic carriers  USPS, Canada Post, Royal Mail, DHL, La Poste and more (TrackMage strength).',
+      'Automatic hand-off between international and domestic carriers — USPS, Canada Post, Royal Mail, DHL, La Poste and more.',
     'features.speed.title': 'Instant results',
     'features.speed.text':
-      'Direct carrier lookups deliver the first status in seconds, not minutes (Ship24 strength).',
+      'Direct carrier lookups deliver the first status in seconds, not minutes.',
     'features.precision.title': 'Time-slot precision',
     'features.precision.text':
-      'Delivery windows narrowed to the time slot on supported networks (DPD strength).',
+      'Delivery windows narrowed to the time slot on supported networks.',
     'faq.title': 'Frequently asked questions',
     'faq.q1': 'How do I track a package with GlobalTrack?',
     'faq.a1':
@@ -164,25 +164,25 @@ const dictionaries = {
     'coverage.region.CANADA': 'Canada',
     'coverage.region.EUROPE': 'Europe',
     'coverage.note': 'Données transporteurs officielles · relais frontière & dernier kilomètre',
-    'features.title': 'Le meilleur de chaque plateforme de suivi, unifié',
+    'features.title': 'Toute la puissance du suivi, réunie en un seul endroit',
     'features.autoDetect.title': 'Détection instantanée du transporteur',
     'features.autoDetect.text':
-      'Une reconnaissance de format de niveau IA identifie le transporteur dès que vous collez un numéro  sans menu déroulant, sans devinette (force de 17TRACK / Ship24).',
+      'Une reconnaissance de format de niveau IA identifie le transporteur dès que vous collez un numéro — sans menu déroulant, sans devinette.',
     'features.batch.title': 'Suivi par lot',
     'features.batch.text':
-      'Collez des dizaines de numéros de suivi d’un coup et suivez chaque colis depuis une file unique (force de PKGE.NET / TrackTry).',
+      'Collez des dizaines de numéros de suivi d’un coup et suivez chaque colis depuis une file unique.',
     'features.timeline.title': 'Historique complet traduit',
     'features.timeline.text':
-      'Chaque point de scan, traduit dans votre langue, avec l’itinéraire exact parcouru par votre colis (force d’Ordertracker).',
+      'Chaque point de scan, traduit dans votre langue, avec l’itinéraire exact parcouru par votre colis.',
     'features.regions.title': 'Routage intelligent aux frontières',
     'features.regions.text':
-      'Relais automatique entre transporteurs internationaux et nationaux  USPS, Postes Canada, Royal Mail, DHL, La Poste et plus (force de TrackMage).',
+      'Relais automatique entre transporteurs internationaux et nationaux — USPS, Postes Canada, Royal Mail, DHL, La Poste et plus.',
     'features.speed.title': 'Résultats instantanés',
     'features.speed.text':
-      'La consultation directe des transporteurs affiche le premier statut en quelques secondes (force de Ship24).',
+      'La consultation directe des transporteurs affiche le premier statut en quelques secondes.',
     'features.precision.title': 'Précision au créneau horaire',
     'features.precision.text':
-      'Fenêtres de livraison affinées au créneau horaire près sur les réseaux compatibles (force de DPD).',
+      'Fenêtres de livraison affinées au créneau horaire près sur les réseaux compatibles.',
     'faq.title': 'Questions fréquentes',
     'faq.q1': 'Comment suivre un colis avec GlobalTrack ?',
     'faq.a1':
@@ -295,25 +295,25 @@ const dictionaries = {
     'coverage.region.CANADA': 'Canadá',
     'coverage.region.EUROPE': 'Europa',
     'coverage.note': 'Datos oficiales · transferencia en frontera y última milla',
-    'features.title': 'Lo mejor de cada plataforma de seguimiento, unificado',
+    'features.title': 'Todo el poder del seguimiento, en un solo lugar',
     'features.autoDetect.title': 'Detección instantánea del transportista',
     'features.autoDetect.text':
-      'El reconocimiento de formato identifica el transportista en cuanto pegas un número  sin menús ni conjeturas (fortaleza de 17TRACK / Ship24).',
+      'El reconocimiento de formato identifica el transportista en cuanto pegas un número — sin menús ni conjeturas.',
     'features.batch.title': 'Seguimiento por lotes',
     'features.batch.text':
-      'Pega decenas de números de seguimiento a la vez y controla cada paquete desde una sola cola (fortaleza de PKGE.NET / TrackTry).',
+      'Pega decenas de números de seguimiento a la vez y controla cada paquete desde una sola cola.',
     'features.timeline.title': 'Historial completo traducido',
     'features.timeline.text':
-      'Cada punto de escaneo, traducido a tu idioma, con la ruta exacta que recorrió tu paquete (fortaleza de Ordertracker).',
+      'Cada punto de escaneo, traducido a tu idioma, con la ruta exacta que recorrió tu paquete.',
     'features.regions.title': 'Enrutamiento inteligente en fronteras',
     'features.regions.text':
-      'Transferencia automática entre transportistas internacionales y locales  USPS, Canada Post, Royal Mail, DHL, La Poste y más (fortaleza de TrackMage).',
+      'Transferencia automática entre transportistas internacionales y locales — USPS, Canada Post, Royal Mail, DHL, La Poste y más.',
     'features.speed.title': 'Resultados instantáneos',
     'features.speed.text':
-      'La consulta directa al transportista entrega el primer estado en segundos, no minutos (fortaleza de Ship24).',
+      'La consulta directa al transportista entrega el primer estado en segundos, no minutos.',
     'features.precision.title': 'Precisión de franja horaria',
     'features.precision.text':
-      'Ventanas de entrega afinadas a la franja horaria en las redes compatibles (fortaleza de DPD).',
+      'Ventanas de entrega afinadas a la franja horaria en las redes compatibles.',
     'faq.title': 'Preguntas frecuentes',
     'faq.q1': '¿Cómo rastreo un paquete con GlobalTrack?',
     'faq.a1':
@@ -426,25 +426,25 @@ const dictionaries = {
     'coverage.region.CANADA': 'Kanada',
     'coverage.region.EUROPE': 'Europa',
     'coverage.note': 'Offizielle Carrier-Daten · automatische Übergabe an Grenze & letzter Meile',
-    'features.title': 'Das Beste jeder Tracking-Plattform, vereint',
+    'features.title': 'Die ganze Power des Trackings, an einem Ort',
     'features.autoDetect.title': 'Sofortige Carrier-Erkennung',
     'features.autoDetect.text':
-      'Die Formaterkennung identifiziert den Carrier, sobald du eine Nummer einfügst  kein Dropdown, kein Raten (Stärke von 17TRACK / Ship24).',
+      'Die Formaterkennung identifiziert den Carrier, sobald du eine Nummer einfügst — kein Dropdown, kein Raten.',
     'features.batch.title': 'Sammel-Tracking',
     'features.batch.text':
-      'Füge Dutzende Sendungsnummern auf einmal ein und verfolge jedes Paket in einer einzigen Warteschlange (Stärke von PKGE.NET / TrackTry).',
+      'Füge Dutzende Sendungsnummern auf einmal ein und verfolge jedes Paket in einer einzigen Warteschlange.',
     'features.timeline.title': 'Vollständig übersetzte Historie',
     'features.timeline.text':
-      'Jeder Scan-Punkt in deiner Sprache, mit der exakten Route deines Pakets (Stärke von Ordertracker).',
+      'Jeder Scan-Punkt in deiner Sprache, mit der exakten Route deines Pakets.',
     'features.regions.title': 'Grenzintelligentes Routing',
     'features.regions.text':
-      'Automatische Übergabe zwischen internationalen und lokalen Carriern  USPS, Canada Post, Royal Mail, DHL, La Poste u. v. m. (Stärke von TrackMage).',
+      'Automatische Übergabe zwischen internationalen und lokalen Carriern — USPS, Canada Post, Royal Mail, DHL, La Poste u. v. m.',
     'features.speed.title': 'Sofortige Ergebnisse',
     'features.speed.text':
-      'Direkte Carrier-Abfragen liefern den ersten Status in Sekunden, nicht Minuten (Stärke von Ship24).',
+      'Direkte Carrier-Abfragen liefern den ersten Status in Sekunden, nicht Minuten.',
     'features.precision.title': 'Zeitfenster-Präzision',
     'features.precision.text':
-      'Lieferfenster auf unterstützten Netzen bis aufs Zeitfenster genau (Stärke von DPD).',
+      'Lieferfenster auf unterstützten Netzen bis aufs Zeitfenster genau.',
     'faq.title': 'Häufig gestellte Fragen',
     'faq.q1': 'Wie verfolge ich ein Paket mit GlobalTrack?',
     'faq.a1':

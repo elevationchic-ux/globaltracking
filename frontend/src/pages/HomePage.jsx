@@ -59,7 +59,7 @@ export default function HomePage() {
   const numbers = useMemo(() => parseTrackingNumbers(input), [input])
   const primary = numbers[0] ?? ''
 
-  // Live auto-detection on the primary number (Ship24-style instant detect).
+  // Live auto-detection on the primary number (instant carrier detect).
   const candidates = useMemo(() => detectCarriers(primary), [primary])
   const detection = candidates[0] ?? null
 
@@ -80,7 +80,7 @@ export default function HomePage() {
     if (primary) navigate(`/track/${encodeURIComponent(normalizeTrackingNumber(primary))}`)
   }
 
-  // CSV import (TrackMage-style bulk): first column of each row is treated
+  // CSV import (bulk): first column of each row is treated
   // as a tracking number; header rows are skipped.
   const fileRef = useRef(null)
   function handleCsvImport(event) {
@@ -192,7 +192,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Batch queue (PKGE-style multi-tracking) */}
+          {/* Batch queue (multi-tracking in one paste) */}
           {queue.length > 1 && (
             <section className="batch-queue" aria-label={t('batch.title')}>
               <h2 className="batch-title">{t('batch.title')} ({queue.length})</h2>
@@ -220,7 +220,7 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* ── Trust stats (17TRACK-style social proof) ─────────────────── */}
+        {/* ── Trust stats (social proof) ─────────────────── */}
         <section className="stats-strip" aria-label="Statistics">
           {STATS.map((stat) => (
             <div key={stat.key} className="stat-cell">

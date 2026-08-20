@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tracking-app-liart-eight.vercel.app/sitemap.xml
+Sitemap: https://globaltracking.vercel.app/sitemap.xml

@@ -673,3 +673,99 @@ body {
   }
 }
 
+/* ── Mobile-first global optimizations ─────────────────────────────────── */
+
+/* Safe area insets for notched phones (iPhone X+, etc.) */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobile: larger tap targets, better readability */
+@media (max-width: 768px) {
+  /* Base font size bump for mobile readability */
+  html {
+    font-size: 16px;
+  }
+
+  /* Buttons and links: minimum 44px tap target (WCAG 2.5.5) */
+  button,
+  .btn,
+  a[href],
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Compact header on mobile */
+  header,
+  .site-header {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Full-width search on mobile */
+  .search-form,
+  .tracking-input {
+    width: 100%;
+  }
+
+  /* Reduce horizontal padding on mobile */
+  main,
+  .page-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Stack grids on mobile */
+  .features-grid,
+  .coverage-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* World clock: 2 columns on mobile */
+  .world-clock-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  /* Trust carriers: wrap on mobile */
+  .trust-carriers {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Footer: stack vertically */
+  footer,
+  .site-footer {
+    padding: 2rem 1rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Very small phones (< 380px): even more compact */
+@media (max-width: 380px) {
+  html {
+    font-size: 15px;
+  }
+
+  .world-clock-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}
+

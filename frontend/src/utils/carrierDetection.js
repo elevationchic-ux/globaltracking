@@ -1,8 +1,8 @@
 /**
  * Universal carrier detection engine  GlobalTrack.
  *
- * Inspired by the auto-detection strengths of 17TRACK, AfterShip and
- * Ship24: given any tracking number, detect the most likely carrier and
+ * Format-based auto-detection of the carrier from the tracking number shape:
+ * given any tracking number, detect the most likely carrier and
  * its operating region (USA / Canada / Europe) without any user input.
  *
  * Pure frontend heuristics  no backend dependency.
@@ -198,7 +198,7 @@ export function detectCarriers(input) {
   return candidates.sort((a, b) => b.confidence - a.confidence)
 }
 
-/** Best single match or null (the Ship24-style "instant carrier detect"). */
+/** Best single match or null (instant carrier detect). */
 export function detectCarrier(input) {
   const candidates = detectCarriers(input)
   return candidates.length > 0 ? candidates[0] : null
