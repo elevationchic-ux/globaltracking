@@ -1,4 +1,4 @@
-# Tracking App — Suivi de colis
+# Tracking App  Suivi de colis
 
 Socle d'application de suivi de colis : API Node.js/Express + frontend React (Vite).
 
@@ -23,7 +23,7 @@ tracking-app/
 
 ## Démarrage rapide (local)
 
-### Option A — sans Docker
+### Option A  sans Docker
 
 ```bash
 # Terminal 1 : backend (port 3001)
@@ -33,7 +33,7 @@ cd backend && npm install && npm run dev
 cd frontend && npm install && npm run dev
 ```
 
-### Option B — avec Docker
+### Option B  avec Docker
 
 ```bash
 docker compose up --build

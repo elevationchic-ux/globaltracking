@@ -10,9 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.16",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.460.0",
+    "postcss": "^8.4.32",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.9.5"
+    "react-globe.gl": "^2.28.0",
+    "react-router-dom": "^7.9.5",
+    "recharts": "^2.15.4",
+    "tailwindcss": "^3.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

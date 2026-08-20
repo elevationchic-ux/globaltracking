@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GlobalTrack sitemap  replace the domain with your production domain -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://globaltrack.example.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-FR" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="es-ES" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="es-419" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://globaltrack.example.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://globaltrack.example.com/"/>
+  </url>
+  <url>
+    <loc>https://globaltrack.example.com/global</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://globaltrack.example.com/pricing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://globaltrack.example.com/analytics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://globaltrack.example.com/trust</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Carrier landing pages (SEO acquisition: "USPS tracking", "suivi Colissimo") -->
+  <url>
+    <loc>https://globaltrack.example.com/carriers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url><loc>https://globaltrack.example.com/tracking/ups/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/fedex/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/usps/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/canada-post/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/purolator/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/dhl/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/la-poste-colissimo/</loc><priority>0.9</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/royal-mail/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/dpd/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/gls/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/postnl/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/china-post/</loc><priority>0.8</priority></url>
+
+  <!-- Help / status lexicon (captures stressed-user searches) -->
+  <url>
+    <loc>https://globaltrack.example.com/help</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url><loc>https://globaltrack.example.com/help/customs-clearance/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/help/exception/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/help/out-for-delivery/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/help/in-transit/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/help/info-received/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/help/delivered/</loc><priority>0.7</priority></url>
+
+  <!-- International corridors (pSEO: "track package from China to France") -->
+  <url><loc>https://globaltrack.example.com/corridors</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/china-to-france/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/china-to-usa/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/china-to-canada/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/france-to-usa/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/usa-to-canada/</loc><priority>0.8</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/usa-to-france/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/uk-to-canada/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/germany-to-france/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/germany-to-usa/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/corridors/japan-to-uk/</loc><priority>0.7</priority></url>
+
+  <!-- Carrier × status silo (sample of 72 programmatic pages) -->
+  <url><loc>https://globaltrack.example.com/tracking/usps/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/usps/status/exception/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/dhl/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/la-poste-colissimo/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/fedex/status/exception/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/ups/status/out-for-delivery/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/canada-post/status/customs-clearance/</loc><priority>0.7</priority></url>
+  <url><loc>https://globaltrack.example.com/tracking/royal-mail/status/delivered/</loc><priority>0.6</priority></url>
+
+  <!-- Legal / institutional trust pages -->
+  <url><loc>https://globaltrack.example.com/about</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltrack.example.com/privacy</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltrack.example.com/terms</loc><priority>0.5</priority></url>
+  <url><loc>https://globaltrack.example.com/legal</loc><priority>0.5</priority></url>
+</urlset>

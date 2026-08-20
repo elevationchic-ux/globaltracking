@@ -1,0 +1,19 @@
+{
+  "name": "globaltrack",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "GlobalTrack  universal package tracking (Vite frontend + Express tracking API)",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace backend",
+    "build": "npm run build --workspace frontend",
+    "lint": "npm run lint --workspace frontend && npm run lint --workspace backend"
+  }
+}

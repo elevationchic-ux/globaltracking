@@ -1,0 +1,590 @@
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+
+/**
+ * EN / FR / ES / DE internationalization for GlobalTrack.
+ * Worldwide audiences: locale defaults to the browser language; document.lang
+ * follows. Every dictionary falls back to English key-by-key.
+ */
+
+const dictionaries = {
+  en: {
+    'nav.missionControl': 'Mission Control',
+    'nav.language': 'Language',
+    'hero.badge': 'Universal tracking · 2,400+ carriers · 190 countries',
+    'hero.title': 'Track any package. Any carrier. Anywhere.',
+    'hero.subtitle':
+      'Paste your tracking number  GlobalTrack auto-detects the carrier and follows your parcel worldwide in real time.',
+    'hero.placeholder': 'e.g. 1Z999AA10123456784, 9400 1118 9922 3197 4284 90',
+    'hero.cta': 'Track',
+    'hero.ctaAll': 'Track all',
+    'hero.hint': 'Paste up to 50 numbers  one per line, comma or space separated',
+    'hero.detected': 'Carrier detected',
+    'hero.unknown': 'Carrier will be auto-detected',
+    'hero.csv': 'Import CSV',
+    'batch.title': 'Tracking queue',
+    'stats.carriers': 'carriers integrated',
+    'stats.countries': 'countries covered',
+    'stats.realtime': 'real-time refresh',
+    'stats.accuracy': 'auto-detection accuracy',
+    'coverage.title': 'Full coverage across North America & Europe',
+    'coverage.subtitle':
+      'One tracking number, one interface. GlobalTrack aggregates official data from every major domestic and international carrier.',
+    'coverage.region.USA': 'United States',
+    'coverage.region.CANADA': 'Canada',
+    'coverage.region.EUROPE': 'Europe',
+    'coverage.note': 'Official carrier data · auto hand-off at border & final mile',
+    'features.title': 'The best of every tracking platform, unified',
+    'features.autoDetect.title': 'Instant carrier detection',
+    'features.autoDetect.text':
+      'AI-grade format recognition identifies the carrier the moment you paste a number  no dropdown, no guessing (17TRACK / Ship24 strength).',
+    'features.batch.title': 'Batch tracking',
+    'features.batch.text':
+      'Paste dozens of tracking numbers at once and follow every parcel from a single queue (PKGE.NET / TrackTry strength).',
+    'features.timeline.title': 'Translated full history',
+    'features.timeline.text':
+      'Every scan point, translated into your language with the exact route your parcel travelled (Ordertracker strength).',
+    'features.regions.title': 'Border-aware routing',
+    'features.regions.text':
+      'Automatic hand-off between international and domestic carriers  USPS, Canada Post, Royal Mail, DHL, La Poste and more (TrackMage strength).',
+    'features.speed.title': 'Instant results',
+    'features.speed.text':
+      'Direct carrier lookups deliver the first status in seconds, not minutes (Ship24 strength).',
+    'features.precision.title': 'Time-slot precision',
+    'features.precision.text':
+      'Delivery windows narrowed to the time slot on supported networks (DPD strength).',
+    'faq.title': 'Frequently asked questions',
+    'faq.q1': 'How do I track a package with GlobalTrack?',
+    'faq.a1':
+      'Paste your tracking number in the search box. GlobalTrack auto-detects the carrier among 2,400+ supported services and shows the full journey: origin, transit scans, border hand-offs and final delivery.',
+    'faq.q2': 'Which carriers are supported in the USA, Canada and Europe?',
+    'faq.a2':
+      'In the USA: USPS, UPS, FedEx and DHL. In Canada: Canada Post, Purolator, UPS and FedEx. In Europe: DHL, La Poste / Colissimo, Royal Mail, DPD, GLS and PostNL  plus every major cross-border flow.',
+    'faq.q3': 'Can I track multiple packages at the same time?',
+    'faq.a3':
+      'Yes. Paste up to 50 tracking numbers separated by commas or line breaks  each one is detected and tracked in its own entry.',
+    'faq.q4': 'Is GlobalTrack free?',
+    'faq.a4':
+      'Tracking is free with no account required. Advanced telemetry (live mission control, analytics, alerts) is available on the Pro plan.',
+    'footer.tagline': 'One interface for every parcel on Earth.',
+    'footer.links': 'Explore',
+    'footer.legal':
+      '© 2026 GlobalTrack  independent package tracking service. Not affiliated with the carriers cited.',
+    'footer.carriers': 'Carriers',
+    'footer.corridors': 'International routes',
+    'footer.help': 'Help & tracking statuses',
+    'footer.about': 'About',
+    'footer.privacy': 'Privacy Policy',
+    'footer.terms': 'Terms of Use',
+    'footer.legalNotice': 'Legal Notice',
+    'footer.disclaimerShort':
+      'GlobalTrack is an independent tracking tool  we are neither the seller nor the carrier of your goods.',
+    'consent.text':
+      'GlobalTrack uses essential cookies to operate. Optional analytics cookies are only set with your consent (GDPR / CCPA).',
+    'consent.accept': 'Accept all',
+    'consent.essential': 'Essential only',
+    'map.openRealMap': 'View on real map',
+    'map.street': 'Street',
+    'map.satellite': 'Satellite',
+    'escalation.stuck': 'Package stuck here? What to do',
+    'stage.avg': 'Average time at this stage',
+    'stage.elapsed': 'elapsed so far',
+    'results.verified': 'Verified carrier data',
+    'results.fraud.title': 'Number not recognized  possible fraud',
+    'results.fraud.body':
+      'This tracking number matches no known carrier format. If a seller gave it to you, treat it as suspicious: ask for proof of shipment, never pay "customs fees" via wire transfer, and contact your bank or platform (PayPal, Amazon) to open a dispute.',
+    'home.carrierTrust': 'Connected to official carrier networks',
+    'trust.ssl': 'SSL encrypted',
+    'trust.officialApi': 'Official carrier APIs',
+    'trust.free100': '100% free',
+    'results.officialHelp': 'Blocked or lost package? Official carrier support',
+    'results.newSearch': '← New search',
+    'results.title': 'Package tracking',
+    'results.loading': 'Loading…',
+    'results.retry': 'Try another number',
+    'results.status': 'Status',
+    'results.carrier': 'Carrier',
+    'results.region': 'Region',
+    'results.correct': 'Wrong carrier?',
+    'results.corrected': 'corrected',
+    'results.origin': 'Origin',
+    'results.destination': 'Destination',
+    'results.history': 'Transit history',
+    'trust.disclaimer.title': 'Independent tracking service',
+    'trust.disclaimer.body':
+      'GlobalTrack is an independent tracking tool. We are neither the seller nor the carrier of your goods, and we never physically handle your package. For delivery issues, refunds or customs questions, please contact your seller or the carrier shown above.',
+    'trust.report': 'Report this package / suspicious seller',
+    'trust.report.title': 'Report a suspicious package',
+    'trust.report.placeholder':
+      'Reason: fake tracking number, seller never shipped, suspected dropshipping scam… (optional)',
+    'trust.report.submit': 'Send report',
+    'trust.report.cancel': 'Cancel',
+    'trust.report.done':
+      'Thank you. Our anti-fraud team reviews every report  repeated signals on the same tracking number trigger a caution alert for other buyers.',
+    'eta.ON_HOLD': 'On hold  pending customs / incident',
+    'eta.RESCHEDULING': 'Being rescheduled  new ETA soon',
+    'answer.where': 'Where is my package?',
+    'answer.when': 'When does it arrive?',
+    'timeline.pending': 'Pending',
+    'timeline.empty': 'No tracking events yet.',
+    'timeline.yourTime': 'Your time',
+    'status.PENDING': 'Pending',
+    'status.INFO_RECEIVED': 'Information received',
+    'status.IN_TRANSIT': 'In transit',
+    'status.OUT_FOR_DELIVERY': 'Out for delivery',
+    'status.DELIVERED': 'Delivered',
+    'status.EXCEPTION': 'Exception',
+    'status.RETURNED': 'Returned',
+    'clock.title': 'Local time across the world’s logistics hubs',
+    'clock.note':
+      'Live times computed from each hub’s official time zone  daylight saving included.',
+  },
+  fr: {
+    'nav.missionControl': 'Mission Control',
+    'nav.language': 'Langue',
+    'hero.badge': 'Suivi universel · 2 400+ transporteurs · 190 pays',
+    'hero.title': 'Suivez tous vos colis. Tous transporteurs. Partout.',
+    'hero.subtitle':
+      'Collez votre numéro de suivi  GlobalTrack détecte automatiquement le transporteur et suit votre colis dans le monde entier en temps réel.',
+    'hero.placeholder': 'ex : 1Z999AA10123456784, 9400 1118 9922 3197 4284 90',
+    'hero.cta': 'Suivre',
+    'hero.ctaAll': 'Tout suivre',
+    'hero.hint': 'Collez jusqu’à 50 numéros  un par ligne, séparés par virgules ou espaces',
+    'hero.detected': 'Transporteur détecté',
+    'hero.unknown': 'Le transporteur sera détecté automatiquement',
+    'hero.csv': 'Importer un CSV',
+    'batch.title': 'File de suivi',
+    'stats.carriers': 'transporteurs intégrés',
+    'stats.countries': 'pays couverts',
+    'stats.realtime': 'rafraîchissement temps réel',
+    'stats.accuracy': 'précision de détection',
+    'coverage.title': 'Couverture complète Amérique du Nord & Europe',
+    'coverage.subtitle':
+      'Un numéro de suivi, une interface. GlobalTrack agrège les données officielles de tous les grands transporteurs nationaux et internationaux.',
+    'coverage.region.USA': 'États-Unis',
+    'coverage.region.CANADA': 'Canada',
+    'coverage.region.EUROPE': 'Europe',
+    'coverage.note': 'Données transporteurs officielles · relais frontière & dernier kilomètre',
+    'features.title': 'Le meilleur de chaque plateforme de suivi, unifié',
+    'features.autoDetect.title': 'Détection instantanée du transporteur',
+    'features.autoDetect.text':
+      'Une reconnaissance de format de niveau IA identifie le transporteur dès que vous collez un numéro  sans menu déroulant, sans devinette (force de 17TRACK / Ship24).',
+    'features.batch.title': 'Suivi par lot',
+    'features.batch.text':
+      'Collez des dizaines de numéros de suivi d’un coup et suivez chaque colis depuis une file unique (force de PKGE.NET / TrackTry).',
+    'features.timeline.title': 'Historique complet traduit',
+    'features.timeline.text':
+      'Chaque point de scan, traduit dans votre langue, avec l’itinéraire exact parcouru par votre colis (force d’Ordertracker).',
+    'features.regions.title': 'Routage intelligent aux frontières',
+    'features.regions.text':
+      'Relais automatique entre transporteurs internationaux et nationaux  USPS, Postes Canada, Royal Mail, DHL, La Poste et plus (force de TrackMage).',
+    'features.speed.title': 'Résultats instantanés',
+    'features.speed.text':
+      'La consultation directe des transporteurs affiche le premier statut en quelques secondes (force de Ship24).',
+    'features.precision.title': 'Précision au créneau horaire',
+    'features.precision.text':
+      'Fenêtres de livraison affinées au créneau horaire près sur les réseaux compatibles (force de DPD).',
+    'faq.title': 'Questions fréquentes',
+    'faq.q1': 'Comment suivre un colis avec GlobalTrack ?',
+    'faq.a1':
+      'Collez votre numéro de suivi dans le champ de recherche. GlobalTrack détecte automatiquement le transporteur parmi plus de 2 400 services et affiche le trajet complet : origine, scans de transit, relais aux frontières et livraison finale.',
+    'faq.q2': 'Quels transporteurs sont pris en charge aux USA, au Canada et en Europe ?',
+    'faq.a2':
+      'Aux USA : USPS, UPS, FedEx et DHL. Au Canada : Postes Canada, Purolator, UPS et FedEx. En Europe : DHL, La Poste / Colissimo, Royal Mail, DPD, GLS et PostNL  ainsi que tous les grands flux transfrontaliers.',
+    'faq.q3': 'Puis-je suivre plusieurs colis en même temps ?',
+    'faq.a3':
+      'Oui. Collez jusqu’à 50 numéros de suivi séparés par des virgules ou des retours à la ligne  chacun est détecté et suivi individuellement.',
+    'faq.q4': 'GlobalTrack est-il gratuit ?',
+    'faq.a4':
+      'Le suivi est gratuit et sans compte. La télémétrie avancée (mission control en direct, analytics, alertes) est disponible sur le plan Pro.',
+    'footer.tagline': 'Une seule interface pour tous les colis de la planète.',
+    'footer.links': 'Explorer',
+    'footer.legal':
+      '© 2026 GlobalTrack  service indépendant de suivi de colis. Sans affiliation avec les transporteurs cités.',
+    'footer.carriers': 'Transporteurs',
+    'footer.corridors': 'Itinéraires internationaux',
+    'footer.help': 'Aide & statuts de suivi',
+    'footer.about': 'À propos',
+    'footer.privacy': 'Politique de confidentialité',
+    'footer.terms': 'Conditions d’utilisation',
+    'footer.legalNotice': 'Mentions légales',
+    'footer.disclaimerShort':
+      'GlobalTrack est un outil de suivi indépendant  nous ne sommes ni le vendeur ni le transporteur de vos marchandises.',
+    'consent.text':
+      'GlobalTrack utilise des cookies essentiels à son fonctionnement. Les cookies de mesure d’audience ne sont déposés qu’avec votre consentement (RGPD / CCPA).',
+    'consent.accept': 'Tout accepter',
+    'consent.essential': 'Essentiels uniquement',
+    'map.openRealMap': 'Voir sur carte réelle',
+    'map.street': 'Plan',
+    'map.satellite': 'Satellite',
+    'escalation.stuck': 'Colis bloqué ici ? Que faire',
+    'stage.avg': 'Durée moyenne à cette étape',
+    'stage.elapsed': 'écoulées à ce jour',
+    'results.verified': 'Données officielles du transporteur',
+    'results.fraud.title': 'Numéro non reconnu  fraude possible',
+    'results.fraud.body':
+      'Ce numéro de suivi ne correspond au format d’aucun transporteur connu. Si un vendeur vous l’a fourni, soyez prudent : exigez une preuve d’expédition, ne payez jamais de « frais de douane » par virement, et contactez votre banque ou la plateforme (PayPal, Amazon) pour ouvrir un litige.',
+    'home.carrierTrust': 'Connecté aux réseaux officiels des transporteurs',
+    'trust.ssl': 'Chiffré SSL',
+    'trust.officialApi': 'API officielles des transporteurs',
+    'trust.free100': '100 % gratuit',
+    'results.officialHelp': 'Colis bloqué ou perdu ? Support officiel du transporteur',
+    'results.newSearch': '← Nouvelle recherche',
+    'results.title': 'Suivi du colis',
+    'results.loading': 'Chargement…',
+    'results.retry': 'Réessayer avec un autre numéro',
+    'results.status': 'Statut',
+    'results.carrier': 'Transporteur',
+    'results.region': 'Région',
+    'results.correct': 'Erreur de transporteur ?',
+    'results.corrected': 'corrigé',
+    'results.origin': 'Origine',
+    'results.destination': 'Destination',
+    'results.history': 'Historique du transit',
+    'trust.disclaimer.title': 'Service de suivi indépendant',
+    'trust.disclaimer.body':
+      'GlobalTrack est un outil de suivi indépendant. Nous ne sommes ni le vendeur ni le transporteur de vos marchandises, et nous ne manipulons jamais physiquement votre colis. Pour tout problème de livraison, remboursement ou question de douane, contactez votre vendeur ou le transporteur indiqué ci-dessus.',
+    'trust.report': 'Signaler ce colis / vendeur suspect',
+    'trust.report.title': 'Signaler un colis suspect',
+    'trust.report.placeholder':
+      'Motif : faux numéro de suivi, vendeur n’ayant jamais expédié, arnaque dropshipping… (facultatif)',
+    'trust.report.submit': 'Envoyer le signalement',
+    'trust.report.cancel': 'Annuler',
+    'trust.report.done':
+      'Merci. Notre équipe anti-fraude examine chaque signalement  des signaux répétés sur un même numéro de suivi déclenchent une alerte de prudence pour les autres acheteurs.',
+    'eta.ON_HOLD': 'En attente  douane / incident en cours',
+    'eta.RESCHEDULING': 'Replanification  nouvel ETA bientôt',
+    'answer.where': 'Où est mon colis ?',
+    'answer.when': 'Quand arrive-t-il ?',
+    'timeline.pending': 'En attente',
+    'timeline.empty': 'Aucun événement de suivi pour le moment.',
+    'timeline.yourTime': 'Votre heure',
+    'status.PENDING': 'En attente',
+    'status.INFO_RECEIVED': 'Informations reçues',
+    'status.IN_TRANSIT': 'En transit',
+    'status.OUT_FOR_DELIVERY': 'En cours de livraison',
+    'status.DELIVERED': 'Livré',
+    'status.EXCEPTION': 'Incident',
+    'status.RETURNED': 'Retourné',
+    'clock.title': 'Heure locale dans les grands hubs logistiques mondiaux',
+    'clock.note':
+      'Heures en direct calculées depuis le fuseau horaire officiel de chaque hub  heure d’été incluse.',
+  },
+  es: {
+    'nav.missionControl': 'Control de misión',
+    'nav.language': 'Idioma',
+    'hero.badge': 'Seguimiento universal · 2 400+ transportistas · 190 países',
+    'hero.title': 'Rastrea cualquier paquete. Cualquier transportista. Donde sea.',
+    'hero.subtitle':
+      'Pega tu número de seguimiento  GlobalTrack detecta automáticamente el transportista y sigue tu paquete por todo el mundo en tiempo real.',
+    'hero.placeholder': 'ej.: 1Z999AA10123456784, 9400 1118 9922 3197 4284 90',
+    'hero.cta': 'Rastrear',
+    'hero.ctaAll': 'Rastrear todo',
+    'hero.hint': 'Pega hasta 50 números  uno por línea, separados por comas o espacios',
+    'hero.detected': 'Transportista detectado',
+    'hero.unknown': 'El transportista se detectará automáticamente',
+    'hero.csv': 'Importar CSV',
+    'batch.title': 'Cola de seguimiento',
+    'stats.carriers': 'transportistas integrados',
+    'stats.countries': 'países cubiertos',
+    'stats.realtime': 'actualización en tiempo real',
+    'stats.accuracy': 'precisión de detección',
+    'coverage.title': 'Cobertura total en Norteamérica y Europa',
+    'coverage.subtitle':
+      'Un número de seguimiento, una interfaz. GlobalTrack agrega los datos oficiales de todos los grandes transportistas nacionales e internacionales.',
+    'coverage.region.USA': 'Estados Unidos',
+    'coverage.region.CANADA': 'Canadá',
+    'coverage.region.EUROPE': 'Europa',
+    'coverage.note': 'Datos oficiales · transferencia en frontera y última milla',
+    'features.title': 'Lo mejor de cada plataforma de seguimiento, unificado',
+    'features.autoDetect.title': 'Detección instantánea del transportista',
+    'features.autoDetect.text':
+      'El reconocimiento de formato identifica el transportista en cuanto pegas un número  sin menús ni conjeturas (fortaleza de 17TRACK / Ship24).',
+    'features.batch.title': 'Seguimiento por lotes',
+    'features.batch.text':
+      'Pega decenas de números de seguimiento a la vez y controla cada paquete desde una sola cola (fortaleza de PKGE.NET / TrackTry).',
+    'features.timeline.title': 'Historial completo traducido',
+    'features.timeline.text':
+      'Cada punto de escaneo, traducido a tu idioma, con la ruta exacta que recorrió tu paquete (fortaleza de Ordertracker).',
+    'features.regions.title': 'Enrutamiento inteligente en fronteras',
+    'features.regions.text':
+      'Transferencia automática entre transportistas internacionales y locales  USPS, Canada Post, Royal Mail, DHL, La Poste y más (fortaleza de TrackMage).',
+    'features.speed.title': 'Resultados instantáneos',
+    'features.speed.text':
+      'La consulta directa al transportista entrega el primer estado en segundos, no minutos (fortaleza de Ship24).',
+    'features.precision.title': 'Precisión de franja horaria',
+    'features.precision.text':
+      'Ventanas de entrega afinadas a la franja horaria en las redes compatibles (fortaleza de DPD).',
+    'faq.title': 'Preguntas frecuentes',
+    'faq.q1': '¿Cómo rastreo un paquete con GlobalTrack?',
+    'faq.a1':
+      'Pega tu número de seguimiento en el buscador. GlobalTrack detecta automáticamente el transportista entre más de 2 400 servicios y muestra el viaje completo: origen, escaneos de tránsito, transferencias fronterizas y entrega final.',
+    'faq.q2': '¿Qué transportistas están disponibles en EE. UU., Canadá y Europa?',
+    'faq.a2':
+      'En EE. UU.: USPS, UPS, FedEx y DHL. En Canadá: Canada Post, Purolator, UPS y FedEx. En Europa: DHL, La Poste / Colissimo, Royal Mail, DPD, GLS y PostNL  además de todos los grandes flujos transfronterizos.',
+    'faq.q3': '¿Puedo rastrear varios paquetes a la vez?',
+    'faq.a3':
+      'Sí. Pega hasta 50 números de seguimiento separados por comas o saltos de línea  cada uno se detecta y rastrea por separado.',
+    'faq.q4': '¿GlobalTrack es gratis?',
+    'faq.a4':
+      'El seguimiento es gratis y sin cuenta. La telemetría avanzada (control de misión en vivo, analíticas, alertas) está disponible en el plan Pro.',
+    'footer.tagline': 'Una sola interfaz para todos los paquetes del planeta.',
+    'footer.links': 'Explorar',
+    'footer.legal':
+      '© 2026 GlobalTrack  servicio independiente de seguimiento de paquetes. Sin afiliación con los transportistas citados.',
+    'footer.carriers': 'Transportistas',
+    'footer.corridors': 'Rutas internacionales',
+    'footer.help': 'Ayuda y estados de seguimiento',
+    'footer.about': 'Acerca de',
+    'footer.privacy': 'Política de privacidad',
+    'footer.terms': 'Condiciones de uso',
+    'footer.legalNotice': 'Aviso legal',
+    'footer.disclaimerShort':
+      'GlobalTrack es una herramienta de seguimiento independiente  no somos ni el vendedor ni el transportista de tus mercancías.',
+    'consent.text':
+      'GlobalTrack utiliza cookies esenciales para funcionar. Las cookies analíticas opcionales solo se instalan con tu consentimiento (RGPD / CCPA).',
+    'consent.accept': 'Aceptar todo',
+    'consent.essential': 'Solo esenciales',
+    'map.openRealMap': 'Ver en mapa real',
+    'map.street': 'Callejero',
+    'map.satellite': 'Satélite',
+    'escalation.stuck': '¿Paquete atascado aquí? Qué hacer',
+    'stage.avg': 'Tiempo medio en esta etapa',
+    'stage.elapsed': 'transcurrido hasta ahora',
+    'results.verified': 'Datos verificados del transportista',
+    'results.fraud.title': 'Número no reconocido  posible fraude',
+    'results.fraud.body':
+      'Este número de seguimiento no coincide con ningún formato conocido. Si te lo dio un vendedor, trátalo como sospechoso: exige prueba de envío, nunca pagues «tarifas de aduana» por transferencia y contacta a tu banco o plataforma (PayPal, Amazon) para abrir una disputa.',
+    'home.carrierTrust': 'Conectado a las redes oficiales de transportistas',
+    'trust.ssl': 'Cifrado SSL',
+    'trust.officialApi': 'APIs oficiales de transportistas',
+    'trust.free100': '100% gratis',
+    'results.officialHelp': '¿Paquete bloqueado o perdido? Soporte oficial del transportista',
+    'results.newSearch': '← Nueva búsqueda',
+    'results.title': 'Seguimiento del paquete',
+    'results.loading': 'Cargando…',
+    'results.retry': 'Probar con otro número',
+    'results.status': 'Estado',
+    'results.carrier': 'Transportista',
+    'results.region': 'Región',
+    'results.correct': '¿Transportista incorrecto?',
+    'results.corrected': 'corregido',
+    'results.origin': 'Origen',
+    'results.destination': 'Destino',
+    'results.history': 'Historial de tránsito',
+    'trust.disclaimer.title': 'Servicio de seguimiento independiente',
+    'trust.disclaimer.body':
+      'GlobalTrack es una herramienta de seguimiento independiente. No somos ni el vendedor ni el transportista de tus mercancías, y nunca manipulamos físicamente tu paquete. Para problemas de entrega, reembolsos o dudas de aduana, contacta a tu vendedor o al transportista indicado arriba.',
+    'trust.report': 'Reportar este paquete / vendedor sospechoso',
+    'trust.report.title': 'Reportar un paquete sospechoso',
+    'trust.report.placeholder':
+      'Motivo: número falso, el vendedor nunca envió, sospecha de estafa dropshipping… (opcional)',
+    'trust.report.submit': 'Enviar reporte',
+    'trust.report.cancel': 'Cancelar',
+    'trust.report.done':
+      'Gracias. Nuestro equipo antifraude revisa cada reporte  señales repetidas sobre un mismo número activan una alerta de precaución para otros compradores.',
+    'eta.ON_HOLD': 'En espera  pendiente de aduana / incidencia',
+    'eta.RESCHEDULING': 'Reprogramado  nueva estimación pronto',
+    'answer.where': '¿Dónde está mi paquete?',
+    'answer.when': '¿Cuándo llega?',
+    'timeline.pending': 'Pendiente',
+    'timeline.empty': 'Aún no hay eventos de seguimiento.',
+    'timeline.yourTime': 'Tu hora',
+    'status.PENDING': 'Pendiente',
+    'status.INFO_RECEIVED': 'Información recibida',
+    'status.IN_TRANSIT': 'En tránsito',
+    'status.OUT_FOR_DELIVERY': 'En reparto',
+    'status.DELIVERED': 'Entregado',
+    'status.EXCEPTION': 'Incidencia',
+    'status.RETURNED': 'Devuelto',
+    'clock.title': 'Hora local en los grandes hubs logísticos del mundo',
+    'clock.note':
+      'Horas en vivo calculadas con el huso horario oficial de cada hub  horario de verano incluido.',
+  },
+  de: {
+    'nav.missionControl': 'Mission Control',
+    'nav.language': 'Sprache',
+    'hero.badge': 'Universelles Tracking · 2.400+ Spediteure · 190 Länder',
+    'hero.title': 'Verfolge jedes Paket. Jeder Carrier. Überall.',
+    'hero.subtitle':
+      'Füge deine Sendungsnummer ein  GlobalTrack erkennt den Carrier automatisch und verfolgt dein Paket weltweit in Echtzeit.',
+    'hero.placeholder': 'z. B. 1Z999AA10123456784, 9400 1118 9922 3197 4284 90',
+    'hero.cta': 'Verfolgen',
+    'hero.ctaAll': 'Alle verfolgen',
+    'hero.hint': 'Füge bis zu 50 Nummern ein  eine pro Zeile, durch Komma oder Leerzeichen getrennt',
+    'hero.detected': 'Carrier erkannt',
+    'hero.unknown': 'Der Carrier wird automatisch erkannt',
+    'hero.csv': 'CSV importieren',
+    'batch.title': 'Tracking-Warteschlange',
+    'stats.carriers': 'integrierte Carrier',
+    'stats.countries': 'abgedeckte Länder',
+    'stats.realtime': 'Echtzeit-Aktualisierung',
+    'stats.accuracy': 'Erkennungsgenauigkeit',
+    'coverage.title': 'Volle Abdeckung in Nordamerika & Europa',
+    'coverage.subtitle':
+      'Eine Sendungsnummer, eine Oberfläche. GlobalTrack bündelt die offiziellen Daten aller großen nationalen und internationalen Carrier.',
+    'coverage.region.USA': 'Vereinigte Staaten',
+    'coverage.region.CANADA': 'Kanada',
+    'coverage.region.EUROPE': 'Europa',
+    'coverage.note': 'Offizielle Carrier-Daten · automatische Übergabe an Grenze & letzter Meile',
+    'features.title': 'Das Beste jeder Tracking-Plattform, vereint',
+    'features.autoDetect.title': 'Sofortige Carrier-Erkennung',
+    'features.autoDetect.text':
+      'Die Formaterkennung identifiziert den Carrier, sobald du eine Nummer einfügst  kein Dropdown, kein Raten (Stärke von 17TRACK / Ship24).',
+    'features.batch.title': 'Sammel-Tracking',
+    'features.batch.text':
+      'Füge Dutzende Sendungsnummern auf einmal ein und verfolge jedes Paket in einer einzigen Warteschlange (Stärke von PKGE.NET / TrackTry).',
+    'features.timeline.title': 'Vollständig übersetzte Historie',
+    'features.timeline.text':
+      'Jeder Scan-Punkt in deiner Sprache, mit der exakten Route deines Pakets (Stärke von Ordertracker).',
+    'features.regions.title': 'Grenzintelligentes Routing',
+    'features.regions.text':
+      'Automatische Übergabe zwischen internationalen und lokalen Carriern  USPS, Canada Post, Royal Mail, DHL, La Poste u. v. m. (Stärke von TrackMage).',
+    'features.speed.title': 'Sofortige Ergebnisse',
+    'features.speed.text':
+      'Direkte Carrier-Abfragen liefern den ersten Status in Sekunden, nicht Minuten (Stärke von Ship24).',
+    'features.precision.title': 'Zeitfenster-Präzision',
+    'features.precision.text':
+      'Lieferfenster auf unterstützten Netzen bis aufs Zeitfenster genau (Stärke von DPD).',
+    'faq.title': 'Häufig gestellte Fragen',
+    'faq.q1': 'Wie verfolge ich ein Paket mit GlobalTrack?',
+    'faq.a1':
+      'Füge deine Sendungsnummer in das Suchfeld ein. GlobalTrack erkennt den Carrier automatisch unter über 2.400 Diensten und zeigt die komplette Reise: Herkunft, Transit-Scans, Grenzübergaben und Zustellung.',
+    'faq.q2': 'Welche Carrier werden in den USA, Kanada und Europa unterstützt?',
+    'faq.a2':
+      'In den USA: USPS, UPS, FedEx und DHL. In Kanada: Canada Post, Purolator, UPS und FedEx. In Europa: DHL, La Poste / Colissimo, Royal Mail, DPD, GLS und PostNL  plus alle großen grenzüberschreitenden Ströme.',
+    'faq.q3': 'Kann ich mehrere Pakete gleichzeitig verfolgen?',
+    'faq.a3':
+      'Ja. Füge bis zu 50 Sendungsnummern ein, getrennt durch Kommas oder Zeilenumbrüche  jede wird einzeln erkannt und verfolgt.',
+    'faq.q4': 'Ist GlobalTrack kostenlos?',
+    'faq.a4':
+      'Das Tracking ist kostenlos und ohne Konto. Erweiterte Telemetrie (Live Mission Control, Analysen, Alarme) gibt es im Pro-Plan.',
+    'footer.tagline': 'Eine Oberfläche für jedes Paket der Welt.',
+    'footer.links': 'Entdecken',
+    'footer.legal':
+      '© 2026 GlobalTrack  unabhängiger Paket-Tracking-Dienst. Nicht mit den genannten Carriern verbunden.',
+    'footer.carriers': 'Carrier',
+    'footer.corridors': 'Internationale Routen',
+    'footer.help': 'Hilfe & Sendungsstatus',
+    'footer.about': 'Über uns',
+    'footer.privacy': 'Datenschutzerklärung',
+    'footer.terms': 'Nutzungsbedingungen',
+    'footer.legalNotice': 'Impressum',
+    'footer.disclaimerShort':
+      'GlobalTrack ist ein unabhängiges Tracking-Tool  wir sind weder Verkäufer noch Carrier deiner Ware.',
+    'consent.text':
+      'GlobalTrack verwendet essenzielle Cookies für den Betrieb. Optionale Analyse-Cookies werden nur mit deiner Einwilligung gesetzt (DSGVO / CCPA).',
+    'consent.accept': 'Alle akzeptieren',
+    'consent.essential': 'Nur essenzielle',
+    'map.openRealMap': 'Auf echter Karte ansehen',
+    'map.street': 'Straßenkarte',
+    'map.satellite': 'Satellit',
+    'escalation.stuck': 'Paket hier festgefahren? Was zu tun ist',
+    'stage.avg': 'Durchschnittliche Dauer in dieser Etappe',
+    'stage.elapsed': 'bisher verstrichen',
+    'results.verified': 'Verifizierte Carrier-Daten',
+    'results.fraud.title': 'Nummer nicht erkannt  möglicher Betrug',
+    'results.fraud.body':
+      'Diese Sendungsnummer passt zu keinem bekannten Carrier-Format. Hat ein Verkäufer sie dir gegeben, sei vorsichtig: verlange einen Versandnachweis, überweise niemals „Zollgebühren“ und kontaktiere deine Bank oder Plattform (PayPal, Amazon) für eine Streitigkeit.',
+    'home.carrierTrust': 'Verbunden mit den offiziellen Carrier-Netzen',
+    'trust.ssl': 'SSL-verschlüsselt',
+    'trust.officialApi': 'Offizielle Carrier-APIs',
+    'trust.free100': '100 % kostenlos',
+    'results.officialHelp': 'Paket blockiert oder verloren? Offizieller Carrier-Support',
+    'results.newSearch': '← Neue Suche',
+    'results.title': 'Paketverfolgung',
+    'results.loading': 'Lädt…',
+    'results.retry': 'Andere Nummer versuchen',
+    'results.status': 'Status',
+    'results.carrier': 'Carrier',
+    'results.region': 'Region',
+    'results.correct': 'Falscher Carrier?',
+    'results.corrected': 'korrigiert',
+    'results.origin': 'Herkunft',
+    'results.destination': 'Ziel',
+    'results.history': 'Transit-Historie',
+    'trust.disclaimer.title': 'Unabhängiger Tracking-Dienst',
+    'trust.disclaimer.body':
+      'GlobalTrack ist ein unabhängiges Tracking-Tool. Wir sind weder Verkäufer noch Carrier deiner Ware und fassen dein Paket nie physisch an. Bei Lieferproblemen, Erstattungen oder Zollfragen wende dich bitte an deinen Verkäufer oder den oben genannten Carrier.',
+    'trust.report': 'Dieses Paket / verdächtigen Verkäufer melden',
+    'trust.report.title': 'Verdächtiges Paket melden',
+    'trust.report.placeholder':
+      'Grund: gefälschte Sendungsnummer, nie versendet, Verdacht auf Dropshipping-Betrug… (optional)',
+    'trust.report.submit': 'Meldung senden',
+    'trust.report.cancel': 'Abbrechen',
+    'trust.report.done':
+      'Danke. Unser Anti-Betrugs-Team prüft jede Meldung  wiederholte Signale zu derselben Nummer lösen eine Warnung für andere Käufer aus.',
+    'eta.ON_HOLD': 'Pausiert  Zoll / Zwischenfall ausstehend',
+    'eta.RESCHEDULING': 'Wird neu geplant  neue Ankunftszeit folgt',
+    'answer.where': 'Wo ist mein Paket?',
+    'answer.when': 'Wann kommt es an?',
+    'timeline.pending': 'Ausstehend',
+    'timeline.empty': 'Noch keine Tracking-Ereignisse.',
+    'timeline.yourTime': 'Deine Zeit',
+    'status.PENDING': 'Ausstehend',
+    'status.INFO_RECEIVED': 'Information erhalten',
+    'status.IN_TRANSIT': 'Unterwegs',
+    'status.OUT_FOR_DELIVERY': 'In Zustellung',
+    'status.DELIVERED': 'Zugestellt',
+    'status.EXCEPTION': 'Störung',
+    'status.RETURNED': 'Zurückgesandt',
+    'clock.title': 'Ortszeit in den großen Logistik-Hubs der Welt',
+    'clock.note':
+      'Live-Zeiten aus der offiziellen Zeitzone jedes Hubs berechnet  Sommerzeit inbegriffen.',
+  },
+}
+
+export const LOCALES = ['en', 'fr', 'es', 'de']
+
+function initialLocale() {
+  const lang = (typeof navigator !== 'undefined' && navigator.language?.toLowerCase()) || 'en'
+  if (lang.startsWith('fr')) return 'fr'
+  if (lang.startsWith('es')) return 'es'
+  if (lang.startsWith('de')) return 'de'
+  return 'en'
+}
+
+const I18nContext = createContext(null)
+
+export function I18nProvider({ children }) {
+  const [locale, setLocale] = useState(initialLocale)
+
+  useEffect(() => {
+    document.documentElement.lang = locale
+  }, [locale])
+
+  const value = useMemo(
+    () => ({
+      locale,
+      setLocale,
+      t: (key) => dictionaries[locale]?.[key] ?? dictionaries.en[key] ?? key,
+    }),
+    [locale],
+  )
+
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
+}
+
+export function useI18n() {
+  const ctx = useContext(I18nContext)
+  if (!ctx) throw new Error('useI18n must be used within I18nProvider')
+  return ctx
+}
+
+/** Minimal language switcher (EN | FR | ES | DE). */
+export function LanguageSwitcher() {
+  const { locale, setLocale } = useI18n()
+  return (
+    <div className="lang-switch" role="group" aria-label="Language">
+      {LOCALES.map((loc) => (
+        <button
+          key={loc}
+          type="button"
+          className={`lang-option${locale === loc ? ' lang-active' : ''}`}
+          onClick={() => setLocale(loc)}
+        >
+          {loc.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  )
+}

@@ -1,14 +1,22 @@
 import { MockCarrierAdapter } from './MockCarrierAdapter.js';
+import { SeventeenTrackAdapter } from './SeventeenTrackAdapter.js';
 
 /**
  * Carrier registry: single entry point used by the API layer.
  *
- * To integrate a real carrier, implement a CarrierAdapter subclass
- * (see MockCarrierAdapter) and add an instance to the list below.
- * Adapters are tried in order; the first one whose `matches()` returns
- * true for the tracking number handles the request.
+ * Adapters are tried in order; the first one whose `matches()` returns true
+ * for the tracking number handles the request.
+ *
+ * Production mode: with TRACKING_API_KEY set (17TRACK developer key), every
+ * real tracking number is looked up against the 17TRACK aggregator API
+ * (2,500+ official carriers). The demo adapter only ever matches the two
+ * seeded DEMO numbers, so it never shadows a real lookup.
  */
 const adapters = [new MockCarrierAdapter()];
+
+if (process.env.TRACKING_API_KEY) {
+  adapters.push(new SeventeenTrackAdapter(process.env.TRACKING_API_KEY));
+}
 
 export function registerAdapter(adapter) {
   adapters.push(adapter);

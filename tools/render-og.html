@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>GlobalTrack og:image rasterizer</title>
+  <style>body { margin: 1rem; font-family: system-ui; background: #0f172a; color: #e2e8f0; }</style>
+</head>
+<body>
+  <h1>og-cover rasterizer</h1>
+  <p>Exports <code>tools/og-cover.svg</code> as a 1200×630 PNG (base64).</p>
+  <button id="export">Export PNG (base64)</button>
+  <pre id="out" style="max-height: 200px; overflow: auto;"></pre>
+  <script type="module">
+    document.getElementById('export').addEventListener('click', async () => {
+      const res = await fetch('./og-cover.svg');
+      const svgText = await res.text();
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 630;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 1200, 630);
+        const dataUrl = canvas.toDataURL('image/png');
+        document.getElementById('out').textContent = dataUrl.slice(0, 120) + '…';
+        // Auto-download for manual flow.
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'og-cover.png';
+        a.click();
+        // Expose for automation.
+        window.__ogBase64 = dataUrl;
+      };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+    });
+  </script>
+</body>
+</html>

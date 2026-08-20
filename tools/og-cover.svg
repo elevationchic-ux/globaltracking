@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="85%">
+      <stop offset="0%" stop-color="#0e1b36"/>
+      <stop offset="55%" stop-color="#081026"/>
+      <stop offset="100%" stop-color="#050a18"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.28"/>
+      <stop offset="70%" stop-color="#3b82f6" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#050a18" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="earth" cx="42%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="60%" stop-color="#0f2150"/>
+      <stop offset="100%" stop-color="#081026"/>
+    </radialGradient>
+    <linearGradient id="arc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <ellipse cx="820" cy="330" rx="420" ry="360" fill="url(#glow)"/>
+
+  <!-- Globe -->
+  <g>
+    <circle cx="820" cy="330" r="215" fill="url(#earth)" stroke="#3b82f6" stroke-opacity="0.55" stroke-width="2"/>
+    <ellipse cx="820" cy="330" rx="215" ry="86" fill="none" stroke="#60a5fa" stroke-opacity="0.35" stroke-width="1.5"/>
+    <ellipse cx="820" cy="330" rx="215" ry="160" fill="none" stroke="#60a5fa" stroke-opacity="0.22" stroke-width="1.2"/>
+    <ellipse cx="820" cy="330" rx="86" ry="215" fill="none" stroke="#60a5fa" stroke-opacity="0.35" stroke-width="1.5"/>
+    <ellipse cx="820" cy="330" rx="160" ry="215" fill="none" stroke="#60a5fa" stroke-opacity="0.22" stroke-width="1.2"/>
+    <line x1="605" y1="330" x2="1035" y2="330" stroke="#60a5fa" stroke-opacity="0.3" stroke-width="1.2"/>
+    <!-- Route arc + hubs -->
+    <path d="M 665 420 Q 820 150 985 380" fill="none" stroke="url(#arc)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 10"/>
+    <circle cx="665" cy="420" r="8" fill="#22d3ee"/>
+    <circle cx="985" cy="380" r="8" fill="#22d3ee"/>
+    <circle cx="820" cy="245" r="7" fill="#f59e0b"/>
+    <circle cx="665" cy="420" r="15" fill="#22d3ee" fill-opacity="0.25"/>
+    <circle cx="985" cy="380" r="15" fill="#22d3ee" fill-opacity="0.25"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="84" y="228" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="84" font-weight="800" letter-spacing="6" fill="#ffffff">GLOBAL<tspan fill="#22d3ee">TRACK</tspan></text>
+  <text x="88" y="286" font-family="'Segoe UI', system-ui, sans-serif" font-size="30" font-weight="500" letter-spacing="3" fill="#93c5fd">Track any package · Any carrier · Anywhere</text>
+
+  <!-- Trust chips -->
+  <g font-family="'Segoe UI', system-ui, sans-serif" font-size="22" font-weight="600">
+    <rect x="84" y="360" width="220" height="52" rx="26" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="118" y="394" fill="#e2e8f0">🔒 SSL encrypted</text>
+    <rect x="324" y="360" width="290" height="52" rx="26" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="358" y="394" fill="#e2e8f0">✓ 2,400+ carriers</text>
+    <rect x="634" y="360" width="200" height="52" rx="26" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text x="668" y="394" fill="#e2e8f0">★ 100% free</text>
+  </g>
+
+  <!-- Bottom line -->
+  <rect x="0" y="596" width="1200" height="34" fill="#020617"/>
+  <text x="84" y="620" font-family="'Segoe UI', system-ui, sans-serif" font-size="20" letter-spacing="2" fill="#64748b">REAL-TIME WORLDWIDE PACKAGE TRACKING — USA · CANADA · EUROPE · ASIA</text>
+</svg>

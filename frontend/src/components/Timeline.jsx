@@ -1,4 +1,6 @@
 import './Timeline.css'
+import { useI18n } from '../i18n/I18nContext.jsx'
+import { browserTag } from '../utils/format.js'
 
 function formatPlace(place) {
   if (!place) return ''
@@ -6,16 +8,20 @@ function formatPlace(place) {
   return [place.city, place.country].filter(Boolean).join(', ')
 }
 
-function formatDate(timestamp) {
-  return new Date(timestamp).toLocaleString('fr-FR', {
-    dateStyle: 'long',
-    timeStyle: 'short',
-  })
+// Visitor-locale human format ("Aug 19, 2026, 2:30 PM" / "19 août 2026, 14:30")
+//  never the raw developer format.
+function formatDate(timestamp, tag) {
+  const date = new Date(timestamp)
+  if (Number.isNaN(date.getTime())) return timestamp
+  return new Intl.DateTimeFormat(tag, { dateStyle: 'long', timeStyle: 'short' }).format(date)
 }
 
 export default function Timeline({ events }) {
+  const { t, locale } = useI18n()
+  const tag = browserTag(locale)
+
   if (!events?.length) {
-    return <p className="timeline-empty">Aucun événement de suivi pour le moment.</p>
+    return <p className="timeline-empty">{t('timeline.empty')}</p>
   }
 
   const ordered = [...events].reverse()
@@ -31,7 +37,7 @@ export default function Timeline({ events }) {
           <div className="timeline-content">
             <p className="timeline-description">{event.statusDescription}</p>
             <p className="timeline-meta">
-              {formatDate(event.timestamp)}
+              {formatDate(event.timestamp, tag)}
               {formatPlace(event.location) && ` · ${formatPlace(event.location)}`}
             </p>
           </div>
