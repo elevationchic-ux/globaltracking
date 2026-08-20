@@ -1,5 +1,5 @@
 {
-  "name": "GlobalTrack \u2014 Universal Package Tracking",
+  "name": "GlobalTrack — Universal Package Tracking",
   "short_name": "GlobalTrack",
   "description": "Track any package with one number. Auto-detects 2,400+ carriers worldwide.",
   "id": "/",
@@ -9,6 +9,7 @@
   "background_color": "#050a18",
   "theme_color": "#050a18",
   "lang": "en",
+  "orientation": "any",
   "categories": ["business", "utilities"],
   "shortcuts": [
     {
@@ -21,6 +22,12 @@
       "name": "Mission Control",
       "short_name": "Globe",
       "url": "/global",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Pricing Plans",
+      "short_name": "Pricing",
+      "url": "/pricing",
       "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
     }
   ],
@@ -36,6 +43,11 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ]
 }

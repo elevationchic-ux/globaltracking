@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -27,31 +28,24 @@ const PAYMENT_METHODS = [
 
 export default function PricingPlans() {
   const { t } = useI18n();
-  const { user, authFetch } = useAuth();
-  const [purchasing, setPurchasing] = useState(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [message, setMessage] = useState(null);
 
-  async function handlePurchase(packId) {
+  function handlePurchase(packId) {
     if (!user) {
       setMessage({ type: 'error', text: t('pricing.loginRequired') });
       return;
     }
-    setPurchasing(packId);
-    try {
-      const res = await authFetch('/api/credits/purchase', {
-        method: 'POST',
-        body: JSON.stringify({ packId }),
-      });
-      const data = await res.json().catch(() => null);
-      if (res.ok) {
-        setMessage({ type: 'success', text: `${data.message}  ${t('pricing.newBalance')}: ${data.newBalance}` });
-      } else {
-        setMessage({ type: 'error', text: data?.message || t('pricing.purchaseFailed') });
-      }
-    } catch {
-      setMessage({ type: 'error', text: t('pricing.purchaseFailed') });
+    navigate(`/checkout?pack=${packId}`);
+  }
+
+  function handleMicroPurchase(itemId) {
+    if (!user) {
+      setMessage({ type: 'error', text: t('pricing.loginRequired') });
+      return;
     }
-    setPurchasing(null);
+    navigate(`/checkout?item=${itemId}`);
   }
 
   // Feature comparison rows for the table
@@ -127,9 +121,8 @@ export default function PricingPlans() {
                 className="pricing-token-btn"
                 style={{ background: pack.color }}
                 onClick={() => handlePurchase(pack.id)}
-                disabled={purchasing === pack.id}
               >
-                {purchasing === pack.id ? t('pricing.processing') : t('pricing.buyNow')}
+                {t('pricing.buyNow')}
               </button>
             </div>
           ))}
@@ -183,6 +176,9 @@ export default function PricingPlans() {
               <span className="pricing-micro-amount">€0.99</span>
               <span className="pricing-micro-unit">{t('pricing.perPackage')}</span>
             </div>
+            <button className="pricing-token-btn" style={{ background: '#25D366', marginTop: '0.75rem' }} onClick={() => handleMicroPurchase('whatsapp-alert')}>
+              {t('pricing.buyNow')}
+            </button>
           </div>
           <div className="pricing-micro-card">
             <div className="pricing-micro-icon">📱</div>
@@ -192,6 +188,9 @@ export default function PricingPlans() {
               <span className="pricing-micro-amount">€0.99</span>
               <span className="pricing-micro-unit">{t('pricing.perPackage')}</span>
             </div>
+            <button className="pricing-token-btn" style={{ background: '#8b5cf6', marginTop: '0.75rem' }} onClick={() => handleMicroPurchase('sms-alert')}>
+              {t('pricing.buyNow')}
+            </button>
           </div>
           <div className="pricing-micro-card">
             <div className="pricing-micro-icon">📦</div>
@@ -201,6 +200,9 @@ export default function PricingPlans() {
               <span className="pricing-micro-amount">€2.99</span>
               <span className="pricing-micro-unit">{t('pricing.perFile')}</span>
             </div>
+            <button className="pricing-token-btn" style={{ background: '#06b6d4', marginTop: '0.75rem' }} onClick={() => handleMicroPurchase('bulk-csv')}>
+              {t('pricing.buyNow')}
+            </button>
           </div>
         </div>
       </section>

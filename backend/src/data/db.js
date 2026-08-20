@@ -382,14 +382,17 @@ export function getAlertsByUser(userId) {
   return db.alerts.filter((a) => a.userId === userId);
 }
 
-export function createAlert(userId, trackingNumber, channel) {
+export function createAlert(userId, trackingNumber, channel, options = {}) {
   const alert = {
     id: `alert-${randomBytes(4).toString('hex')}`,
     userId,
     trackingNumber,
     channel, // 'whatsapp' or 'sms'
+    notificationNumber: options.notificationNumber || '',
     active: true,
-    pricePaid: 0.99,
+    pricePaid: options.pricePaid || 0.99,
+    paymentId: options.paymentId || null,
+    paymentMethod: options.paymentMethod || null,
     createdAt: new Date().toISOString(),
   };
   db.alerts.push(alert);

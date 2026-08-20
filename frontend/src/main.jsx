@@ -26,6 +26,7 @@ const GlobalTrackPage = lazy(() => import('./pages/GlobalTrackPage.jsx'))
 const AdminPanel = lazy(() => import('./pages/AdminPanel.jsx'))
 const UserWallet = lazy(() => import('./pages/UserWallet.jsx'))
 const PricingPlans = lazy(() => import('./components/PricingPlans.jsx'))
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage.jsx'))
 const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard.jsx'))
 const TrustSignals = lazy(() => import('./components/TrustSignals.jsx'))
 
@@ -52,6 +53,7 @@ createRoot(document.getElementById('root')).render(
               <Route path="/track/:number" element={<ResultsPage />} />
               <Route path="/global" element={<GlobalTrackPage />} />
               <Route path="/pricing" element={<ErrorBoundary section="Pricing"><PricingPlans /></ErrorBoundary>} />
+              <Route path="/checkout" element={<ErrorBoundary section="Checkout"><CheckoutPage /></ErrorBoundary>} />
               <Route path="/analytics" element={<ErrorBoundary section="Analytics"><AnalyticsDashboard /></ErrorBoundary>} />
               <Route path="/trust" element={<ErrorBoundary section="Trust"><TrustSignals /></ErrorBoundary>} />
               {/* SEO: carrier landing pages (EN + FR paths) */}

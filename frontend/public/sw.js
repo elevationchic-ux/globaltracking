@@ -1,5 +1,5 @@
 // GlobalTrack service worker  cache-first for static assets, network-first for navigation.
-const CACHE = 'globaltrack-v1';
+const CACHE = 'globaltrack-v3';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -10,6 +10,7 @@ const PRECACHE = [
   '/login',
   '/signup',
   '/pricing',
+  '/checkout',
   '/wallet',
 ];
 
