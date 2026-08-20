@@ -112,6 +112,9 @@ const GlobeMap = () => {
     globe.controls().autoRotateSpeed = 0.35;
     if (import.meta.env.DEV) window.__globeControls = globe.controls();
 
+    // Tilt camera down slightly so the top of the globe isn't cut off
+    globe.pointOfView({ lat: 15, lng: 0, altitude: 2.5 });
+
     const pause = () => {
       globe.controls().autoRotate = false;
       if (resumeTimer) clearTimeout(resumeTimer);

@@ -101,6 +101,12 @@ export default function ChatWidget() {
       if (data.message) {
         setMessages((prev) => [...prev, data.message])
       }
+      // Auto-reply from bot when no agent is online
+      if (data.autoReply) {
+        setTimeout(() => {
+          setMessages((prev) => [...prev, data.autoReply])
+        }, 800)
+      }
       setInput('')
     } catch {
       // silent

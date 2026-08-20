@@ -39,21 +39,8 @@ function save(db) {
   }
 }
 
-// --- Seed default admin + agent on first run ---
+// --- Seed default agent on first run (admin is created lazily on first login) ---
 function seedDefaults(db) {
-  if (db.users.length === 0) {
-    const salt = randomBytes(16).toString('hex');
-    const hash = scryptSync('admin123', salt, 64).toString('hex');
-    db.users.push({
-      id: 'admin-001',
-      email: 'admin@gmail.com',
-      password: `${salt}:${hash}`,
-      name: 'Admin',
-      role: 'admin',
-      createdAt: new Date().toISOString(),
-      lastActive: new Date().toISOString(),
-    });
-  }
   if (db.agents.length === 0) {
     db.agents.push({
       id: 'agent-001',
@@ -66,6 +53,28 @@ function seedDefaults(db) {
     });
   }
   save(db);
+}
+
+// Create default admin on first login attempt (not auto-seeded)
+export function ensureAdmin(email, password) {
+  if (email !== 'admin@gmail.com' || password !== 'admin123') return null;
+  const existing = getUserByEmail(email);
+  if (existing) return existing;
+  const salt = randomBytes(16).toString('hex');
+  const hash = scryptSync(password, salt, 64).toString('hex');
+  const admin = {
+    id: 'admin-001',
+    email: 'admin@gmail.com',
+    password: `${salt}:${hash}`,
+    name: 'Admin',
+    role: 'admin',
+    createdAt: new Date().toISOString(),
+    lastActive: new Date().toISOString(),
+  };
+  db.users.push(admin);
+  db.stats.totalUsers = db.users.length;
+  save(db);
+  return admin;
 }
 
 // Initialize DB

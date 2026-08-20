@@ -35,7 +35,7 @@ export default function PricingPlans() {
       });
       const data = await res.json().catch(() => null);
       if (res.ok) {
-        setMessage({ type: 'success', text: `${data.message} — ${t('pricing.newBalance')}: ${data.newBalance}` });
+        setMessage({ type: 'success', text: `${data.message}  ${t('pricing.newBalance')}: ${data.newBalance}` });
       } else {
         setMessage({ type: 'error', text: data?.message || t('pricing.purchaseFailed') });
       }

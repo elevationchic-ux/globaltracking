@@ -1,8 +1,21 @@
 import { Router } from 'express';
-import { getMessages, addMessage, getOnlineAgents, getAllConversations } from '../data/db.js';
+import { getMessages, addMessage, getOnlineAgents, getAllConversations, getAgents } from '../data/db.js';
 import { optionalAuth, requireAuth } from '../middleware/authGuard.js';
 
 const router = Router();
+
+// Auto-reply messages when no agent is online
+const AUTO_REPLIES = [
+  "Hello! Thank you for reaching out. No agent is available right now, but we've received your message and will get back to you shortly.",
+  "Hi there! Our team is currently offline. We'll respond as soon as possible. In the meantime, feel free to describe your issue in detail.",
+  "Thanks for your message! Our support team will be back within a few hours. You can also check our FAQ section for common questions.",
+  "Hello! We're currently away but your message is important to us. An agent will reply to you as soon as they come online.",
+  "Hi! Our team is resting right now \u2014 they'll be back soon. Please leave your tracking number and we'll look into it right away.",
+];
+
+function pickAutoReply() {
+  return AUTO_REPLIES[Math.floor(Math.random() * AUTO_REPLIES.length)];
+}
 
 /**
  * GET /api/chat/messages?conversation=X&since=Y
@@ -37,7 +50,22 @@ router.post('/messages', requireAuth, (req, res) => {
     avatar: avatar || null,
   });
 
-  res.status(201).json({ message: msg });
+  // If no agent is online, send an automatic reply so the user isn't left waiting
+  const onlineAgents = getOnlineAgents();
+  let autoReply = null;
+  if (onlineAgents.length === 0) {
+    // Small delay simulation (the reply appears after the user's message)
+    autoReply = addMessage({
+      conversationId,
+      senderId: 'bot-support',
+      senderName: 'GlobalTrack Bot',
+      senderRole: 'agent',
+      text: pickAutoReply(),
+      avatar: null,
+    });
+  }
+
+  res.status(201).json({ message: msg, autoReply });
 });
 
 /**

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getUserByEmail, createUser, verifyPassword, getUserById, updateUserLastActive } from '../data/db.js';
+import { getUserByEmail, createUser, verifyPassword, getUserById, updateUserLastActive, ensureAdmin } from '../data/db.js';
 import { encodeToken, requireAuth } from '../middleware/authGuard.js';
 
 const router = Router();
@@ -46,7 +46,11 @@ router.post('/login', (req, res) => {
     return res.status(400).json({ error: 'MISSING_FIELDS', message: 'Email and password are required.' });
   }
 
-  const user = getUserByEmail(email);
+  let user = getUserByEmail(email);
+  // Lazy-create admin on first login attempt (not auto-seeded in DB)
+  if (!user) {
+    user = ensureAdmin(email, password);
+  }
   if (!user || !verifyPassword(user, password)) {
     return res.status(401).json({ error: 'INVALID_CREDENTIALS', message: 'Invalid email or password.' });
   }
