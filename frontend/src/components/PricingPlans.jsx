@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import Icon from './Icon.jsx';
 
 const TOKEN_PACKS = [
   { id: 'starter', name: 'Starter', tokens: 10, price: '€1.99', perUnit: '€0.20', color: '#3b82f6', features: ['pricing.feat.simultaneous.5', 'pricing.feat.history', 'pricing.feat.carriers'] },
@@ -12,18 +13,18 @@ const TOKEN_PACKS = [
 ];
 
 const PAYMENT_METHODS = [
-  { name: 'Visa', icon: '💳' },
-  { name: 'Mastercard', icon: '💳' },
-  { name: 'American Express', icon: '💳' },
-  { name: 'PayPal', icon: '🅿️' },
-  { name: 'Apple Pay', icon: '🍎' },
-  { name: 'Google Pay', icon: '🔵' },
-  { name: 'Stripe', icon: '🟣' },
-  { name: 'Orange Money', icon: '🍊' },
-  { name: 'MTN MoMo', icon: '🟡' },
-  { name: 'M-Pesa', icon: '🟢' },
-  { name: 'SEPA', icon: '🏦' },
-  { name: 'Crypto (USDC)', icon: '₿' },
+  { name: 'Visa', icon: 'credit-card' },
+  { name: 'Mastercard', icon: 'credit-card' },
+  { name: 'American Express', icon: 'credit-card' },
+  { name: 'PayPal', icon: 'send' },
+  { name: 'Apple Pay', icon: 'smartphone' },
+  { name: 'Google Pay', icon: 'smartphone' },
+  { name: 'Stripe', icon: 'credit-card' },
+  { name: 'Orange Money', icon: 'smartphone' },
+  { name: 'MTN MoMo', icon: 'smartphone' },
+  { name: 'M-Pesa', icon: 'smartphone' },
+  { name: 'SEPA', icon: 'building' },
+  { name: 'Crypto (USDC)', icon: 'key' },
 ];
 
 export default function PricingPlans() {
@@ -71,7 +72,7 @@ export default function PricingPlans() {
       {message && (
         <div className={`pricing-toast ${message.type === 'success' ? 'pricing-toast-success' : 'pricing-toast-error'}`}>
           {message.text}
-          <button onClick={() => setMessage(null)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '1.1rem' }}>✕</button>
+          <button onClick={() => setMessage(null)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '1.1rem', display: 'flex' }}><Icon name="x" size={18} /></button>
         </div>
       )}
 
@@ -169,7 +170,7 @@ export default function PricingPlans() {
         <p className="pricing-section-desc">{t('pricing.microDesc')}</p>
         <div className="pricing-micro-grid">
           <div className="pricing-micro-card">
-            <div className="pricing-micro-icon">💬</div>
+            <div className="pricing-micro-icon"><Icon name="whatsapp" size={28} /></div>
             <h4>{t('pricing.whatsappAlert')}</h4>
             <p>{t('pricing.whatsappDesc')}</p>
             <div className="pricing-micro-price">
@@ -181,7 +182,7 @@ export default function PricingPlans() {
             </button>
           </div>
           <div className="pricing-micro-card">
-            <div className="pricing-micro-icon">📱</div>
+            <div className="pricing-micro-icon"><Icon name="smartphone" size={28} /></div>
             <h4>{t('pricing.smsAlert')}</h4>
             <p>{t('pricing.smsDesc')}</p>
             <div className="pricing-micro-price">
@@ -193,7 +194,7 @@ export default function PricingPlans() {
             </button>
           </div>
           <div className="pricing-micro-card">
-            <div className="pricing-micro-icon">📦</div>
+            <div className="pricing-micro-icon"><Icon name="package" size={28} /></div>
             <h4>{t('pricing.bulkProcess')}</h4>
             <p>{t('pricing.bulkDesc')}</p>
             <div className="pricing-micro-price">
@@ -215,28 +216,28 @@ export default function PricingPlans() {
           <p className="pricing-section-desc">{t('pricing.apiDesc')}</p>
           <div className="pricing-api-features">
             <div className="pricing-api-feat">
-              <span className="pricing-api-feat-icon">🔑</span>
+              <span className="pricing-api-feat-icon"><Icon name="key" size={22} /></span>
               <div>
                 <h4>{t('pricing.apiFeat1Title')}</h4>
                 <p>{t('pricing.apiFeat1Desc')}</p>
               </div>
             </div>
             <div className="pricing-api-feat">
-              <span className="pricing-api-feat-icon">📊</span>
+              <span className="pricing-api-feat-icon"><Icon name="bar-chart" size={22} /></span>
               <div>
                 <h4>{t('pricing.apiFeat2Title')}</h4>
                 <p>{t('pricing.apiFeat2Desc')}</p>
               </div>
             </div>
             <div className="pricing-api-feat">
-              <span className="pricing-api-feat-icon">💳</span>
+              <span className="pricing-api-feat-icon"><Icon name="credit-card" size={22} /></span>
               <div>
                 <h4>{t('pricing.apiFeat3Title')}</h4>
                 <p>{t('pricing.apiFeat3Desc')}</p>
               </div>
             </div>
             <div className="pricing-api-feat">
-              <span className="pricing-api-feat-icon">🛡️</span>
+              <span className="pricing-api-feat-icon"><Icon name="shield-check" size={22} /></span>
               <div>
                 <h4>{t('pricing.apiFeat5Title')}</h4>
                 <p>{t('pricing.apiFeat5Desc')}</p>
@@ -256,7 +257,7 @@ export default function PricingPlans() {
         <div className="pricing-payment-grid">
           {PAYMENT_METHODS.map((pm) => (
             <div key={pm.name} className="pricing-payment-item">
-              <span className="pricing-payment-icon">{pm.icon}</span>
+              <span className="pricing-payment-icon"><Icon name={pm.icon} size={20} /></span>
               <span className="pricing-payment-name">{pm.name}</span>
             </div>
           ))}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useI18n, LanguageSwitcher } from '../i18n/I18nContext.jsx'
 import WorldClock from '../components/WorldClock.jsx'
 import AuthButton from '../components/AuthButton.jsx'
+import Icon from '../components/Icon.jsx'
 import {
   detectCarriers,
   parseTrackingNumbers,
@@ -21,12 +22,12 @@ const STATS = [
 ]
 
 const FEATURES = [
-  { icon: '⚡', title: 'features.autoDetect.title', text: 'features.autoDetect.text' },
-  { icon: '🗂️', title: 'features.batch.title', text: 'features.batch.text' },
-  { icon: '🌐', title: 'features.timeline.title', text: 'features.timeline.text' },
-  { icon: '🛰️', title: 'features.regions.title', text: 'features.regions.text' },
-  { icon: '🚀', title: 'features.speed.title', text: 'features.speed.text' },
-  { icon: '⏱️', title: 'features.precision.title', text: 'features.precision.text' },
+  { icon: 'zap', title: 'features.autoDetect.title', text: 'features.autoDetect.text' },
+  { icon: 'layers', title: 'features.batch.title', text: 'features.batch.text' },
+  { icon: 'globe', title: 'features.timeline.title', text: 'features.timeline.text' },
+  { icon: 'radar', title: 'features.regions.title', text: 'features.regions.text' },
+  { icon: 'rocket', title: 'features.speed.title', text: 'features.speed.text' },
+  { icon: 'clock', title: 'features.precision.title', text: 'features.precision.text' },
 ]
 
 const FAQS = [
@@ -188,7 +189,10 @@ export default function HomePage() {
         <div className="home-nav-right">
           <AuthButton />
           <LanguageSwitcher />
-          <Link to="/global" className="nav-mission">{t('nav.missionControl')} ↗</Link>
+          <Link to="/global" className="nav-mission">
+            <Icon name="satellite" size={16} />
+            <span>{t('nav.missionControl')}</span>
+          </Link>
         </div>
       </nav>
 
@@ -202,15 +206,15 @@ export default function HomePage() {
           {/* Social proof: reassurance before the user pastes sensitive data */}
           <div className="social-proof-strip" aria-label={t('social.title')}>
             <span className="social-proof-item">
-              <span className="social-proof-icon">🔒</span>
+              <Icon name="lock" size={14} className="social-proof-icon" />
               <span>{t('social.encryption')}</span>
             </span>
             <span className="social-proof-item">
-              <span className="social-proof-icon">⭐</span>
+              <Icon name="star" size={14} className="social-proof-icon" />
               <span>{t('social.users')}</span>
             </span>
             <span className="social-proof-item">
-              <span className="social-proof-icon">🏢</span>
+              <Icon name="building" size={14} className="social-proof-icon" />
               <span>{t('social.carriers')}</span>
             </span>
           </div>
@@ -237,7 +241,7 @@ export default function HomePage() {
                 aria-label={t('scan.title')}
                 disabled={scanning}
               >
-                {scanning ? '⏳' : '📷'}
+                {scanning ? <Icon name="clock" size={18} /> : <Icon name="camera" size={18} />}
               </button>
               {/* Hidden file inputs for barcode scan fallback */}
               <input
@@ -257,7 +261,7 @@ export default function HomePage() {
           <p className="search-hint">
             {t('hero.hint')}
             <button type="button" className="csv-button" onClick={() => fileRef.current?.click()}>
-              📄 {t('hero.csv')}
+              <Icon name="file" size={14} /> {t('hero.csv')}
             </button>
             <input
               ref={fileRef}
@@ -304,7 +308,7 @@ export default function HomePage() {
           <div className="detect-readout" aria-live="polite">
             {detection ? (
               <span className="detect-chip detect-hit">
-                ◉ {t('hero.detected')}: <strong>{detection.carrier.name}</strong>
+                <Icon name="circle" size={10} style={{ fill: 'currentColor' }} /> {t('hero.detected')}: <strong>{detection.carrier.name}</strong>
                 <em> {REGION_FLAGS[detection.carrier.region]} {detection.carrier.region}</em>
                 {candidates.length > 1 && (
                   <span className="detect-alts">
@@ -313,7 +317,7 @@ export default function HomePage() {
                 )}
               </span>
             ) : (
-              <span className="detect-chip detect-idle">◇ {t('hero.unknown')}</span>
+              <span className="detect-chip detect-idle"><Icon name="diamond" size={10} /> {t('hero.unknown')}</span>
             )}
           </div>
 
@@ -342,9 +346,9 @@ export default function HomePage() {
               ))}
             </ul>
             <p className="trust-badges">
-              <span className="trust-badge">🔒 {t('trust.ssl')}</span>
-              <span className="trust-badge">✓ {t('trust.officialApi')}</span>
-              <span className="trust-badge">★ {t('trust.free100')}</span>
+              <span className="trust-badge"><Icon name="lock" size={12} /> {t('trust.ssl')}</span>
+              <span className="trust-badge"><Icon name="shield-check" size={12} /> {t('trust.officialApi')}</span>
+              <span className="trust-badge"><Icon name="award" size={12} /> {t('trust.free100')}</span>
             </p>
           </div>
 
@@ -414,7 +418,7 @@ export default function HomePage() {
           <div className="features-grid">
             {FEATURES.map((feature) => (
               <article key={feature.title} className="feature-card">
-                <span className="feature-icon" aria-hidden="true">{feature.icon}</span>
+                <span className="feature-icon" aria-hidden="true"><Icon name={feature.icon} size={28} /></span>
                 <h3>{t(feature.title)}</h3>
                 <p>{t(feature.text)}</p>
               </article>

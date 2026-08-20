@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useI18n } from '../i18n/I18nContext.jsx'
+import Icon from '../components/Icon.jsx'
 import AdminDashboard from '../components/admin/AdminDashboard.jsx'
 import AgentManagement from '../components/admin/AgentManagement.jsx'
 import ChatDashboard from '../components/admin/ChatDashboard.jsx'
@@ -52,7 +53,7 @@ export default function AdminPanel() {
       <aside className={`admin-sidebar ${sidebarOpen ? 'admin-sidebar-open' : ''}`}>
         <div className="admin-sidebar-header">
           <Link to="/" className="admin-logo">
-            <span className="admin-logo-icon">🌐</span>
+            <span className="admin-logo-icon"><Icon name="globe" size={20} /></span>
             <span className="admin-logo-text">GlobalTrack</span>
           </Link>
           <span className="admin-badge">ADMIN</span>

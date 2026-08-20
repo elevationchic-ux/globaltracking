@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useI18n } from '../i18n/I18nContext.jsx'
+import Icon from './Icon.jsx'
 import './ChatWidget.css'
 
 const API_BASE = import.meta.env.VITE_API_URL || ''
@@ -120,7 +121,7 @@ export default function ChatWidget() {
     return (
       <div className="chat-widget" style={{ position: 'fixed', right: '1rem', bottom: '1rem', zIndex: 9999 }}>
         <div className="chat-bubble" onClick={() => setOpen(!open)}>
-          💬
+          <Icon name="message-circle" size={24} style={{ color: '#fff' }} />
         </div>
         {open && (
           <div className="chat-panel">
@@ -145,7 +146,7 @@ export default function ChatWidget() {
         onPointerUp={handlePointerUp}
         onClick={() => !dragging && setOpen(!open)}
       >
-        {open ? '✕' : '💬'}
+        {open ? <Icon name="x" size={20} style={{ color: '#fff' }} /> : <Icon name="message-circle" size={24} style={{ color: '#fff' }} />}
         {onlineAgents.length > 0 && !open && (
           <span className="chat-online-badge">{onlineAgents.length}</span>
         )}

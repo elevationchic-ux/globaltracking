@@ -70,19 +70,36 @@
 }
 
 .nav-mission {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   color: #22d3ee;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  padding: 0.4rem 0.9rem;
-  border: 1px solid rgba(34, 211, 238, 0.4);
+  padding: 0.45rem 1rem 0.45rem 0.75rem;
+  border: 1px solid rgba(34, 211, 238, 0.35);
   border-radius: 999px;
-  transition: all 0.15s ease;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(56, 189, 248, 0.04) 100%);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.nav-mission svg {
+  flex-shrink: 0;
+  animation: satellite-pulse 3s ease-in-out infinite;
 }
 
 .nav-mission:hover {
-  background: rgba(34, 211, 238, 0.12);
-  box-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.18) 0%, rgba(56, 189, 248, 0.1) 100%);
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.3), 0 0 4px rgba(34, 211, 238, 0.15) inset;
+  transform: translateY(-1px);
+}
+
+@keyframes satellite-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
 }
 
 /* ── Layout ───────────────────────────────────────────────────────────── */
@@ -476,9 +493,15 @@
 }
 
 .feature-icon {
-  font-size: 1.6rem;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
   margin-bottom: 0.75rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%);
+  color: #22d3ee;
 }
 
 .feature-card h3 {
@@ -629,9 +652,14 @@
     white-space: nowrap;
   }
   .nav-mission {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.6rem;
+    font-size: 0.72rem;
+    padding: 0.35rem 0.7rem 0.35rem 0.55rem;
+    gap: 0.35rem;
     white-space: nowrap;
+  }
+  .nav-mission svg {
+    width: 14px;
+    height: 14px;
   }
 }
 

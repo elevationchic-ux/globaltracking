@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useI18n } from '../i18n/I18nContext.jsx'
+import Icon from './Icon.jsx'
 
 /**
  * Universal world clock  the real local time of every major logistics hub,
@@ -81,7 +82,7 @@ export default function WorldClock() {
 
   return (
     <section className="world-clock" aria-label={t('clock.title')}>
-      <p className="world-clock-title">🌍 {t('clock.title')}</p>
+      <p className="world-clock-title"><Icon name="globe" size={18} /> {t('clock.title')}</p>
 
       {/* Scrolling marquee: duplicate the set for seamless loop */}
       <div className="world-clock-marquee">

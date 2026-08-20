@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useI18n } from '../../i18n/I18nContext.jsx'
+import Icon from '../Icon.jsx'
 
 const EARTH_RADIUS_KM = 6371
 
@@ -264,7 +265,7 @@ export default function TrackingManager({ authFetch }) {
                 />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <button type="button" className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => fileRef.current?.click()}>
-                    📷 {t('admin.addPhoto')}
+                    <Icon name="camera" size={14} /> {t('admin.addPhoto')}
                   </button>
                   <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleEventImage} />
                   {imagePreview && <span style={{ fontSize: '0.75rem', color: '#16a34a' }}>✓ {t('admin.photoAttached')}</span>}
@@ -377,8 +378,8 @@ export default function TrackingManager({ authFetch }) {
 
               {calculated && (
                 <div className="admin-distance-badge">
-                  <span>📏 {calculated.distance} km</span>
-                  <span>⏱ {calculated.duration}</span>
+                  <span><Icon name="diamond" size={12} /> {calculated.distance} km</span>
+                  <span><Icon name="clock" size={12} /> {calculated.duration}</span>
                 </div>
               )}
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import Icon from '../components/Icon.jsx';
 
 const PACKS = [
   { id: 'starter', name: 'Starter', tokens: 10, price: 1.99, color: '#3b82f6' },
@@ -12,21 +13,21 @@ const PACKS = [
 ];
 
 const MICRO_ITEMS = [
-  { id: 'whatsapp-alert', name: 'checkout.whatsappAlert', price: 0.99, type: 'alert', channel: 'whatsapp', icon: '💬' },
-  { id: 'sms-alert', name: 'checkout.smsAlert', price: 0.99, type: 'alert', channel: 'sms', icon: '📱' },
-  { id: 'bulk-csv', name: 'checkout.bulkCsv', price: 2.99, type: 'bulk', icon: '📦' },
+  { id: 'whatsapp-alert', name: 'checkout.whatsappAlert', price: 0.99, type: 'alert', channel: 'whatsapp', icon: 'whatsapp' },
+  { id: 'sms-alert', name: 'checkout.smsAlert', price: 0.99, type: 'alert', channel: 'sms', icon: 'smartphone' },
+  { id: 'bulk-csv', name: 'checkout.bulkCsv', price: 2.99, type: 'bulk', icon: 'package' },
 ];
 
 const PAYMENT_METHODS = [
-  { id: 'card', name: 'checkout.payCard', icon: '💳', fields: ['cardNumber', 'expiry', 'cvv', 'holderName'] },
-  { id: 'orange-money', name: 'checkout.payOrangeMoney', icon: '🍊', fields: ['phone', 'holderName'] },
-  { id: 'mtn-momo', name: 'checkout.payMtnMomo', icon: '🟡', fields: ['phone', 'holderName'] },
-  { id: 'm-pesa', name: 'checkout.payMPesa', icon: '🟢', fields: ['phone', 'holderName'] },
-  { id: 'paypal', name: 'PayPal', icon: '🅿️', fields: ['email'] },
-  { id: 'apple-pay', name: 'Apple Pay', icon: '🍎', fields: ['holderName'] },
-  { id: 'google-pay', name: 'Google Pay', icon: '🔵', fields: ['holderName'] },
-  { id: 'sepa', name: 'checkout.paySEPA', icon: '🏦', fields: ['iban', 'holderName'] },
-  { id: 'crypto', name: 'checkout.payCrypto', icon: '₿', fields: ['walletAddress'] },
+  { id: 'card', name: 'checkout.payCard', icon: 'credit-card', fields: ['cardNumber', 'expiry', 'cvv', 'holderName'] },
+  { id: 'orange-money', name: 'checkout.payOrangeMoney', icon: 'smartphone', fields: ['phone', 'holderName'] },
+  { id: 'mtn-momo', name: 'checkout.payMtnMomo', icon: 'smartphone', fields: ['phone', 'holderName'] },
+  { id: 'm-pesa', name: 'checkout.payMPesa', icon: 'smartphone', fields: ['phone', 'holderName'] },
+  { id: 'paypal', name: 'PayPal', icon: 'send', fields: ['email'] },
+  { id: 'apple-pay', name: 'Apple Pay', icon: 'smartphone', fields: ['holderName'] },
+  { id: 'google-pay', name: 'Google Pay', icon: 'smartphone', fields: ['holderName'] },
+  { id: 'sepa', name: 'checkout.paySEPA', icon: 'building', fields: ['iban', 'holderName'] },
+  { id: 'crypto', name: 'checkout.payCrypto', icon: 'key', fields: ['walletAddress'] },
 ];
 
 // Field labels and placeholders
@@ -212,7 +213,7 @@ export default function CheckoutPage() {
               <h3>{t('checkout.orderSummary')}</h3>
               <div className="checkout-item">
                 <div className="checkout-item-icon" style={{ background: pack ? pack.color : '#8b5cf6' }}>
-                  {pack ? pack.tokens : micro.icon}
+                  {pack ? pack.tokens : <Icon name={micro.icon} size={24} />}
                 </div>
                 <div className="checkout-item-info">
                   <div className="checkout-item-name">{pack ? pack.name : t(micro.name)}</div>
@@ -271,7 +272,7 @@ export default function CheckoutPage() {
                     className={`checkout-method ${method === pm.id ? 'checkout-method-active' : ''}`}
                     onClick={() => { setMethod(pm.id); setForm({}); setError(''); }}
                   >
-                    <span className="checkout-method-icon">{pm.icon}</span>
+                    <span className="checkout-method-icon"><Icon name={pm.icon} size={22} /></span>
                     <span className="checkout-method-name">{t(pm.name)}</span>
                   </button>
                 ))}
@@ -351,7 +352,7 @@ export default function CheckoutPage() {
                     <>{t('checkout.payNow')} €{item.price}</>
                   )}
                 </button>
-                <p className="checkout-secure">{t('checkout.securePayment')}</p>
+                <p className="checkout-secure"><Icon name="shield-check" size={14} /> {t('checkout.securePayment')}</p>
               </div>
             )}
           </div>
@@ -370,9 +371,9 @@ export default function CheckoutPage() {
                 <span>€{item.price}</span>
               </div>
               <div className="checkout-sidebar-guarantees">
-                <div>🔒 {t('checkout.guaranteeSecure')}</div>
-                <div>⚡ {t('checkout.guaranteeInstant')}</div>
-                <div>💯 {t('checkout.guaranteeSatisfied')}</div>
+                <div><Icon name="lock" size={14} /> {t('checkout.guaranteeSecure')}</div>
+                <div><Icon name="zap" size={14} /> {t('checkout.guaranteeInstant')}</div>
+                <div><Icon name="award" size={14} /> {t('checkout.guaranteeSatisfied')}</div>
               </div>
             </div>
           </div>
