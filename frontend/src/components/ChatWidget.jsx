@@ -19,10 +19,12 @@ export default function ChatWidget() {
   const messagesEnd = useRef(null)
   const pollRef = useRef(null)
 
-  // Initialize position bottom-right
+  // Initialize position bottom-right (above sidebar on mobile)
   useEffect(() => {
     if (pos.x === -1) {
-      setPos({ x: window.innerWidth - 70, y: window.innerHeight - 90 })
+      const isMobile = window.innerWidth <= 768
+      const bottomOffset = isMobile ? Math.round(window.innerHeight * 0.56) + 16 : 90
+      setPos({ x: window.innerWidth - 70, y: window.innerHeight - bottomOffset })
     }
   }, [pos.x])
 

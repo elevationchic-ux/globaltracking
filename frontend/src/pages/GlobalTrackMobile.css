@@ -6,6 +6,19 @@
  */
 
 @media (max-width: 768px) {
+  /* ── Globe: ensure it fills viewport and is centered ──────────── */
+  .relative.w-full.h-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Shift globe canvas slightly down on mobile so it appears
+     centered between the compact header and the bottom sheet */
+  .globe-glow {
+    margin-top: 2rem;
+  }
+
   /* ── Header: single compact row ────────────────────────────────────── */
   /* The theme row is now hidden via Tailwind hidden md:flex in Header.jsx */
 

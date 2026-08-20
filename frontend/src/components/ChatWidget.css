@@ -215,4 +215,17 @@
     right: -0.5rem;
     max-height: 60vh;
   }
+  .chat-bubble {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+}
+
+/* On /global page mobile: position chat above the bottom-sheet sidebar */
+@media (max-width: 768px) {
+  .chat-widget {
+    bottom: 56vh !important;
+    right: 1rem !important;
+  }
 }
