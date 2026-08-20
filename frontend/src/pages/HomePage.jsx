@@ -4,6 +4,7 @@ import { useI18n, LanguageSwitcher } from '../i18n/I18nContext.jsx'
 import WorldClock from '../components/WorldClock.jsx'
 import AuthButton from '../components/AuthButton.jsx'
 import Icon from '../components/Icon.jsx'
+import ManifestPage from './ManifestPage.jsx'
 import {
   detectCarriers,
   parseTrackingNumbers,
@@ -461,7 +462,7 @@ export default function HomePage() {
           <Link to="/privacy">{t('footer.privacy')}</Link>
           <Link to="/terms">{t('footer.terms')}</Link>
           <Link to="/legal">{t('footer.legalNotice')}</Link>
-          <Link to="/manifest">{t('manifest.documentTitle')}</Link>
+          <ManifestPage />
         </nav>
         <p className="footer-legal">{t('footer.legal')}</p>
       </footer>

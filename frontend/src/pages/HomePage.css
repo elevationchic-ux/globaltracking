@@ -236,6 +236,9 @@
 }
 
 .csv-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   margin-left: 0.75rem;
   padding: 0.2rem 0.7rem;
   font-size: 0.75rem;
@@ -713,6 +716,9 @@
 }
 
 .trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.75rem;
   font-weight: 600;
   color: #15803d;
@@ -812,7 +818,10 @@
 }
 
 .social-proof-icon {
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: #22d3ee;
 }
 
 /* ── Search input row (textarea + scan button) ──────────────────────── */

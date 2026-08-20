@@ -12,7 +12,6 @@ import CookieConsent from './components/CookieConsent.jsx'
 import ChatWidget from './components/ChatWidget.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { AboutPage, PrivacyPage, TermsPage, LegalNoticePage } from './pages/LegalPages.jsx'
-import ManifestPage from './pages/ManifestPage.jsx'
 import { CarrierIndexPage, CarrierLandingPage } from './pages/CarrierPages.jsx'
 import { HelpIndexPage, HelpArticlePage } from './pages/HelpPages.jsx'
 import {
@@ -75,7 +74,6 @@ createRoot(document.getElementById('root')).render(
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/legal" element={<LegalNoticePage />} />
-              <Route path="/manifest" element={<ManifestPage />} />
             </Routes>
           </Suspense>
           {/* GDPR / CCPA consent gate  shown until the visitor chooses */}
