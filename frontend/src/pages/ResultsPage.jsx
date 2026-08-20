@@ -10,8 +10,9 @@ import SiteFooter from '../components/SiteFooter.jsx'
 import Timeline from '../components/Timeline.jsx'
 import './ResultsPage.css'
 
-const REGION_FLAGS = { USA: '🇺🇸', CANADA: '🇨🇦', EUROPE: '🇪🇺', WORLDWIDE: '🌍' }
+const REGION_FLAGS = { USA: '🇺🇸', CANADA: '🇨🇦', EUROPE: '🇪🇺', AFRICA: '🌍', LATIN_AMERICA: '🌎', ASIA_PACIFIC: '🌏', WORLDWIDE: '🌍' }
 const OVERRIDE_KEY = 'globaltrack:carrier-override'
+const FAVORITES_KEY = 'globaltrack:favorites'
 
 function loadOverrides() {
   try {
@@ -20,6 +21,21 @@ function loadOverrides() {
   } catch {
     return {}
   }
+}
+
+function loadFavorites() {
+  try {
+    if (typeof window === 'undefined') return []
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []
+  } catch {
+    return []
+  }
+}
+
+function saveFavorites(list) {
+  try {
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(list.slice(0, 50)))
+  } catch { /* ignore */ }
 }
 
 function formatPlace(place) {
@@ -32,6 +48,46 @@ export default function ResultsPage() {
   const { number } = useParams()
   const { t } = useI18n()
   const [result, setResult] = useState(null)
+  const [favorites, setFavorites] = useState(loadFavorites)
+  const isFavorite = favorites.some((f) => f.number === number)
+
+  function toggleFavorite() {
+    setFavorites((prev) => {
+      const exists = prev.some((f) => f.number === number)
+      let next
+      if (exists) {
+        next = prev.filter((f) => f.number !== number)
+      } else {
+        next = [
+          { number, carrier: effectiveCarrier?.name ?? null, addedAt: Date.now() },
+          ...prev,
+        ]
+      }
+      saveFavorites(next)
+      return next
+    })
+  }
+
+  // Push notification toggle (PWA)
+  const [pushEnabled, setPushEnabled] = useState(false)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      setPushEnabled(Notification.permission === 'granted')
+    }
+  }, [])
+
+  function togglePushNotifications() {
+    if (!('Notification' in window)) return
+    if (Notification.permission === 'granted') {
+      setPushEnabled(false)
+      try { localStorage.setItem('globaltrack:push', 'false') } catch {}
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((perm) => {
+        setPushEnabled(perm === 'granted')
+        try { localStorage.setItem('globaltrack:push', perm === 'granted' ? 'true' : 'false') } catch {}
+      })
+    }
+  }
 
   // Client-side carrier detection, with manual user correction persisted.
   const detected = useMemo(() => detectCarrier(number), [number])
@@ -108,6 +164,28 @@ export default function ResultsPage() {
     <main className="results">
       <header className="results-header">
         <Link to="/" className="back-link">{t('results.newSearch')}</Link>
+        <div className="results-header-actions">
+          <button
+            type="button"
+            className={`favorite-button ${isFavorite ? 'is-favorite' : ''}`}
+            onClick={toggleFavorite}
+            title={isFavorite ? t('favorites.remove') : t('favorites.add')}
+            aria-label={isFavorite ? t('favorites.remove') : t('favorites.add')}
+          >
+            {isFavorite ? '★' : '☆'}
+          </button>
+          {('Notification' in window) && (
+            <button
+              type="button"
+              className={`push-button ${pushEnabled ? 'is-push-on' : ''}`}
+              onClick={togglePushNotifications}
+              title={pushEnabled ? t('push.disable') : t('push.enable')}
+              aria-label={pushEnabled ? t('push.disable') : t('push.enable')}
+            >
+              {pushEnabled ? '🔔' : '🔕'}
+            </button>
+          )}
+        </div>
         <h1 className="results-title">{t('results.title')}</h1>
         <p className="tracking-number">{number}</p>
         {effectiveCarrier && (

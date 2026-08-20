@@ -65,3 +65,43 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
+// Push notifications: show a native notification when the server sends a push event.
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  try {
+    const data = event.data.json();
+    event.waitUntil(
+      self.registration.showNotification(data.title || 'GlobalTrack', {
+        body: data.body || 'Tracking update available',
+        icon: '/icons/icon.svg',
+        badge: '/icons/icon-maskable.svg',
+        data: data.url || '/',
+        vibrate: [200, 100, 200],
+      })
+    );
+  } catch {
+    // Fallback for non-JSON push payloads
+    event.waitUntil(
+      self.registration.showNotification('GlobalTrack', {
+        body: event.data.text(),
+        icon: '/icons/icon.svg',
+        badge: '/icons/icon-maskable.svg',
+      })
+    );
+  }
+});
+
+// Notification click: open the tracking page or focus the app.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data || '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      for (const client of list) {
+        if (client.url.includes(targetUrl) && 'focus' in client) return client.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(targetUrl);
+    })
+  );
+});
