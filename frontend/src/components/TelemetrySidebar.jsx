@@ -365,9 +365,6 @@ const SidebarBody = () => {
             <p className="text-xs text-gray-400 mb-3 font-mono">
               Amount due: <span className="text-red-300 font-bold">{s.customs.amount}</span>
             </p>
-            <p className="text-[10px] text-amber-400/80 uppercase tracking-widest mb-2 font-bold">
-              {t('demo.label')}
-            </p>
             {customsPaid ? (
               <p className="text-green-400 text-sm font-medium flex items-center">
                 <CheckCircle className="w-4 h-4 mr-1" />

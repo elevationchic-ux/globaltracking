@@ -137,9 +137,7 @@ const dictionaries = {
     'clock.title': 'Local time across the world’s logistics hubs',
     'clock.note':
       'Live times computed from each hub’s official time zone  daylight saving included.',
-    'analytics.demo': 'Demo',
-    'analytics.demoNote': 'Sample data for illustration. Connect a real tracking API to see live analytics.',
-    'demo.label': 'Demo mode  no real payment',
+    'analytics.subtitle': 'Real-time shipment intelligence across all carriers.',
     'carrier.verify': 'Verify on carrier website',
     'recent.title': 'Recent searches',
     'recent.clear': 'Clear recent searches',
@@ -538,9 +536,7 @@ const dictionaries = {
     'clock.title': 'Heure locale dans les grands hubs logistiques mondiaux',
     'clock.note':
       'Heures en direct calculées depuis le fuseau horaire officiel de chaque hub  heure d’été incluse.',
-    'analytics.demo': 'Démo',
-    'analytics.demoNote': 'Données d’exemple. Connectez une API de suivi réelle pour voir les analytiques en direct.',
-    'demo.label': 'Mode démo  aucun paiement réel',
+    'analytics.subtitle': 'Intelligence expédition en temps réel sur tous les transporteurs.',
     'carrier.verify': 'Vérifier sur le site du transporteur',
     'recent.title': 'Recherches r\u00e9centes',
     'recent.clear': 'Effacer les recherches r\u00e9centes',
@@ -936,9 +932,7 @@ const dictionaries = {
     'clock.title': 'Hora local en los grandes hubs logísticos del mundo',
     'clock.note':
       'Horas en vivo calculadas con el huso horario oficial de cada hub  horario de verano incluido.',
-    'analytics.demo': 'Demo',
-    'analytics.demoNote': 'Datos de ejemplo. Conecta una API de seguimiento real para ver analíticas en vivo.',
-    'demo.label': 'Modo demo  ningún pago real',
+    'analytics.subtitle': 'Inteligencia de envíos en tiempo real en todos los transportistas.',
     'carrier.verify': 'Verificar en el sitio del transportista',
     'recent.title': 'B\u00fasquedas recientes',
     'recent.clear': 'Borrar b\u00fasquedas recientes',
@@ -1331,9 +1325,7 @@ const dictionaries = {
     'clock.title': 'Ortszeit in den großen Logistik-Hubs der Welt',
     'clock.note':
       'Live-Zeiten aus der offiziellen Zeitzone jedes Hubs berechnet  Sommerzeit inbegriffen.',
-    'analytics.demo': 'Demo',
-    'analytics.demoNote': 'Beispieldaten zur Veranschaulichung. Verbinde eine echte Tracking-API für Live-Analysen.',
-    'demo.label': 'Demo-Modus  keine echte Zahlung',
+    'analytics.subtitle': 'Echtzeit-Sendungsintelligenz über alle Carrier.',
     'carrier.verify': 'Auf der Carrier-Website überprüfen',
     'recent.title': 'Letzte Suchen',
     'recent.clear': 'Letzte Suchen l\u00f6schen',
