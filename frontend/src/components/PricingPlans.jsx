@@ -1,198 +1,186 @@
-import React from 'react';
-import { Check, X, Star, Zap, Globe, Lock, Headphones, BarChart, Zap as ZapIcon } from 'lucide-react';
-import { useI18n } from '../i18n/I18nContext';
+import { useState } from 'react';
+import { useI18n } from '../i18n/I18nContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
-const PricingPlans = () => {
+const TOKEN_PACKS = [
+  { id: 'starter', name: 'Starter', tokens: 10, price: '€1.99', perUnit: '€0.20', color: '#3b82f6' },
+  { id: 'basic', name: 'Basic', tokens: 50, price: '€5.99', perUnit: '€0.12', color: '#8b5cf6', popular: true },
+  { id: 'pro', name: 'Pro', tokens: 100, price: '€9.99', perUnit: '€0.10', color: '#06b6d4' },
+  { id: 'business', name: 'Business', tokens: 500, price: '€39.99', perUnit: '€0.08', color: '#10b981' },
+  { id: 'enterprise', name: 'Enterprise', tokens: 2000, price: '€129.99', perUnit: '€0.065', color: '#f59e0b' },
+];
+
+const MICRO_TX = [
+  { id: 'whatsapp', icon: '💬', name: 'pricing.whatsappAlert', desc: 'pricing.whatsappDesc', price: '€0.99', unit: 'pricing.perPackage' },
+  { id: 'sms', icon: '📱', name: 'pricing.smsAlert', desc: 'pricing.smsDesc', price: '€0.99', unit: 'pricing.perPackage' },
+  { id: 'bulk', icon: '📦', name: 'pricing.bulkProcess', desc: 'pricing.bulkDesc', price: '€2.99', unit: 'pricing.perFile' },
+];
+
+export default function PricingPlans() {
   const { t } = useI18n();
-  const plans = [
-    {
-      name: 'Basic',
-      price: 'Free',
-      period: 'forever',
-      description: 'Perfect for individuals and small businesses',
-      features: [
-        { name: '5 shipments/month', included: true },
-        { name: '200+ carriers worldwide', included: true },
-        { name: 'Basic tracking dashboard', included: true },
-        { name: 'Email notifications', included: true },
-        { name: 'Standard support', included: true },
-        { name: 'API access', included: false },
-        { name: 'Branded tracking pages', included: false },
-        { name: 'SMS notifications', included: false },
-        { name: 'AI ETA predictions', included: false },
-        { name: 'Carbon emissions tracking', included: false },
-        { name: '24/7 priority support', included: false },
-        { name: 'Dedicated account manager', included: false },
-        { name: 'Custom integrations', included: false },
-        { name: 'Advanced analytics', included: false },
-        { name: 'White-label solution', included: false }
-      ],
-      cta: 'Get Started Free',
-      popular: false
-    },
-    {
-      name: 'Premium',
-      price: '$49',
-      period: 'per month',
-      description: 'Best for growing businesses with higher volume',
-      features: [
-        { name: 'Unlimited shipments', included: true },
-        { name: '200+ carriers worldwide', included: true },
-        { name: 'Advanced tracking dashboard', included: true },
-        { name: 'Email + SMS notifications', included: true },
-        { name: 'Priority support', included: true },
-        { name: 'API access (10K calls/mo)', included: true },
-        { name: 'Branded tracking pages', included: true },
-        { name: 'AI ETA predictions', included: true },
-        { name: 'Carbon emissions tracking', included: true },
-        { name: 'Advanced analytics', included: true },
-        { name: 'Route optimization', included: true },
-        { name: 'Bulk data export', included: true },
-        { name: 'Custom alerts', included: true },
-        { name: '24/7 support', included: false },
-        { name: 'Dedicated account manager', included: false },
-        { name: 'White-label solution', included: false }
-      ],
-      cta: 'Start Premium Trial',
-      popular: true
-    },
-    {
-      name: 'Enterprise',
-      price: 'Custom',
-      period: 'contact sales',
-      description: 'For large organizations with custom needs',
-      features: [
-        { name: 'Unlimited shipments', included: true },
-        { name: '200+ carriers worldwide', included: true },
-        { name: 'Enterprise dashboard', included: true },
-        { name: 'Multi-channel notifications', included: true },
-        { name: '24/7 dedicated support', included: true },
-        { name: 'Unlimited API access', included: true },
-        { name: 'White-label solution', included: true },
-        { name: 'Custom integrations', included: true },
-        { name: 'AI ETA predictions', included: true },
-        { name: 'Carbon emissions tracking', included: true },
-        { name: 'Advanced analytics & BI', included: true },
-        { name: 'Route optimization', included: true },
-        { name: 'Dedicated account manager', included: true },
-        { name: 'Custom carrier onboarding', included: true },
-        { name: 'SLA guarantees', included: true },
-        { name: 'Compliance tools', included: true }
-      ],
-      cta: 'Contact Sales',
-      popular: false
+  const { user, authFetch } = useAuth();
+  const [purchasing, setPurchasing] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  async function handlePurchase(packId) {
+    if (!user) {
+      setMessage({ type: 'error', text: t('pricing.loginRequired') });
+      return;
     }
-  ];
+    setPurchasing(packId);
+    try {
+      const res = await authFetch('/api/credits/purchase', {
+        method: 'POST',
+        body: JSON.stringify({ packId }),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok) {
+        setMessage({ type: 'success', text: `${data.message} — ${t('pricing.newBalance')}: ${data.newBalance}` });
+      } else {
+        setMessage({ type: 'error', text: data?.message || t('pricing.purchaseFailed') });
+      }
+    } catch {
+      setMessage({ type: 'error', text: t('pricing.purchaseFailed') });
+    }
+    setPurchasing(null);
+  }
 
   return (
-    <div className="bg-gray-900 py-20 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Choose Your Plan</h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Scale your logistics operations with flexible pricing designed for businesses of all sizes
-          </p>
+    <div className="pricing-page">
+      <div className="pricing-hero">
+        <h1 className="pricing-title">{t('pricing.title')}</h1>
+        <p className="pricing-subtitle">{t('pricing.subtitle')}</p>
+      </div>
+
+      {message && (
+        <div className={`pricing-toast ${message.type === 'success' ? 'pricing-toast-success' : 'pricing-toast-error'}`}>
+          {message.text}
+          <button onClick={() => setMessage(null)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '1.1rem' }}>✕</button>
         </div>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`relative rounded-2xl p-8 ${
-                plan.popular
-                  ? 'bg-gradient-to-b from-indigo-600 to-purple-700 text-white scale-105 shadow-2xl'
-                  : 'bg-gray-800 text-white'
-              }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1">
-                    <Star className="w-4 h-4" />
-                    <span>MOST POPULAR</span>
-                  </div>
-                </div>
-              )}
+      {/* ── Free Tier ─────────────────────────────────── */}
+      <section className="pricing-section">
+        <div className="pricing-tier pricing-tier-free">
+          <div className="pricing-tier-header">
+            <h3>{t('pricing.freeTitle')}</h3>
+            <div className="pricing-price">
+              <span className="pricing-amount">€0</span>
+              <span className="pricing-period">{t('pricing.forever')}</span>
+            </div>
+            <p className="pricing-desc">{t('pricing.freeDesc')}</p>
+          </div>
+          <ul className="pricing-features">
+            <li>✓ {t('pricing.freeFeat1')}</li>
+            <li>✓ {t('pricing.freeFeat2')}</li>
+            <li>✓ {t('pricing.freeFeat3')}</li>
+            <li>✓ {t('pricing.freeFeat4')}</li>
+            <li className="pricing-feat-disabled">✕ {t('pricing.freeLimit1')}</li>
+            <li className="pricing-feat-disabled">✕ {t('pricing.freeLimit2')}</li>
+          </ul>
+        </div>
+      </section>
 
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="flex items-baseline justify-center space-x-2">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-gray-400">{plan.period}</span>
-                </div>
-                <p className="text-sm text-gray-400 mt-2">{plan.description}</p>
-              </div>
+      {/* ── Token Packs (Credits System) ──────────────── */}
+      <section className="pricing-section">
+        <h2 className="pricing-section-title">{t('pricing.tokenTitle')}</h2>
+        <p className="pricing-section-desc">{t('pricing.tokenDesc')}</p>
 
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-start space-x-3">
-                    {feature.included ? (
-                      <Check className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                    ) : (
-                      <X className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
-                    )}
-                    <span className={`text-sm ${feature.included ? '' : 'text-gray-500'}`}>
-                      {feature.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
+        <div className="pricing-tokens-grid">
+          {TOKEN_PACKS.map((pack) => (
+            <div key={pack.id} className={`pricing-token-card ${pack.popular ? 'pricing-token-popular' : ''}`} style={{ '--accent': pack.color }}>
+              {pack.popular && <div className="pricing-popular-badge">{t('pricing.popular')}</div>}
+              <div className="pricing-token-name">{pack.name}</div>
+              <div className="pricing-token-amount">{pack.tokens}</div>
+              <div className="pricing-token-label">{t('pricing.requests')}</div>
+              <div className="pricing-token-price">{pack.price}</div>
+              <div className="pricing-token-unit">{pack.perUnit} {t('pricing.perRequest')}</div>
               <button
-                className={`w-full py-3 rounded-lg font-semibold transition-colors ${
-                  plan.popular
-                    ? 'bg-white text-indigo-600 hover:bg-gray-100'
-                    : 'bg-indigo-600 text-white hover:bg-indigo-700'
-                }`}
-                onClick={() => {
-                  if (plan.name === 'Enterprise') {
-                    window.location.href = 'mailto:support@globaltracking.vercel.app?subject=Enterprise%20Plan%20Inquiry';
-                  } else if (plan.name === 'Premium') {
-                    window.location.href = '/help?topic=premium';
-                  } else {
-                    window.location.href = '/';
-                  }
-                }}
+                className="pricing-token-btn"
+                style={{ background: pack.color }}
+                onClick={() => handlePurchase(pack.id)}
+                disabled={purchasing === pack.id}
               >
-                {plan.cta}
+                {purchasing === pack.id ? t('pricing.processing') : t('pricing.buyNow')}
               </button>
             </div>
           ))}
         </div>
+      </section>
 
-        {/* Trust badges */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div className="flex flex-col items-center">
-            <div className="p-3 bg-gray-800 rounded-full mb-2">
-              <Zap className="w-6 h-6 text-yellow-400" />
+      {/* ── Micro-transactions ────────────────────────── */}
+      <section className="pricing-section">
+        <h2 className="pricing-section-title">{t('pricing.microTitle')}</h2>
+        <p className="pricing-section-desc">{t('pricing.microDesc')}</p>
+
+        <div className="pricing-micro-grid">
+          {MICRO_TX.map((item) => (
+            <div key={item.id} className="pricing-micro-card">
+              <div className="pricing-micro-icon">{item.icon}</div>
+              <h4>{t(item.name)}</h4>
+              <p>{t(item.desc)}</p>
+              <div className="pricing-micro-price">
+                <span className="pricing-micro-amount">{item.price}</span>
+                <span className="pricing-micro-unit">{t(item.unit)}</span>
+              </div>
             </div>
-            <p className="text-white font-semibold">99.9% Uptime</p>
-            <p className="text-gray-400 text-sm">SLA Guaranteed</p>
+          ))}
+        </div>
+      </section>
+
+      {/* ── API Pay-As-You-Go ─────────────────────────── */}
+      <section className="pricing-section">
+        <div className="pricing-api-section">
+          <h2 className="pricing-section-title">{t('pricing.apiTitle')}</h2>
+          <p className="pricing-section-desc">{t('pricing.apiDesc')}</p>
+          <div className="pricing-api-features">
+            <div className="pricing-api-feat">
+              <span className="pricing-api-feat-icon">🔑</span>
+              <div>
+                <h4>{t('pricing.apiFeat1Title')}</h4>
+                <p>{t('pricing.apiFeat1Desc')}</p>
+              </div>
+            </div>
+            <div className="pricing-api-feat">
+              <span className="pricing-api-feat-icon">📊</span>
+              <div>
+                <h4>{t('pricing.apiFeat2Title')}</h4>
+                <p>{t('pricing.apiFeat2Desc')}</p>
+              </div>
+            </div>
+            <div className="pricing-api-feat">
+              <span className="pricing-api-feat-icon">💳</span>
+              <div>
+                <h4>{t('pricing.apiFeat3Title')}</h4>
+                <p>{t('pricing.apiFeat3Desc')}</p>
+              </div>
+            </div>
+            <div className="pricing-api-feat">
+              <span className="pricing-api-feat-icon">📱</span>
+              <div>
+                <h4>{t('pricing.apiFeat4Title')}</h4>
+                <p>{t('pricing.apiFeat4Desc')}</p>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
-            <div className="p-3 bg-gray-800 rounded-full mb-2">
-              <Globe className="w-6 h-6 text-blue-400" />
-            </div>
-            <p className="text-white font-semibold">200+ Carriers</p>
-            <p className="text-gray-400 text-sm">Worldwide Coverage</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="p-3 bg-gray-800 rounded-full mb-2">
-              <Lock className="w-6 h-6 text-green-400" />
-            </div>
-            <p className="text-white font-semibold">Bank-Level Security</p>
-            <p className="text-gray-400 text-sm">SOC 2 Compliant</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="p-3 bg-gray-800 rounded-full mb-2">
-              <Headphones className="w-6 h-6 text-purple-400" />
-            </div>
-            <p className="text-white font-semibold">24/7 Support</p>
-            <p className="text-gray-400 text-sm">Premium Plans</p>
+          <div className="pricing-api-cta">
+            <a href="/help?topic=api" className="pricing-api-btn">{t('pricing.apiContact')}</a>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ── Payment Methods ───────────────────────────── */}
+      <section className="pricing-section pricing-payment-methods">
+        <h3>{t('pricing.paymentMethods')}</h3>
+        <div className="pricing-payment-icons">
+          <span title="Visa">💳 Visa</span>
+          <span title="Mastercard">💳 Mastercard</span>
+          <span title="Mobile Money">📲 Mobile Money</span>
+          <span title="PayPal">🅿️ PayPal</span>
+          <span title="Orange Money">🍊 Orange Money</span>
+          <span title="MTN MoMo">🟡 MTN MoMo</span>
+        </div>
+      </section>
     </div>
   );
-};
-
-export default PricingPlans;
+}

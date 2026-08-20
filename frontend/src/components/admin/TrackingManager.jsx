@@ -38,6 +38,7 @@ const EMPTY_FORM = {
   trackingNumber: '', carrier: '', status: 'INFO_RECEIVED',
   originCity: '', originLat: '', originLng: '',
   destCity: '', destLat: '', destLng: '',
+  departureAt: '',
 }
 
 export default function TrackingManager({ authFetch }) {
@@ -48,7 +49,7 @@ export default function TrackingManager({ authFetch }) {
   const [calculated, setCalculated] = useState(null)
   // Detail view state
   const [selected, setSelected] = useState(null)
-  const [eventForm, setEventForm] = useState({ status: 'IN_TRANSIT', description: '', location: '', image: null })
+  const [eventForm, setEventForm] = useState({ status: 'IN_TRANSIT', description: '', location: '', image: null, timestamp: '' })
   const [imagePreview, setImagePreview] = useState(null)
   const fileRef = useRef(null)
 
@@ -92,6 +93,7 @@ export default function TrackingManager({ authFetch }) {
           status: form.status,
           origin,
           destination,
+          departureAt: form.departureAt || undefined,
         }),
       })
       if (res.ok) {
@@ -149,12 +151,13 @@ export default function TrackingManager({ authFetch }) {
           description: eventForm.description,
           location: eventForm.location || null,
           image: eventForm.image,
+          timestamp: eventForm.timestamp ? new Date(eventForm.timestamp).toISOString() : undefined,
         }),
       })
       if (res.ok) {
         const data = await res.json().catch(() => null)
         if (data?.trackingRequest) setSelected(data.trackingRequest)
-        setEventForm({ status: 'IN_TRANSIT', description: '', location: '', image: null })
+        setEventForm({ status: 'IN_TRANSIT', description: '', location: '', image: null, timestamp: '' })
         setImagePreview(null)
         fetchData()
       }
@@ -184,6 +187,7 @@ export default function TrackingManager({ authFetch }) {
               <th>{t('admin.destination')}</th>
               <th>{t('admin.distance')}</th>
               <th>{t('admin.duration')}</th>
+              <th>{t('admin.departure')}</th>
               <th>{t('admin.statusCol')}</th>
               <th></th>
             </tr>
@@ -197,6 +201,7 @@ export default function TrackingManager({ authFetch }) {
                 <td>{req.destination?.city || '-'}</td>
                 <td>{req.distanceKm ? `${req.distanceKm} km` : '-'}</td>
                 <td>{req.durationHours || '-'}</td>
+                <td>{req.departureAt ? new Date(req.departureAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
                 <td>
                   <select
                     value={req.status}
@@ -216,7 +221,7 @@ export default function TrackingManager({ authFetch }) {
               </tr>
             ))}
             {requests.length === 0 && (
-              <tr><td colSpan={8} style={{ textAlign: 'center', color: '#64748b', padding: '2rem' }}>{t('admin.noTracking')}</td></tr>
+              <tr><td colSpan={9} style={{ textAlign: 'center', color: '#64748b', padding: '2rem' }}>{t('admin.noTracking')}</td></tr>
             )}
           </tbody>
         </table>
@@ -246,8 +251,9 @@ export default function TrackingManager({ authFetch }) {
                   <select className="admin-form-select" value={eventForm.status} onChange={(e) => setEventForm((f) => ({ ...f, status: e.target.value }))}>
                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
-                  <input className="admin-form-input" value={eventForm.location} onChange={(e) => setEventForm((f) => ({ ...f, location: e.target.value }))} placeholder={t('admin.eventLocation')} />
+                  <input className="admin-form-input" type="datetime-local" value={eventForm.timestamp} onChange={(e) => setEventForm((f) => ({ ...f, timestamp: e.target.value }))} />
                 </div>
+                <input className="admin-form-input" value={eventForm.location} onChange={(e) => setEventForm((f) => ({ ...f, location: e.target.value }))} placeholder={t('admin.eventLocation')} style={{ marginBottom: '0.5rem' }} />
                 <textarea
                   className="admin-form-input"
                   rows={2}
@@ -330,6 +336,11 @@ export default function TrackingManager({ authFetch }) {
                 <select className="admin-form-select" value={form.status} onChange={(e) => updateField('status', e.target.value)}>
                   {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
+              </div>
+
+              <div className="admin-form-group">
+                <label>{t('admin.departureDateTime')}</label>
+                <input className="admin-form-input" type="datetime-local" value={form.departureAt} onChange={(e) => updateField('departureAt', e.target.value)} />
               </div>
 
               <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')}</h4>

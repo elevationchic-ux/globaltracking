@@ -9,6 +9,8 @@ const PRECACHE = [
   '/icons/icon-maskable.svg',
   '/login',
   '/signup',
+  '/pricing',
+  '/wallet',
 ];
 
 self.addEventListener('install', (event) => {

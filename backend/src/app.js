@@ -6,6 +6,7 @@ import trackRouter from './routes/track.js';
 import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
 import adminRouter from './routes/admin.js';
+import creditsRouter from './routes/credits.js';
 import { optionalAuth } from './middleware/authGuard.js';
 
 /**
@@ -35,6 +36,7 @@ export function createApp() {
   app.use('/api/auth', authRouter);
   app.use('/api/chat', chatRouter);
   app.use('/api/admin', adminRouter);
+  app.use('/api/credits', creditsRouter);
 
   app.use((_req, res) => {
     res.status(404).json({ error: 'NOT_FOUND', message: 'Unknown route.' });

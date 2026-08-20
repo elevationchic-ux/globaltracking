@@ -956,6 +956,24 @@ body {
   color: #e2e8f0;
 }
 
+.auth-wallet-btn {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #67e8f9;
+  padding: 0.35rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.auth-wallet-btn:hover {
+  background: #164e63;
+  color: #a5f3fc;
+}
+
 .auth-user-name {
   font-size: 0.8rem;
   color: #e2e8f0;
@@ -1017,5 +1035,539 @@ body {
   .world-clock-track {
     animation-duration: 25s;
   }
+}
+
+/* ── Pricing Page ──────────────────────────────────────────── */
+.pricing-page {
+  min-height: 100vh;
+  background: #0a0e1a;
+  color: #e2e8f0;
+  padding: 3rem 1.5rem;
+}
+.pricing-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.pricing-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #67e8f9, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.5rem;
+}
+.pricing-subtitle {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.pricing-toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  margin: 0 auto 2rem;
+  max-width: 600px;
+  font-size: 0.9rem;
+}
+.pricing-toast-success {
+  background: #16a34a22;
+  border: 1px solid #16a34a;
+  color: #4ade80;
+}
+.pricing-toast-error {
+  background: #dc262622;
+  border: 1px solid #dc2626;
+  color: #f87171;
+}
+.pricing-section {
+  max-width: 1100px;
+  margin: 0 auto 3rem;
+}
+.pricing-section-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.5rem;
+}
+.pricing-section-desc {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+/* Free tier */
+.pricing-tier-free {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.pricing-tier-header h3 {
+  font-size: 1.3rem;
+  color: #f1f5f9;
+  margin: 0 0 0.5rem;
+}
+.pricing-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.pricing-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #67e8f9;
+}
+.pricing-period {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+.pricing-desc {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pricing-features li {
+  padding: 0.35rem 0;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+.pricing-feat-disabled {
+  color: #475569 !important;
+}
+
+/* Token packs grid */
+.pricing-tokens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.pricing-token-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.pricing-token-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+.pricing-token-popular {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 20px #8b5cf622;
+}
+.pricing-popular-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #8b5cf6;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+.pricing-token-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.pricing-token-amount {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #f1f5f9;
+}
+.pricing-token-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+}
+.pricing-token-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 0.25rem;
+}
+.pricing-token-unit {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+.pricing-token-btn {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.pricing-token-btn:hover {
+  opacity: 0.85;
+}
+.pricing-token-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Micro-transactions */
+.pricing-micro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.pricing-micro-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-align: center;
+}
+.pricing-micro-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.pricing-micro-card h4 {
+  color: #f1f5f9;
+  font-size: 1rem;
+  margin: 0 0 0.25rem;
+}
+.pricing-micro-card p {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+}
+.pricing-micro-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.pricing-micro-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #67e8f9;
+}
+.pricing-micro-unit {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* API section */
+.pricing-api-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 2rem;
+}
+.pricing-api-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+.pricing-api-feat {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+.pricing-api-feat-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.pricing-api-feat h4 {
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  margin: 0 0 0.2rem;
+}
+.pricing-api-feat p {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  margin: 0;
+}
+.pricing-api-cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.pricing-api-btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: #3b82f6;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.pricing-api-btn:hover {
+  background: #2563eb;
+}
+
+/* Payment methods */
+.pricing-payment-methods {
+  text-align: center;
+}
+.pricing-payment-methods h3 {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.pricing-payment-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+/* ── User Wallet / Dashboard ─────────────────────────────── */
+.wallet-page {
+  min-height: 100vh;
+  background: #0a0e1a;
+  color: #e2e8f0;
+  padding: 2rem 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.wallet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.wallet-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.wallet-balance-card {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.wallet-balance-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+.wallet-balance-value {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #67e8f9;
+}
+.wallet-balance-sub {
+  font-size: 0.8rem;
+  color: #475569;
+  margin-top: 0.25rem;
+}
+.wallet-section {
+  margin-bottom: 2rem;
+}
+.wallet-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #1e293b;
+}
+.wallet-keys-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.wallet-key-item {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wallet-key-info {
+  flex: 1;
+}
+.wallet-key-name {
+  font-weight: 600;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+}
+.wallet-key-id {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+.wallet-key-stats {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+.wallet-key-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.wallet-btn {
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.wallet-btn:hover { opacity: 0.85; }
+.wallet-btn-primary { background: #3b82f6; color: white; }
+.wallet-btn-danger { background: #dc2626; color: white; }
+.wallet-btn-ghost { background: #334155; color: #e2e8f0; }
+.wallet-input {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  width: 200px;
+}
+.wallet-alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.wallet-alert-item {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wallet-alert-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.wallet-alert-channel {
+  font-size: 1.2rem;
+}
+.wallet-alert-tracking {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #f1f5f9;
+}
+.wallet-alert-status {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.wallet-alert-active {
+  background: #16a34a22;
+  color: #4ade80;
+}
+.wallet-alert-inactive {
+  background: #dc262622;
+  color: #f87171;
+}
+.wallet-empty {
+  color: #475569;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+/* ── Bulk Paywall Modal ──────────────────────────────────── */
+.paywall-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.paywall-modal {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  color: #e2e8f0;
+}
+.paywall-modal h3 {
+  font-size: 1.3rem;
+  margin: 0 0 0.5rem;
+  color: #f1f5f9;
+}
+.paywall-modal p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0 0 1.5rem;
+}
+.paywall-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #67e8f9;
+  margin-bottom: 0.25rem;
+}
+.paywall-unit {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+.paywall-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.paywall-btn {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.paywall-btn-primary { background: #3b82f6; color: white; }
+.paywall-btn-ghost { background: #334155; color: #e2e8f0; }
+
+@media (max-width: 640px) {
+  .pricing-title { font-size: 1.8rem; }
+  .pricing-tokens-grid { grid-template-columns: repeat(2, 1fr); }
+  .pricing-api-features { grid-template-columns: 1fr; }
 }
 

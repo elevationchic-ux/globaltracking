@@ -11,6 +11,9 @@ const DEFAULT_DB = {
   agents: [],
   messages: [],
   trackingRequests: [],
+  credits: [],
+  apiKeys: [],
+  alerts: [],
   stats: { totalTrackingRequests: 0, totalUsers: 0, totalChats: 0 },
 };
 
@@ -23,7 +26,7 @@ function load() {
   } catch {
     // corrupted file  start fresh
   }
-  const db = { ...DEFAULT_DB, users: [], agents: [], messages: [], trackingRequests: [], stats: { ...DEFAULT_DB.stats } };
+  const db = { ...DEFAULT_DB, users: [], agents: [], messages: [], trackingRequests: [], credits: [], apiKeys: [], alerts: [], stats: { ...DEFAULT_DB.stats } };
   save(db);
   return db;
 }
@@ -217,6 +220,7 @@ export function createTrackingRequest(data) {
     distanceKm: data.distanceKm || null,
     durationHours: data.durationHours || null,
     currentLocation: data.currentLocation || data.origin,
+    departureAt: data.departureAt || null,
     events: data.events || [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -250,7 +254,7 @@ export function addTrackingEvent(trackingId, event) {
     description: event.description || '',
     location: event.location || null,
     image: event.image || null,
-    timestamp: new Date().toISOString(),
+    timestamp: event.timestamp || new Date().toISOString(),
   };
   req.events.push(evt);
   // Auto-update the shipment status to match the latest event
@@ -263,6 +267,122 @@ export function addTrackingEvent(trackingId, event) {
   req.updatedAt = new Date().toISOString();
   save(db);
   return evt;
+}
+
+// --- Credits (token/coin system) ---
+export function getCreditsByUser(userId) {
+  return db.credits.filter((c) => c.userId === userId);
+}
+
+export function getCreditBalance(userId) {
+  const userCredits = getCreditsByUser(userId);
+  return userCredits.reduce((sum, c) => sum + (c.amount - c.used), 0);
+}
+
+export function addCreditPack(userId, pack) {
+  const credit = {
+    id: `cr-${randomBytes(4).toString('hex')}`,
+    userId,
+    packName: pack.name,
+    amount: pack.amount,
+    used: 0,
+    pricePaid: pack.price,
+    purchasedAt: new Date().toISOString(),
+    expiresAt: null, // credits don't expire
+  };
+  db.credits.push(credit);
+  save(db);
+  return credit;
+}
+
+export function deductCredit(userId, count = 1) {
+  const userCredits = getCreditsByUser(userId).sort(
+    (a, b) => new Date(a.purchasedAt) - new Date(b.purchasedAt)
+  );
+  let remaining = count;
+  for (const c of userCredits) {
+    const available = c.amount - c.used;
+    if (available <= 0) continue;
+    const deduct = Math.min(available, remaining);
+    c.used += deduct;
+    remaining -= deduct;
+    if (remaining <= 0) break;
+  }
+  save(db);
+  return remaining === 0;
+}
+
+export function hasEnoughCredits(userId, count = 1) {
+  return getCreditBalance(userId) >= count;
+}
+
+// --- API Keys ---
+export function getApiKeysByUser(userId) {
+  return db.apiKeys.filter((k) => k.userId === userId);
+}
+
+export function createApiKey(userId, name) {
+  const key = {
+    id: `key-${randomBytes(8).toString('hex')}`,
+    userId,
+    name: name || 'Default',
+    active: true,
+    usageCount: 0,
+    createdAt: new Date().toISOString(),
+    lastUsedAt: null,
+  };
+  db.apiKeys.push(key);
+  save(db);
+  return key;
+}
+
+export function revokeApiKey(keyId) {
+  const key = db.apiKeys.find((k) => k.id === keyId);
+  if (!key) return null;
+  key.active = false;
+  key.revokedAt = new Date().toISOString();
+  save(db);
+  return key;
+}
+
+export function findApiKey(keyId) {
+  return db.apiKeys.find((k) => k.id === keyId && k.active);
+}
+
+export function incrementApiUsage(keyId) {
+  const key = db.apiKeys.find((k) => k.id === keyId);
+  if (!key) return;
+  key.usageCount += 1;
+  key.lastUsedAt = new Date().toISOString();
+  save(db);
+}
+
+// --- Alerts (WhatsApp/SMS per-package micro-tx) ---
+export function getAlertsByUser(userId) {
+  return db.alerts.filter((a) => a.userId === userId);
+}
+
+export function createAlert(userId, trackingNumber, channel) {
+  const alert = {
+    id: `alert-${randomBytes(4).toString('hex')}`,
+    userId,
+    trackingNumber,
+    channel, // 'whatsapp' or 'sms'
+    active: true,
+    pricePaid: 0.99,
+    createdAt: new Date().toISOString(),
+  };
+  db.alerts.push(alert);
+  save(db);
+  return alert;
+}
+
+export function deactivateAlert(alertId) {
+  const alert = db.alerts.find((a) => a.id === alertId);
+  if (!alert) return null;
+  alert.active = false;
+  save(db);
+  return alert;
 }
 
 // --- Stats ---

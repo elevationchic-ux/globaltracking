@@ -88,7 +88,7 @@ router.get('/tracking', (_req, res) => {
 });
 
 router.post('/tracking', (req, res) => {
-  const { origin, destination, carrier, status, trackingNumber } = req.body;
+  const { origin, destination, carrier, status, trackingNumber, departureAt } = req.body;
 
   if (!origin || !destination) {
     return res.status(400).json({ error: 'MISSING_LOCATIONS', message: 'Origin and destination are required.' });
@@ -110,6 +110,7 @@ router.post('/tracking', (req, res) => {
     destination,
     distanceKm,
     durationHours: durationHours ? formatDuration(durationHours) : null,
+    departureAt: departureAt || null,
   });
 
   res.status(201).json({ trackingRequest: trackingReq });
@@ -137,8 +138,8 @@ router.delete('/tracking/:id', (req, res) => {
 
 // --- Tracking Events (with photo proof) ---
 router.post('/tracking/:id/events', (req, res) => {
-  const { status, description, location, image } = req.body;
-  const evt = addTrackingEvent(req.params.id, { status, description, location, image });
+  const { status, description, location, image, timestamp } = req.body;
+  const evt = addTrackingEvent(req.params.id, { status, description, location, image, timestamp });
   if (!evt) return res.status(404).json({ error: 'NOT_FOUND', message: 'Tracking request not found.' });
   const updated = getTrackingRequestById(req.params.id);
   res.status(201).json({ event: evt, trackingRequest: updated });

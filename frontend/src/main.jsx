@@ -24,6 +24,7 @@ import {
 // (react-globe.gl alone is ~1MB  critical for Core Web Vitals / SEO).
 const GlobalTrackPage = lazy(() => import('./pages/GlobalTrackPage.jsx'))
 const AdminPanel = lazy(() => import('./pages/AdminPanel.jsx'))
+const UserWallet = lazy(() => import('./pages/UserWallet.jsx'))
 const PricingPlans = lazy(() => import('./components/PricingPlans.jsx'))
 const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard.jsx'))
 const TrustSignals = lazy(() => import('./components/TrustSignals.jsx'))
@@ -47,6 +48,7 @@ createRoot(document.getElementById('root')).render(
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/wallet" element={<UserWallet />} />
               <Route path="/track/:number" element={<ResultsPage />} />
               <Route path="/global" element={<GlobalTrackPage />} />
               <Route path="/pricing" element={<ErrorBoundary section="Pricing"><PricingPlans /></ErrorBoundary>} />
