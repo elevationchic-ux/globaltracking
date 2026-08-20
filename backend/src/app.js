@@ -3,6 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import trackRouter from './routes/track.js';
+import authRouter from './routes/auth.js';
+import chatRouter from './routes/chat.js';
+import adminRouter from './routes/admin.js';
+import { optionalAuth } from './middleware/authGuard.js';
 
 /**
  * Express app factory, decoupled from the listener so the exact same app
@@ -21,12 +25,16 @@ export function createApp() {
     })
   );
   app.use(express.json());
+  app.use(optionalAuth);
 
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', uptime: process.uptime() });
   });
 
   app.use('/api', trackRouter);
+  app.use('/api/auth', authRouter);
+  app.use('/api/chat', chatRouter);
+  app.use('/api/admin', adminRouter);
 
   app.use((_req, res) => {
     res.status(404).json({ error: 'NOT_FOUND', message: 'Unknown route.' });

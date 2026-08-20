@@ -2,6 +2,7 @@ import { useMemo, useRef, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useI18n, LanguageSwitcher } from '../i18n/I18nContext.jsx'
 import WorldClock from '../components/WorldClock.jsx'
+import AuthButton from '../components/AuthButton.jsx'
 import {
   detectCarriers,
   parseTrackingNumbers,
@@ -185,6 +186,7 @@ export default function HomePage() {
       <nav className="home-nav" aria-label="Main">
         <span className="home-logo">GLOBAL<span>TRACK</span></span>
         <div className="home-nav-right">
+          <AuthButton />
           <LanguageSwitcher />
           <Link to="/global" className="nav-mission">{t('nav.missionControl')} ↗</Link>
         </div>

@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nContext.jsx'
  * Universal world clock  the real local time of every major logistics hub,
  * ticking live. Pure Intl.DateTimeFormat: no API, no hardcoded offsets,
  * DST handled by the browser's IANA timezone database.
+ * Renders as a horizontally scrolling marquee.
  */
 
 const HUBS = [
@@ -38,6 +39,31 @@ function hubTime(date, tz, lang) {
   return { time, tzShort, day }
 }
 
+function ClockCell({ hub, locale, userDay, now }) {
+  const lang = LANG[locale] ?? LANG.en
+  const { time, tzShort, day } = hubTime(now, hub.tz, lang)
+  return (
+    <li className="world-clock-cell">
+      <span className="world-clock-city">{hub.city[locale] ?? hub.city.en}</span>
+      <span className="world-clock-time">
+        {time}
+        {day !== userDay && <em className="world-clock-day"> {day}</em>}
+      </span>
+      <span className="world-clock-tz">{tzShort}</span>
+    </li>
+  )
+}
+
+function ClockSet({ locale, userDay, now }) {
+  return (
+    <ul className="world-clock-set">
+      {HUBS.map((hub) => (
+        <ClockCell key={hub.id} hub={hub} locale={locale} userDay={userDay} now={now} />
+      ))}
+    </ul>
+  )
+}
+
 export default function WorldClock() {
   const { locale, t } = useI18n()
   const [now, setNow] = useState(() => new Date())
@@ -48,7 +74,6 @@ export default function WorldClock() {
     return () => clearInterval(timer)
   }, [])
 
-  const lang = LANG[locale] ?? LANG.en
   const userDay = useMemo(
     () => new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(now),
     [now],
@@ -57,21 +82,15 @@ export default function WorldClock() {
   return (
     <section className="world-clock" aria-label={t('clock.title')}>
       <p className="world-clock-title">🌍 {t('clock.title')}</p>
-      <ul className="world-clock-grid">
-        {HUBS.map((hub) => {
-          const { time, tzShort, day } = hubTime(now, hub.tz, lang)
-          return (
-            <li key={hub.id} className="world-clock-cell">
-              <span className="world-clock-city">{hub.city[locale] ?? hub.city.en}</span>
-              <span className="world-clock-time">
-                {time}
-                {day !== userDay && <em className="world-clock-day"> {day}</em>}
-              </span>
-              <span className="world-clock-tz">{tzShort}</span>
-            </li>
-          )
-        })}
-      </ul>
+
+      {/* Scrolling marquee: duplicate the set for seamless loop */}
+      <div className="world-clock-marquee">
+        <div className="world-clock-track">
+          <ClockSet locale={locale} userDay={userDay} now={now} />
+          <ClockSet locale={locale} userDay={userDay} now={now} />
+        </div>
+      </div>
+
       <p className="world-clock-note">{t('clock.note')}</p>
     </section>
   )
