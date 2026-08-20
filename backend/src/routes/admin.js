@@ -3,7 +3,7 @@ import { requireAuth, requireAdmin } from '../middleware/authGuard.js';
 import {
   getStats, getUsers, getAgents, getAgentById, createAgent, updateAgent, deleteAgent,
   getTrackingRequests, getTrackingRequestById, createTrackingRequest, updateTrackingRequest, deleteTrackingRequest,
-  getAllConversations, addMessage,
+  getAllConversations, addMessage, addTrackingEvent,
 } from '../data/db.js';
 import { haversineDistance, estimateDuration, formatDuration } from '../utils/haversine.js';
 
@@ -133,6 +133,15 @@ router.put('/tracking/:id', (req, res) => {
 router.delete('/tracking/:id', (req, res) => {
   deleteTrackingRequest(req.params.id);
   res.json({ success: true });
+});
+
+// --- Tracking Events (with photo proof) ---
+router.post('/tracking/:id/events', (req, res) => {
+  const { status, description, location, image } = req.body;
+  const evt = addTrackingEvent(req.params.id, { status, description, location, image });
+  if (!evt) return res.status(404).json({ error: 'NOT_FOUND', message: 'Tracking request not found.' });
+  const updated = getTrackingRequestById(req.params.id);
+  res.status(201).json({ event: evt, trackingRequest: updated });
 });
 
 export default router;

@@ -241,6 +241,30 @@ export function deleteTrackingRequest(id) {
   save(db);
 }
 
+export function addTrackingEvent(trackingId, event) {
+  const req = db.trackingRequests.find((t) => t.id === trackingId);
+  if (!req) return null;
+  const evt = {
+    id: `evt-${randomBytes(4).toString('hex')}`,
+    status: event.status || req.status,
+    description: event.description || '',
+    location: event.location || null,
+    image: event.image || null,
+    timestamp: new Date().toISOString(),
+  };
+  req.events.push(evt);
+  // Auto-update the shipment status to match the latest event
+  if (event.status) {
+    req.status = event.status;
+  }
+  if (event.location) {
+    req.currentLocation = event.location;
+  }
+  req.updatedAt = new Date().toISOString();
+  save(db);
+  return evt;
+}
+
 // --- Stats ---
 export function getStats() {
   return {
