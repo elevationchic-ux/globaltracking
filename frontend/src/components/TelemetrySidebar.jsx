@@ -58,6 +58,10 @@ const SidebarBody = () => {
     setSpeed,
     progressById,
     openMap,
+    subscription,
+    packageLimit,
+    packageCount,
+    canCreateMore,
   } = useGlobalTrack();
   const { t, locale } = useI18n();
   const [editingAlias, setEditingAlias] = useState(false);
@@ -140,6 +144,24 @@ const SidebarBody = () => {
   return (
     <div className="telemetry-sidebar fixed right-0 top-0 bottom-0 w-96 bg-gray-900/95 backdrop-blur-md border-l border-gray-800 z-40 overflow-y-auto">
       <div className="p-6 space-y-6 pt-36">
+        {/* Subscription limit warning for free users */}
+        {subscription?.tier === 'free' && !canCreateMore && (
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+            <div className="flex items-center gap-2 text-yellow-400">
+              <AlertTriangle size={16} />
+              <span className="text-sm font-medium">
+                {t('subscription.limitReached')} ({packageLimit})
+              </span>
+            </div>
+            <button 
+              className="mt-2 text-xs text-yellow-300 hover:text-yellow-200 underline"
+              onClick={() => window.location.href = '/pricing'}
+            >
+              {t('subscription.upgrade')}
+            </button>
+          </div>
+        )}
+
         {/* Shipment Header  alias + carrier handover chain */}
         <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700 neon-glow">
           <div className="flex items-center justify-between mb-3">

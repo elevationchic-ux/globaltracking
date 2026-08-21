@@ -154,14 +154,6 @@ export const GlobalTrackProvider = ({ children }) => {
     }
   }, []);
 
-  // Subscription context
-  const subscriptionValue = {
-    subscription: userSubscription,
-    packageLimit,
-    packageCount,
-    canCreateMore: packageCount < packageLimit,
-  };
-
   // ── Fetch shipments from public API (includes demo packages) ──
   const [adminShipments, setAdminShipments] = useState([]);
   const [userSubscription, setUserSubscription] = useState(null);
@@ -216,6 +208,14 @@ export const GlobalTrackProvider = ({ children }) => {
   const shipments = useMemo(() => {
     return adminShipments;
   }, [adminShipments]);
+
+  // Subscription context
+  const subscriptionValue = {
+    subscription: userSubscription,
+    packageLimit,
+    packageCount,
+    canCreateMore: packageCount < packageLimit,
+  };
 
   // User-defined aliases ("Nike shoes  birthday") persisted locally.
   const [aliases, setAliases] = useState(() => {
@@ -364,7 +364,10 @@ export const GlobalTrackProvider = ({ children }) => {
       togglePlay,
       setSpeed,
       progressById,
-      ...subscriptionValue,
+      subscription: userSubscription,
+      packageLimit,
+      packageCount,
+      canCreateMore: packageCount < packageLimit,
     }),
     [
       theme,
@@ -382,7 +385,9 @@ export const GlobalTrackProvider = ({ children }) => {
       togglePlay,
       setSpeed,
       progressById,
-      subscriptionValue,
+      userSubscription,
+      packageLimit,
+      packageCount,
     ]
   );
 
