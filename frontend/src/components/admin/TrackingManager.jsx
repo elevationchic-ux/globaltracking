@@ -40,6 +40,9 @@ const EMPTY_FORM = {
   originCity: '', originLat: '', originLng: '',
   destCity: '', destLat: '', destLng: '',
   departureAt: '',
+  senderName: '', senderEmail: '', senderLocation: '',
+  receiverName: '', receiverEmail: '', receiverPhone: '', receiverAddress: '',
+  product: '', shippingType: 'Priority shipping',
 }
 
 export default function TrackingManager({ authFetch }) {
@@ -85,6 +88,8 @@ export default function TrackingManager({ authFetch }) {
     e.preventDefault()
     const origin = { city: form.originCity, lat: parseFloat(form.originLat) || null, lng: parseFloat(form.originLng) || null }
     const destination = { city: form.destCity, lat: parseFloat(form.destLat) || null, lng: parseFloat(form.destLng) || null }
+    const sender = { name: form.senderName || null, email: form.senderEmail || null, location: form.senderLocation || null }
+    const receiver = { name: form.receiverName || null, email: form.receiverEmail || null, phone: form.receiverPhone || null, address: form.receiverAddress || null }
     try {
       const res = await authFetch('/api/admin/tracking', {
         method: 'POST',
@@ -95,6 +100,10 @@ export default function TrackingManager({ authFetch }) {
           origin,
           destination,
           departureAt: form.departureAt || undefined,
+          sender,
+          receiver,
+          product: form.product || undefined,
+          shippingType: form.shippingType || undefined,
         }),
       })
       if (res.ok) {
@@ -239,10 +248,43 @@ export default function TrackingManager({ authFetch }) {
 
             {/* Summary */}
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{selected.origin?.city} → {selected.destination?.city}</span>
+              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{selected.origin?.city} \u2192 {selected.destination?.city}</span>
               <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{selected.carrier}</span>
-              {selected.distanceKm && <span style={{ fontSize: '0.8rem', color: '#67e8f9' }}>{selected.distanceKm} km · {selected.durationHours}</span>}
+              {selected.distanceKm && <span style={{ fontSize: '0.8rem', color: '#67e8f9' }}>{selected.distanceKm} km \u00b7 {selected.durationHours}</span>}
             </div>
+
+            {/* Sender / Receiver / Product */}
+            {(selected.sender || selected.receiver || selected.product) && (
+              <div style={{ background: '#0f172a', borderRadius: 10, padding: '0.75rem', marginBottom: '1rem', fontSize: '0.8rem' }}>
+                {selected.sender && (selected.sender.name || selected.sender.email || selected.sender.location) && (
+                  <div style={{ marginBottom: '0.5rem' }}>
+                    <span style={{ color: '#64748b', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '0.05em' }}>Sender</span>
+                    <div style={{ color: '#e2e8f0', marginTop: 2 }}>
+                      {selected.sender.name && <strong>{selected.sender.name}</strong>}
+                      {selected.sender.location && <span style={{ color: '#94a3b8', marginLeft: '0.5rem' }}>{selected.sender.location}</span>}
+                      {selected.sender.email && <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{selected.sender.email}</div>}
+                    </div>
+                  </div>
+                )}
+                {selected.receiver && (selected.receiver.name || selected.receiver.email || selected.receiver.phone || selected.receiver.address) && (
+                  <div style={{ marginBottom: '0.5rem' }}>
+                    <span style={{ color: '#64748b', fontWeight: 600, textTransform: 'uppercase', fontSize: '0.7rem', letterSpacing: '0.05em' }}>Receiver</span>
+                    <div style={{ color: '#e2e8f0', marginTop: 2 }}>
+                      {selected.receiver.name && <strong>{selected.receiver.name}</strong>}
+                      {selected.receiver.phone && <span style={{ color: '#94a3b8', marginLeft: '0.5rem' }}>{selected.receiver.phone}</span>}
+                      {selected.receiver.email && <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{selected.receiver.email}</div>}
+                      {selected.receiver.address && <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{selected.receiver.address}</div>}
+                    </div>
+                  </div>
+                )}
+                {(selected.product || selected.shippingType) && (
+                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    {selected.product && <span style={{ color: '#94a3b8' }}>Product: <span style={{ color: '#e2e8f0' }}>{selected.product}</span></span>}
+                    {selected.shippingType && <span style={{ color: '#94a3b8' }}>Type: <span style={{ color: '#f59e0b' }}>{selected.shippingType}</span></span>}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Add Event Form */}
             <div style={{ background: '#0f172a', borderRadius: 10, padding: '0.75rem', marginBottom: '1rem' }}>
@@ -382,6 +424,61 @@ export default function TrackingManager({ authFetch }) {
                   <span><Icon name="clock" size={12} /> {calculated.duration}</span>
                 </div>
               )}
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>Sender</h4>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Name</label>
+                  <input className="admin-form-input" value={form.senderName} onChange={(e) => updateField('senderName', e.target.value)} placeholder="Banks Junior" />
+                </div>
+                <div className="admin-form-group">
+                  <label>Email</label>
+                  <input className="admin-form-input" type="email" value={form.senderEmail} onChange={(e) => updateField('senderEmail', e.target.value)} placeholder="sender@email.com" />
+                </div>
+              </div>
+              <div className="admin-form-group">
+                <label>Location</label>
+                <input className="admin-form-input" value={form.senderLocation} onChange={(e) => updateField('senderLocation', e.target.value)} placeholder="Oklahoma" />
+              </div>
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>Receiver</h4>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Name</label>
+                  <input className="admin-form-input" value={form.receiverName} onChange={(e) => updateField('receiverName', e.target.value)} placeholder="Wylee Allender" />
+                </div>
+                <div className="admin-form-group">
+                  <label>Phone</label>
+                  <input className="admin-form-input" value={form.receiverPhone} onChange={(e) => updateField('receiverPhone', e.target.value)} placeholder="208-739-1957" />
+                </div>
+              </div>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Email</label>
+                  <input className="admin-form-input" type="email" value={form.receiverEmail} onChange={(e) => updateField('receiverEmail', e.target.value)} placeholder="receiver@email.com" />
+                </div>
+                <div className="admin-form-group">
+                  <label>Address</label>
+                  <input className="admin-form-input" value={form.receiverAddress} onChange={(e) => updateField('receiverAddress', e.target.value)} placeholder="30686 Opal Rd, Parma, ID" />
+                </div>
+              </div>
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>Shipment Details</h4>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Product</label>
+                  <input className="admin-form-input" value={form.product} onChange={(e) => updateField('product', e.target.value)} placeholder="Brazilian bull rope" />
+                </div>
+                <div className="admin-form-group">
+                  <label>Shipping Type</label>
+                  <select className="admin-form-select" value={form.shippingType} onChange={(e) => updateField('shippingType', e.target.value)}>
+                    <option value="Priority shipping">Priority shipping</option>
+                    <option value="Express shipping">Express shipping</option>
+                    <option value="Standard shipping">Standard shipping</option>
+                    <option value="Economy shipping">Economy shipping</option>
+                  </select>
+                </div>
+              </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
                 <button type="button" className="admin-btn admin-btn-ghost" onClick={() => setShowModal(false)}>

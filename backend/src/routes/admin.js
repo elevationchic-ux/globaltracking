@@ -88,7 +88,7 @@ router.get('/tracking', (_req, res) => {
 });
 
 router.post('/tracking', (req, res) => {
-  const { origin, destination, carrier, status, trackingNumber, departureAt } = req.body;
+  const { origin, destination, carrier, status, trackingNumber, departureAt, sender, receiver, product, shippingType } = req.body;
 
   if (!origin || !destination) {
     return res.status(400).json({ error: 'MISSING_LOCATIONS', message: 'Origin and destination are required.' });
@@ -111,6 +111,10 @@ router.post('/tracking', (req, res) => {
     distanceKm,
     durationHours: durationHours ? formatDuration(durationHours) : null,
     departureAt: departureAt || null,
+    sender: sender || null,
+    receiver: receiver || null,
+    product: product || null,
+    shippingType: shippingType || null,
   });
 
   res.status(201).json({ trackingRequest: trackingReq });
