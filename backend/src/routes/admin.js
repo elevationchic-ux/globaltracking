@@ -4,6 +4,7 @@ import {
   getStats, getUsers, getAgents, getAgentById, createAgent, updateAgent, deleteAgent,
   getTrackingRequests, getTrackingRequestById, createTrackingRequest, updateTrackingRequest, deleteTrackingRequest,
   getAllConversations, addMessage, addTrackingEvent, updateTrackingEvent, deleteTrackingEvent,
+  setUserSubscription, getUserSubscription, getUserPackageLimit, getUserPackageCount,
 } from '../data/db.js';
 import { haversineDistance, estimateDuration, formatDuration } from '../utils/haversine.js';
 import { generateTrackingNumber } from '../utils/trackingNumberGenerator.js';
@@ -170,6 +171,36 @@ router.delete('/tracking/:id/events/:eventId', (req, res) => {
   if (!ok) return res.status(404).json({ error: 'NOT_FOUND', message: 'Event not found.' });
   const updated = getTrackingRequestById(req.params.id);
   res.json({ success: true, trackingRequest: updated });
+});
+
+// --- User Subscription Management ---
+router.get('/users/:userId/subscription', (req, res) => {
+  const subscription = getUserSubscription(req.params.userId);
+  const packageLimit = getUserPackageLimit(req.params.userId);
+  const packageCount = getUserPackageCount(req.params.userId);
+  
+  res.json({
+    subscription,
+    packageLimit,
+    packageCount,
+    canCreateMore: packageCount < packageLimit,
+  });
+});
+
+router.put('/users/:userId/subscription', (req, res) => {
+  const { tier, expiresAt } = req.body;
+  
+  if (!tier) {
+    return res.status(400).json({ error: 'MISSING_TIER', message: 'Tier is required.' });
+  }
+  
+  const validTiers = ['free', 'starter', 'basic', 'pro', 'business', 'enterprise'];
+  if (!validTiers.includes(tier)) {
+    return res.status(400).json({ error: 'INVALID_TIER', message: 'Invalid subscription tier.' });
+  }
+  
+  const subscription = setUserSubscription(req.params.userId, tier, expiresAt);
+  res.json({ subscription });
 });
 
 export default router;

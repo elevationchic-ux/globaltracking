@@ -15,18 +15,25 @@ const DEFAULT_DB = {
   apiKeys: [],
   alerts: [],
   stats: { totalTrackingRequests: 0, totalUsers: 0, totalChats: 0 },
+  demoPackagesSeeded: false,
+  subscriptions: [], // User subscriptions
 };
 
 function load() {
   try {
     if (existsSync(DB_PATH)) {
       const raw = readFileSync(DB_PATH, 'utf-8');
-      return JSON.parse(raw);
+      const loaded = JSON.parse(raw);
+      // Ensure subscriptions array exists for backward compatibility
+      if (!loaded.subscriptions) {
+        loaded.subscriptions = [];
+      }
+      return loaded;
     }
   } catch {
     // corrupted file  start fresh
   }
-  const db = { ...DEFAULT_DB, users: [], agents: [], messages: [], trackingRequests: [], credits: [], apiKeys: [], alerts: [], stats: { ...DEFAULT_DB.stats } };
+  const db = { ...DEFAULT_DB, users: [], agents: [], messages: [], trackingRequests: [], credits: [], apiKeys: [], alerts: [], subscriptions: [], stats: { ...DEFAULT_DB.stats } };
   save(db);
   return db;
 }
@@ -52,7 +59,296 @@ function seedDefaults(db) {
       createdAt: new Date().toISOString(),
     });
   }
+  
+  // Seed 5 demo packages with real information if not already seeded
+  if (!db.demoPackagesSeeded) {
+    seedDemoPackages(db);
+    db.demoPackagesSeeded = true;
+  }
+  
   save(db);
+}
+
+// --- Seed 5 demo packages with real information and different transport modes ---
+function seedDemoPackages(db) {
+  const now = new Date();
+  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+  
+  // Demo 1: Ship (Sea freight) - Marseille to Shanghai
+  db.trackingRequests.push({
+    id: 'demo-ship-001',
+    trackingNumber: 'MSCU987654321',
+    carrier: 'MSC Mediterranean Shipping Company',
+    status: 'IN_TRANSIT',
+    origin: { city: 'Marseille', country: 'France', lat: 43.2965, lng: 5.3698 },
+    destination: { city: 'Shanghai', country: 'China', lat: 31.2304, lng: 121.4737 },
+    distanceKm: 12000,
+    durationHours: '25d 12h',
+    currentLocation: { city: 'Suez Canal', country: 'Egypt', lat: 30.0107, lng: 32.5406 },
+    departureAt: twoDaysAgo.toISOString(),
+    transportMode: 'sea',
+    sender: { name: 'Vincent Martin', email: 'vincent@export-fr.com', location: 'Marseille, France' },
+    receiver: { name: 'Li Wei', email: 'li.wei@import-cn.com', phone: '+86 21 1234 5678', address: '123 Nanjing Road, Shanghai' },
+    product: 'Industrial machinery parts - 2 containers',
+    shippingType: 'Sea Freight - FCL',
+    events: [
+      {
+        id: 'evt-ship-001',
+        status: 'INFO_RECEIVED',
+        description: 'Container received at Marseille terminal',
+        location: 'Marseille, France',
+        lat: 43.2965,
+        lng: 5.3698,
+        transportMode: 'sea',
+        timestamp: twoDaysAgo.toISOString(),
+      },
+      {
+        id: 'evt-ship-002',
+        status: 'IN_TRANSIT',
+        description: 'Vessel departed Marseille - Loading completed',
+        location: 'Marseille Port',
+        lat: 43.2965,
+        lng: 5.3698,
+        transportMode: 'sea',
+        timestamp: yesterday.toISOString(),
+      },
+      {
+        id: 'evt-ship-003',
+        status: 'IN_TRANSIT',
+        description: 'Transiting Suez Canal',
+        location: 'Suez Canal, Egypt',
+        lat: 30.0107,
+        lng: 32.5406,
+        transportMode: 'sea',
+        timestamp: now.toISOString(),
+      },
+    ],
+    createdAt: twoDaysAgo.toISOString(),
+    updatedAt: now.toISOString(),
+  });
+
+  // Demo 2: Car (Ground transport) - Paris to Amsterdam
+  db.trackingRequests.push({
+    id: 'demo-car-001',
+    trackingNumber: 'DPD123456789FR',
+    carrier: 'DPD France',
+    status: 'OUT_FOR_DELIVERY',
+    origin: { city: 'Paris', country: 'France', lat: 48.8566, lng: 2.3522 },
+    destination: { city: 'Amsterdam', country: 'Netherlands', lat: 52.3676, lng: 4.9041 },
+    distanceKm: 430,
+    durationHours: '1d 4h',
+    currentLocation: { city: 'Amsterdam', country: 'Netherlands', lat: 52.3676, lng: 4.9041 },
+    departureAt: yesterday.toISOString(),
+    transportMode: 'ground',
+    sender: { name: 'Sophie Dubois', email: 'sophie@boutique-paris.com', location: 'Paris, France' },
+    receiver: { name: 'Jan van der Berg', email: 'jan@amsterdam-business.nl', phone: '+31 20 123 4567', address: '45 Herengracht, Amsterdam' },
+    product: 'Designer clothing collection',
+    shippingType: 'Express Ground',
+    events: [
+      {
+        id: 'evt-car-001',
+        status: 'INFO_RECEIVED',
+        description: 'Package collected from sender',
+        location: 'Paris, France',
+        lat: 48.8566,
+        lng: 2.3522,
+        transportMode: 'ground',
+        timestamp: yesterday.toISOString(),
+      },
+      {
+        id: 'evt-car-002',
+        status: 'IN_TRANSIT',
+        description: 'In transit to Amsterdam hub',
+        location: 'Lille, France',
+        lat: 50.6292,
+        lng: 3.0573,
+        transportMode: 'ground',
+        timestamp: new Date(yesterday.getTime() + 12 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'evt-car-003',
+        status: 'OUT_FOR_DELIVERY',
+        description: 'Out for delivery - Expected today',
+        location: 'Amsterdam, Netherlands',
+        lat: 52.3676,
+        lng: 4.9041,
+        transportMode: 'ground',
+        timestamp: now.toISOString(),
+      },
+    ],
+    createdAt: yesterday.toISOString(),
+    updatedAt: now.toISOString(),
+  });
+
+  // Demo 3: Train (Rail transport) - Berlin to Warsaw
+  db.trackingRequests.push({
+    id: 'demo-train-001',
+    trackingNumber: 'DBS987654321PL',
+    carrier: 'DB Schenker Rail',
+    status: 'IN_TRANSIT',
+    origin: { city: 'Berlin', country: 'Germany', lat: 52.52, lng: 13.405 },
+    destination: { city: 'Warsaw', country: 'Poland', lat: 52.2297, lng: 21.0122 },
+    distanceKm: 520,
+    durationHours: '2d 6h',
+    currentLocation: { city: 'Poznan', country: 'Poland', lat: 52.4064, lng: 16.9252 },
+    departureAt: twoDaysAgo.toISOString(),
+    transportMode: 'rail',
+    sender: { name: 'Hans Müller', email: 'hans@german-export.de', location: 'Berlin, Germany' },
+    receiver: { name: 'Anna Kowalski', email: 'anna@polish-import.pl', phone: '+48 22 123 4567', address: '78 Marszalkowska Street, Warsaw' },
+    product: 'Automotive parts - Rail wagon',
+    shippingType: 'Rail Freight',
+    events: [
+      {
+        id: 'evt-train-001',
+        status: 'INFO_RECEIVED',
+        description: 'Rail wagon loaded at Berlin terminal',
+        location: 'Berlin, Germany',
+        lat: 52.52,
+        lng: 13.405,
+        transportMode: 'rail',
+        timestamp: twoDaysAgo.toISOString(),
+      },
+      {
+        id: 'evt-train-002',
+        status: 'IN_TRANSIT',
+        description: 'Train departed Berlin - On schedule',
+        location: 'Berlin Hauptbahnhof',
+        lat: 52.525,
+        lng: 13.3695,
+        transportMode: 'rail',
+        timestamp: yesterday.toISOString(),
+      },
+      {
+        id: 'evt-train-003',
+        status: 'IN_TRANSIT',
+        description: 'Passing through Poznan hub',
+        location: 'Poznan, Poland',
+        lat: 52.4064,
+        lng: 16.9252,
+        transportMode: 'rail',
+        timestamp: now.toISOString(),
+      },
+    ],
+    createdAt: twoDaysAgo.toISOString(),
+    updatedAt: now.toISOString(),
+  });
+
+  // Demo 4: Pickup point (Relay point) - Lyon to Lille
+  db.trackingRequests.push({
+    id: 'demo-pickup-001',
+    trackingNumber: '3SAB41C56D78E9',
+    carrier: 'PostNL',
+    status: 'DELIVERED',
+    origin: { city: 'Lyon', country: 'France', lat: 45.764, lng: 4.8357 },
+    destination: { city: 'Lille', country: 'France', lat: 50.6292, lng: 3.0573 },
+    distanceKm: 690,
+    durationHours: '1d 8h',
+    currentLocation: { city: 'Lille', country: 'France', lat: 50.6292, lng: 3.0573 },
+    departureAt: twoDaysAgo.toISOString(),
+    transportMode: 'ground',
+    sender: { name: 'Claude Martin', email: 'claude@lyon-business.fr', location: 'Lyon, France' },
+    receiver: { name: 'Marie Dupont', email: 'marie@lille-resident.fr', phone: '+33 6 12 34 56 78', address: '56 Rue de Paris, Lille' },
+    product: 'Electronics - Smartphone',
+    shippingType: 'Point Relais',
+    pickupPoint: {
+      name: 'Point Relais - Night&Day Lille',
+      address: '23 Rue Esquermoise, 59000 Lille',
+      pin: '4 8 2 9 1 3',
+      hours: 'Mon–Sat 08:00–20:00 · Sun 09:00–18:00',
+      collected: true,
+    },
+    events: [
+      {
+        id: 'evt-pickup-001',
+        status: 'INFO_RECEIVED',
+        description: 'Package handed to carrier',
+        location: 'Lyon, France',
+        lat: 45.764,
+        lng: 4.8357,
+        transportMode: 'ground',
+        timestamp: twoDaysAgo.toISOString(),
+      },
+      {
+        id: 'evt-pickup-002',
+        status: 'IN_TRANSIT',
+        description: 'In transit to Lille hub',
+        location: 'Paris, France',
+        lat: 48.8566,
+        lng: 2.3522,
+        transportMode: 'ground',
+        timestamp: yesterday.toISOString(),
+      },
+      {
+        id: 'evt-pickup-003',
+        status: 'DELIVERED',
+        description: 'Delivered to pickup point - Ready for collection',
+        location: 'Lille, France',
+        lat: 50.6292,
+        lng: 3.0573,
+        transportMode: 'ground',
+        timestamp: now.toISOString(),
+      },
+    ],
+    createdAt: twoDaysAgo.toISOString(),
+    updatedAt: now.toISOString(),
+  });
+
+  // Demo 5: Air freight (Air transport) - Dubai to New York
+  db.trackingRequests.push({
+    id: 'demo-air-001',
+    trackingNumber: 'EK123456789AE',
+    carrier: 'Emirates SkyCargo',
+    status: 'IN_TRANSIT',
+    origin: { city: 'Dubai', country: 'UAE', lat: 25.2048, lng: 55.2708 },
+    destination: { city: 'New York', country: 'USA', lat: 40.7128, lng: -74.006 },
+    distanceKm: 11000,
+    durationHours: '2d 4h',
+    currentLocation: { city: 'London', country: 'UK', lat: 51.5074, lng: -0.1278 },
+    departureAt: yesterday.toISOString(),
+    transportMode: 'air',
+    sender: { name: 'Ahmed Al-Rashid', email: 'ahmed@dubai-export.ae', location: 'Dubai, UAE' },
+    receiver: { name: 'John Smith', email: 'john@ny-business.com', phone: '+1 212 555 1234', address: '456 Fifth Avenue, New York, NY' },
+    product: 'Luxury watches - Express shipment',
+    shippingType: 'Air Freight Express',
+    events: [
+      {
+        id: 'evt-air-001',
+        status: 'INFO_RECEIVED',
+        description: 'Cargo received at Dubai International Airport',
+        location: 'Dubai, UAE',
+        lat: 25.2048,
+        lng: 55.2708,
+        transportMode: 'air',
+        timestamp: yesterday.toISOString(),
+      },
+      {
+        id: 'evt-air-002',
+        status: 'IN_TRANSIT',
+        description: 'Flight departed Dubai - EK201',
+        location: 'Dubai International (DXB)',
+        lat: 25.2532,
+        lng: 55.3657,
+        transportMode: 'air',
+        timestamp: new Date(yesterday.getTime() + 6 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'evt-air-003',
+        status: 'IN_TRANSIT',
+        description: 'Landed at London Heathrow - Customs clearance',
+        location: 'London, UK',
+        lat: 51.4700,
+        lng: -0.4543,
+        transportMode: 'air',
+        timestamp: now.toISOString(),
+      },
+    ],
+    createdAt: yesterday.toISOString(),
+    updatedAt: now.toISOString(),
+  });
+
+  // Update stats
+  db.stats.totalTrackingRequests = db.trackingRequests.length;
 }
 
 // Create default admin on first login attempt (not auto-seeded)
@@ -457,4 +753,72 @@ export function getStats() {
     totalConversations: new Set(db.messages.map((m) => m.conversationId)).size,
     totalMessages: db.messages.length,
   };
+}
+
+// --- Subscriptions & User Limits ---
+export function getUserSubscription(userId) {
+  return db.subscriptions.find(s => s.userId === userId) || { tier: 'free', expiresAt: null };
+}
+
+export function setUserSubscription(userId, tier, expiresAt = null) {
+  const existingIndex = db.subscriptions.findIndex(s => s.userId === userId);
+  const subscription = {
+    userId,
+    tier,
+    expiresAt: expiresAt || null,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  
+  if (existingIndex >= 0) {
+    db.subscriptions[existingIndex] = subscription;
+  } else {
+    db.subscriptions.push(subscription);
+  }
+  save(db);
+  return subscription;
+}
+
+export function getUserPackageLimit(userId) {
+  const subscription = getUserSubscription(userId);
+  
+  // Check if subscription is expired
+  if (subscription.expiresAt && new Date(subscription.expiresAt) < new Date()) {
+    return 2; // Free tier limit
+  }
+  
+  const limits = {
+    free: 2,
+    starter: 5,
+    basic: 10,
+    pro: 25,
+    business: 100,
+    enterprise: Infinity,
+  };
+  
+  return limits[subscription.tier] || 2;
+}
+
+export function getUserPackageCount(userId) {
+  // Count packages created by this user (admin created packages don't count)
+  return db.trackingRequests.filter(t => t.userId === userId).length;
+}
+
+export function canUserCreatePackage(userId) {
+  const limit = getUserPackageLimit(userId);
+  const current = getUserPackageCount(userId);
+  return current < limit;
+}
+
+export function createTrackingRequestWithUser(data, userId) {
+  if (!canUserCreatePackage(userId)) {
+    throw new Error('PACKAGE_LIMIT_REACHED');
+  }
+  
+  const req = {
+    ...createTrackingRequest(data),
+    userId, // Track which user created this package
+  };
+  
+  return req;
 }

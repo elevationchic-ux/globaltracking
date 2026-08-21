@@ -1,5 +1,4 @@
 import { AdminTrackingAdapter } from './AdminTrackingAdapter.js';
-import { MockCarrierAdapter } from './MockCarrierAdapter.js';
 import { SeventeenTrackAdapter } from './SeventeenTrackAdapter.js';
 
 /**
@@ -9,14 +8,13 @@ import { SeventeenTrackAdapter } from './SeventeenTrackAdapter.js';
  * for the tracking number handles the request.
  *
  * Admin adapter is registered FIRST so that admin-created tracking numbers
- * always take priority over the demo/mock adapter and real carrier lookups.
+ * always take priority over real carrier lookups.
  *
  * Production mode: with TRACKING_API_KEY set (17TRACK developer key), every
  * real tracking number is looked up against the 17TRACK aggregator API
- * (2,500+ official carriers). The demo adapter only ever matches the two
- * seeded DEMO numbers, so it never shadows a real lookup.
+ * (2,500+ official carriers).
  */
-const adapters = [new AdminTrackingAdapter(), new MockCarrierAdapter()];
+const adapters = [new AdminTrackingAdapter()];
 
 if (process.env.TRACKING_API_KEY) {
   adapters.push(new SeventeenTrackAdapter(process.env.TRACKING_API_KEY));

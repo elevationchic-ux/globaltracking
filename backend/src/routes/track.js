@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { Router } from 'express';
 import { getAdapterForTrackingNumber, listCarriers } from '../carriers/registry.js';
-import { getTrackingRequests } from '../data/db.js';
+import { getTrackingRequests, getUserSubscription, getUserPackageLimit, getUserPackageCount } from '../data/db.js';
 
 const router = Router();
 
@@ -171,6 +171,22 @@ router.get('/track/:number', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// --- User subscription info (public endpoint for frontend) ---
+router.get('/user/subscription', (req, res) => {
+  // For demo purposes, return free tier info
+  // In production, this would require authentication and return the real user's subscription
+  const demoSubscription = {
+    subscription: {
+      tier: 'free',
+      expiresAt: null,
+    },
+    packageLimit: 2,
+    packageCount: 0,
+    canCreateMore: true,
+  };
+  res.json(demoSubscription);
 });
 
 export default router;
