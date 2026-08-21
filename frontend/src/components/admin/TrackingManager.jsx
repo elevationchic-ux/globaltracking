@@ -13,8 +13,24 @@ function haversineDistance(from, to) {
   return Math.round(EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))
 }
 
-function estimateDuration(km) {
-  return Math.round(km / 200 + 6)
+function estimateDuration(km, transportMode = 'air') {
+  // Speeds in km/h based on transport mode
+  const speeds = {
+    air: 800,      // ~800 km/h for air freight
+    ground: 60,    // ~60 km/h for truck
+    sea: 25,       // ~25 km/h for ship
+    rail: 80,      // ~80 km/h for train
+  }
+  // Base processing time in hours
+  const baseTime = {
+    air: 12,
+    ground: 4,
+    sea: 48,
+    rail: 8,
+  }
+  const speed = speeds[transportMode] || speeds.ground
+  const base = baseTime[transportMode] || baseTime.ground
+  return Math.round(km / speed + base)
 }
 
 function formatDuration(hours) {
@@ -42,6 +58,7 @@ const EMPTY_FORM = {
   originCity: '', originLat: '', originLng: '',
   destCity: '', destLat: '', destLng: '',
   departureAt: '', transportMode: 'air',
+  weight: '', durationHours: '',
   senderName: '', senderEmail: '', senderLocation: '',
   receiverName: '', receiverEmail: '', receiverPhone: '', receiverAddress: '',
   product: '', shippingType: 'Priority shipping',
@@ -87,12 +104,13 @@ export default function TrackingManager({ authFetch }) {
     const dLng = parseFloat(form.destLng)
     if (!isNaN(oLat) && !isNaN(oLng) && !isNaN(dLat) && !isNaN(dLng)) {
       const dist = haversineDistance({ lat: oLat, lng: oLng }, { lat: dLat, lng: dLng })
-      const dur = estimateDuration(dist)
+      const transportMode = form.transportMode || 'air'
+      const dur = estimateDuration(dist, transportMode)
       setCalculated({ distance: dist, duration: formatDuration(dur) })
     } else {
       setCalculated(null)
     }
-  }, [form.originLat, form.originLng, form.destLat, form.destLng])
+  }, [form.originLat, form.originLng, form.destLat, form.destLng, form.transportMode])
 
   async function handleCreate(e) {
     e.preventDefault()
@@ -111,6 +129,9 @@ export default function TrackingManager({ authFetch }) {
           origin,
           destination,
           departureAt: form.departureAt || undefined,
+          transportMode: form.transportMode || 'air',
+          weight: form.weight || undefined,
+          durationHours: form.durationHours || undefined,
           sender,
           receiver,
           product: form.product || undefined,
@@ -210,6 +231,8 @@ export default function TrackingManager({ authFetch }) {
       destLng: req.destination?.lng != null ? String(req.destination.lng) : '',
       departureAt: req.departureAt ? req.departureAt.slice(0, 16) : '',
       transportMode: req.transportMode || 'air',
+      weight: req.weight || '',
+      durationHours: req.durationHours || '',
       senderName: req.sender?.name || '',
       senderEmail: req.sender?.email || '',
       senderLocation: req.sender?.location || '',
@@ -225,7 +248,8 @@ export default function TrackingManager({ authFetch }) {
         { lat: req.origin.lat, lng: req.origin.lng },
         { lat: req.destination.lat, lng: req.destination.lng }
       )
-      setEditCalculated({ distance: dist, duration: formatDuration(estimateDuration(dist)) })
+      const transportMode = req.transportMode || 'air'
+      setEditCalculated({ distance: dist, duration: formatDuration(estimateDuration(dist, transportMode)) })
     } else {
       setEditCalculated(null)
     }
@@ -240,12 +264,13 @@ export default function TrackingManager({ authFetch }) {
     const dLng = parseFloat(editForm.destLng)
     if (!isNaN(oLat) && !isNaN(oLng) && !isNaN(dLat) && !isNaN(dLng)) {
       const dist = haversineDistance({ lat: oLat, lng: oLng }, { lat: dLat, lng: dLng })
-      const dur = estimateDuration(dist)
+      const transportMode = editForm.transportMode || 'air'
+      const dur = estimateDuration(dist, transportMode)
       setEditCalculated({ distance: dist, duration: formatDuration(dur) })
     } else {
       setEditCalculated(null)
     }
-  }, [editForm?.originLat, editForm?.originLng, editForm?.destLat, editForm?.destLng])
+  }, [editForm?.originLat, editForm?.originLng, editForm?.destLat, editForm?.destLng, editForm?.transportMode])
 
   function updateEditField(field, value) {
     setEditForm((f) => ({ ...f, [field]: value }))
@@ -268,6 +293,8 @@ export default function TrackingManager({ authFetch }) {
           origin, destination,
           departureAt: editForm.departureAt || null,
           transportMode: editForm.transportMode,
+          weight: editForm.weight || null,
+          durationHours: editForm.durationHours || null,
           sender, receiver,
           product: editForm.product || null,
           shippingType: editForm.shippingType || null,
@@ -607,6 +634,17 @@ export default function TrackingManager({ authFetch }) {
                 </select>
               </div>
 
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>{t('admin.weight')}</label>
+                  <input className="admin-form-input" value={form.weight} onChange={(e) => updateField('weight', e.target.value)} placeholder="2.4 kg" />
+                </div>
+                <div className="admin-form-group">
+                  <label>{t('admin.duration')}</label>
+                  <input className="admin-form-input" value={form.durationHours} onChange={(e) => updateField('durationHours', e.target.value)} placeholder="2d 12h" />
+                </div>
+              </div>
+
               <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')} <span style={{ color: '#ef4444' }}>*</span></h4>
               <div className="admin-form-group">
                 <label>{t('admin.city')} <span style={{ color: '#ef4444' }}>*</span></label>
@@ -753,6 +791,17 @@ export default function TrackingManager({ authFetch }) {
               <div className="admin-form-group">
                 <label>{t('admin.departureDateTime')}</label>
                 <input className="admin-form-input" type="datetime-local" value={editForm.departureAt} onChange={(e) => updateEditField('departureAt', e.target.value)} />
+              </div>
+
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>{t('admin.weight')}</label>
+                  <input className="admin-form-input" value={editForm.weight} onChange={(e) => updateEditField('weight', e.target.value)} placeholder="2.4 kg" />
+                </div>
+                <div className="admin-form-group">
+                  <label>{t('admin.duration')}</label>
+                  <input className="admin-form-input" value={editForm.durationHours} onChange={(e) => updateEditField('durationHours', e.target.value)} placeholder="2d 12h" />
+                </div>
               </div>
 
               <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')}</h4>

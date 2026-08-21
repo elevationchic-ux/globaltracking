@@ -1,7 +1,8 @@
 /**
  * Haversine formula  calculates the great-circle distance between two
  * points on Earth given their latitude/longitude coordinates.
- * Also estimates transit duration based on average cargo speeds.
+ * Also estimates transit duration based on realistic cargo transport speeds
+ * with margins for handling and customs.
  */
 
 const EARTH_RADIUS_KM = 6371;
@@ -28,16 +29,32 @@ export function haversineDistance(from, to) {
 }
 
 /**
- * Estimate transit duration based on distance and average cargo transport speed.
- * Average speeds by mode: air ~500 km/h effective (incl. handling), sea ~40 km/h, ground ~80 km/h.
- * We use a blended average of ~200 km/h effective (most international shipping is air+ground).
+ * Transport mode-specific speeds with realistic margins.
+ * Speeds are effective averages including handling, customs, and transfer times.
+ * Air: ~500 km/h effective speed + 6h margin for security/handling
+ * Sea: ~40 km/h effective speed + 48h margin for port operations/customs
+ * Ground: ~80 km/h effective speed + 12h margin for customs/delivery
+ * Rail: ~60 km/h effective speed + 24h margin for rail operations
+ */
+const TRANSPORT_SPEEDS = {
+  air: { speed: 500, margin: 6 }, // km/h + hours margin
+  sea: { speed: 40, margin: 48 },
+  ground: { speed: 80, margin: 12 },
+  rail: { speed: 60, margin: 24 },
+};
+
+/**
+ * Estimate transit duration based on distance and transport mode.
+ * Uses realistic speed estimates with built-in margins for handling and customs.
  * @param {number} distanceKm
+ * @param {string} transportMode - 'air', 'sea', 'ground', 'rail'
  * @returns {number} estimated hours
  */
-export function estimateDuration(distanceKm) {
-  const EFFECTIVE_SPEED_KMH = 200; // blended air+ground average
-  const HANDLING_OVERHEAD_H = 6; // customs, sorting, etc.
-  return Math.round((distanceKm / EFFECTIVE_SPEED_KMH) + HANDLING_OVERHEAD_H);
+export function estimateDuration(distanceKm, transportMode = 'air') {
+  const config = TRANSPORT_SPEEDS[transportMode] || TRANSPORT_SPEEDS.air;
+  const transitTime = distanceKm / config.speed;
+  const totalTime = transitTime + config.margin;
+  return Math.round(totalTime);
 }
 
 /**

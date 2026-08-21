@@ -90,18 +90,23 @@ router.get('/tracking', (_req, res) => {
 });
 
 router.post('/tracking', (req, res) => {
-  const { origin, destination, carrier, status, trackingNumber, departureAt, sender, receiver, product, shippingType } = req.body;
+  const { origin, destination, carrier, status, trackingNumber, departureAt, sender, receiver, product, shippingType, weight, durationHours } = req.body;
 
   if (!origin || !destination) {
     return res.status(400).json({ error: 'MISSING_LOCATIONS', message: 'Origin and destination are required.' });
   }
 
-  // Auto-calculate distance and duration if coordinates provided
+  // Auto-calculate distance and duration if coordinates provided and not manually specified
   let distanceKm = null;
-  let durationHours = null;
+  let finalDurationHours = durationHours || null;
   if (origin.lat && origin.lng && destination.lat && destination.lng) {
     distanceKm = haversineDistance(origin, destination);
-    durationHours = estimateDuration(distanceKm);
+    // Only auto-calculate duration if not manually specified
+    if (!durationHours) {
+      const transportMode = req.body.transportMode || 'air';
+      const hours = estimateDuration(distanceKm, transportMode);
+      finalDurationHours = formatDuration(hours);
+    }
   }
 
   // Auto-generate a carrier-format tracking number when none provided
@@ -116,9 +121,10 @@ router.post('/tracking', (req, res) => {
     origin,
     destination,
     distanceKm,
-    durationHours: durationHours ? formatDuration(durationHours) : null,
+    durationHours: finalDurationHours,
     departureAt: departureAt || null,
     transportMode: req.body.transportMode || 'air',
+    weight: weight || null,
     sender: sender || null,
     receiver: receiver || null,
     product: product || null,
@@ -134,8 +140,12 @@ router.put('/tracking/:id', (req, res) => {
   // Recalculate distance if origin/destination changed
   if (updates.origin && updates.destination && updates.origin.lat && updates.destination.lat) {
     updates.distanceKm = haversineDistance(updates.origin, updates.destination);
-    const hours = estimateDuration(updates.distanceKm);
-    updates.durationHours = formatDuration(hours);
+    // Recalculate duration based on transport mode if not manually specified
+    if (!updates.durationHours) {
+      const transportMode = updates.transportMode || 'air';
+      const hours = estimateDuration(updates.distanceKm, transportMode);
+      updates.durationHours = formatDuration(hours);
+    }
   }
 
   const trackingReq = updateTrackingRequest(req.params.id, updates);

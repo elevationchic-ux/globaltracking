@@ -527,6 +527,7 @@ export function createTrackingRequest(data) {
     currentLocation: data.currentLocation || data.origin,
     departureAt: data.departureAt || null,
     transportMode: data.transportMode || 'air',
+    weight: data.weight || null,
     sender: data.sender || null,
     receiver: data.receiver || null,
     product: data.product || null,

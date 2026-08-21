@@ -8,6 +8,34 @@ const router = Router();
 const TRACKING_NUMBER_PATTERN = /^[A-Za-z0-9-]{6,40}$/;
 
 /**
+ * Parse duration string like "2d 12h" into hours
+ */
+function parseDuration(durationStr) {
+  if (!durationStr) return 0;
+  let totalHours = 0;
+  
+  // Parse days
+  const daysMatch = durationStr.match(/(\d+)\s*day[s]?/i);
+  if (daysMatch) {
+    totalHours += parseInt(daysMatch[1]) * 24;
+  }
+  
+  // Parse hours
+  const hoursMatch = durationStr.match(/(\d+)\s*h/);
+  if (hoursMatch) {
+    totalHours += parseInt(hoursMatch[1]);
+  }
+  
+  // Parse minutes
+  const minutesMatch = durationStr.match(/(\d+)\s*min/);
+  if (minutesMatch) {
+    totalHours += parseInt(minutesMatch[1]) / 60;
+  }
+  
+  return totalHours;
+}
+
+/**
  * Aggressive status cache (Redis-style, in-memory here).
  * Carrier APIs are slow and rate-limited: 10 people checking the same number
  * within 15 minutes must all hit the cache (<1 ms), not the carrier API.
@@ -47,45 +75,60 @@ router.get('/shipments', (_req, res) => {
     return res.json(shipmentsCache.body);
   }
   const requests = getTrackingRequests();
-  const shipments = requests.map((req) => ({
-    id: req.id,
-    trackingNumber: req.trackingNumber,
-    status: statusToGlobe(req.status),
-    originCarrier: req.carrier || 'Unknown',
-    finalCarrier: req.carrier || 'Unknown',
-    service: req.shippingType || 'Standard',
-    weight: null,
-    pieces: 1,
-    from: {
-      name: req.origin?.city || 'Unknown',
-      lat: req.origin?.lat || 0,
-      lng: req.origin?.lng || 0,
-      tz: 'UTC',
-    },
-    to: {
-      name: req.destination?.city || 'Unknown',
-      lat: req.destination?.lat || 0,
-      lng: req.destination?.lng || 0,
-      tz: 'UTC',
-    },
-    mode: req.transportMode || 'air',
-    transportMode: modeLabel(req.transportMode),
-    elapsedTime: null,
-    distanceKm: req.distanceKm || null,
-    estimatedArrival: null,
-    progress: computeProgress(req),
-    timeline: (req.events || []).map((evt) => ({
-      label: evt.description || evt.status || 'Event',
-      completed: isEventCompleted(evt.status),
-      time: evt.timestamp || 'Pending',
-      tz: 'UTC',
-    })),
-    sender: req.sender || null,
-    receiver: req.receiver || null,
-    product: req.product || null,
-    shippingType: req.shippingType || null,
-    agent: { name: 'GlobalTrack', role: 'Admin', status: 'Online' },
-  }));
+  const shipments = requests.map((req) => {
+    // Calculate ETA if departure time and duration are available
+    let estimatedArrival = null;
+    if (req.departureAt && req.durationHours) {
+      try {
+        const departure = new Date(req.departureAt);
+        const durationHours = parseDuration(req.durationHours);
+        const arrival = new Date(departure.getTime() + durationHours * 60 * 60 * 1000);
+        estimatedArrival = arrival.toISOString();
+      } catch {
+        // If parsing fails, leave as null
+      }
+    }
+
+    return {
+      id: req.id,
+      trackingNumber: req.trackingNumber,
+      status: statusToGlobe(req.status),
+      originCarrier: req.carrier || 'Unknown',
+      finalCarrier: req.carrier || 'Unknown',
+      service: req.shippingType || 'Standard',
+      weight: req.weight || null,
+      pieces: 1,
+      from: {
+        name: req.origin?.city || 'Unknown',
+        lat: req.origin?.lat || 0,
+        lng: req.origin?.lng || 0,
+        tz: 'UTC',
+      },
+      to: {
+        name: req.destination?.city || 'Unknown',
+        lat: req.destination?.lat || 0,
+        lng: req.destination?.lng || 0,
+        tz: 'UTC',
+      },
+      mode: req.transportMode || 'air',
+      transportMode: modeLabel(req.transportMode),
+      elapsedTime: null,
+      distanceKm: req.distanceKm || null,
+      estimatedArrival: estimatedArrival,
+      progress: computeProgress(req),
+      timeline: (req.events || []).map((evt) => ({
+        label: evt.description || evt.status || 'Event',
+        completed: isEventCompleted(evt.status),
+        time: evt.timestamp || 'Pending',
+        tz: 'UTC',
+      })),
+      sender: req.sender || null,
+      receiver: req.receiver || null,
+      product: req.product || null,
+      shippingType: req.shippingType || null,
+      agent: { name: 'GlobalTrack', role: 'Admin', status: 'Online' },
+    };
+  });
   shipmentsCache = { body: { shipments }, expiresAt: Date.now() + SHIPMENTS_CACHE_TTL };
   res.json(shipmentsCache.body);
 });

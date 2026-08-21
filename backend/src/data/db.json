@@ -1,5 +1,15 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "user-e0a5657e",
+      "email": "admin@globaltrack.com",
+      "password": "2ce12f42e92913e16a14b0318a5ab387:5dfc85ff448e8c6b151ef0e2c3dd3d9cd5c4d76fbe9f8f121415f3cf739b16c91329782956fbc61edf52bc87a1e7bc4d5e385348721eab592b7fdf646ccf464f",
+      "name": "Admin User",
+      "role": "admin",
+      "createdAt": "2026-08-21T21:40:29.760Z",
+      "lastActive": "2026-08-21T21:40:29.763Z"
+    }
+  ],
   "agents": [
     {
       "id": "agent-001",
@@ -401,7 +411,7 @@
   "alerts": [],
   "stats": {
     "totalTrackingRequests": 5,
-    "totalUsers": 0,
+    "totalUsers": 1,
     "totalChats": 0
   },
   "demoPackagesSeeded": true,

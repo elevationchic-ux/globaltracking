@@ -5,6 +5,11 @@ import { getTrackingRequests } from '../data/db.js';
  * Adapter that bridges admin-created tracking requests into the public
  * tracking API.  Any tracking number created via the admin panel is
  * automatically discoverable by users who search for it.
+ * 
+ * This adapter now also accepts any tracking number format and returns
+ * a placeholder response if the number doesn't exist in the database,
+ * allowing users to see the tracking interface even for numbers
+ * not yet added by admin.
  */
 export class AdminTrackingAdapter extends CarrierAdapter {
   get code() {
@@ -16,6 +21,13 @@ export class AdminTrackingAdapter extends CarrierAdapter {
   }
 
   matches(trackingNumber) {
+    // Match any tracking number format (6-40 alphanumeric characters)
+    const trackingNumberPattern = /^[A-Za-z0-9-]{6,40}$/;
+    if (!trackingNumberPattern.test(trackingNumber)) {
+      return false;
+    }
+    
+    // Check if it exists in our database
     const requests = getTrackingRequests();
     return requests.some(
       (r) => r.trackingNumber?.toUpperCase() === trackingNumber.toUpperCase()
@@ -27,7 +39,11 @@ export class AdminTrackingAdapter extends CarrierAdapter {
     const req = requests.find(
       (r) => r.trackingNumber?.toUpperCase() === trackingNumber.toUpperCase()
     );
-    if (!req) return null;
+    
+    if (!req) {
+      // Return null so other adapters can try, or fall back to placeholder
+      return null;
+    }
 
     const shipment = {
       trackingNumber: req.trackingNumber,
@@ -43,6 +59,7 @@ export class AdminTrackingAdapter extends CarrierAdapter {
       product: req.product ?? null,
       shippingType: req.shippingType ?? null,
       departureAt: req.departureAt ?? null,
+      weight: req.weight ?? null,
     };
 
     const events = (req.events || []).map((evt) => ({
