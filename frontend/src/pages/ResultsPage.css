@@ -81,14 +81,73 @@
 }
 
 .results-error {
-  background: color-mix(in srgb, #dc2626 12%, transparent);
-  border: 1px solid #dc2626;
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
+  background: color-mix(in srgb, #dc2626 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, #dc2626 40%, transparent);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
 }
 
-.results-error a {
-  color: var(--accent);
+.results-error-icon {
+  color: #dc2626;
+  margin-bottom: 0.75rem;
+}
+
+.results-error-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.results-error-detail {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.results-error-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: color-mix(in srgb, #dc2626 10%, transparent);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.results-error-label {
+  color: var(--text-muted);
+}
+
+.results-error-number code {
+  color: var(--text);
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+}
+
+.results-error-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.results-error-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--accent);
+  color: #000;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: opacity 0.15s;
+}
+
+.results-error-btn:hover {
+  opacity: 0.85;
 }
 
 .shipment-card {

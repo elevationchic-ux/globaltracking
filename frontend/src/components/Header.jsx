@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Search, MapPin, Package, Truck, Plane, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { useGlobalTrack } from '../context/GlobalTrackContext';
 import { useI18n } from '../i18n/I18nContext';
@@ -7,16 +7,25 @@ const Header = () => {
   const { theme, setTheme, shipments, selectShipment } = useGlobalTrack();
   const { t } = useI18n();
   const [searchValue, setSearchValue] = useState('');
+  const [searchError, setSearchError] = useState('');
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = useCallback((e) => {
     if (e.key !== 'Enter') return;
     const query = searchValue.trim().toLowerCase();
-    if (!query) return;
+    if (!query) {
+      setSearchError(t('header.empty'));
+      return;
+    }
     const match = shipments.find(
       (s) => s.trackingNumber.toLowerCase() === query
     );
-    if (match) selectShipment(match.id);
-  };
+    if (match) {
+      selectShipment(match.id);
+      setSearchError('');
+    } else {
+      setSearchError(t('header.notFound'));
+    }
+  }, [searchValue, shipments, selectShipment, t]);
 
   const themes = [
     { id: 'dark', name: 'Dark', color: 'bg-gray-900' },
@@ -59,11 +68,21 @@ const Header = () => {
                 type="text"
                 placeholder={t('hero.placeholder')}
                 value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={(e) => { setSearchValue(e.target.value); if (searchError) setSearchError(''); }}
                 onKeyDown={handleSearchSubmit}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 text-sm md:text-base text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono"
+                className={`w-full bg-gray-800 border rounded-lg pl-8 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 text-sm md:text-base text-white placeholder-gray-400 focus:outline-none focus:ring-1 font-mono ${
+                  searchError
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                    : 'border-gray-700 focus:border-cyan-500 focus:ring-cyan-500'
+                }`}
               />
             </div>
+            {searchError && (
+              <div className="flex items-center gap-1.5 mt-1 px-1 text-xs text-red-400">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{searchError}</span>
+              </div>
+            )}
           </div>
 
           {/* Status Indicators  hidden on small screens (mobile cockpit) */}

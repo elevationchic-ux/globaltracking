@@ -8,6 +8,7 @@ import { claimUrlFor, trackingUrlFor } from '../utils/carrierHelp.js'
 import { Disclaimer, ReportButton } from '../components/TrustWidgets.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
 import Timeline from '../components/Timeline.jsx'
+import Icon from '../components/Icon.jsx'
 import './ResultsPage.css'
 
 const REGION_FLAGS = { USA: '🇺🇸', CANADA: '🇨🇦', EUROPE: '🇪🇺', AFRICA: '🌍', LATIN_AMERICA: '🌎', ASIA_PACIFIC: '🌏', WORLDWIDE: '🌍' }
@@ -231,8 +232,33 @@ export default function ResultsPage() {
 
       {state.error && (
         <div className="results-error" role="alert">
-          <p>{state.error.message}</p>
-          <Link to="/">{t('results.retry')}</Link>
+          <div className="results-error-icon">
+            <Icon name="alert-triangle" size={32} />
+          </div>
+          <h2 className="results-error-title">
+            {state.error.status === 404
+              ? t('error.notFound')
+              : state.error.status >= 500 || state.error.message?.includes('Failed to fetch')
+                ? t('error.network')
+                : t('error.generic')}
+          </h2>
+          <p className="results-error-detail">
+            {state.error.status === 404
+              ? t('error.notFoundDetail')
+              : state.error.status >= 500 || state.error.message?.includes('Failed to fetch')
+                ? t('error.networkDetail')
+                : state.error.message || t('error.genericDetail')}
+          </p>
+          <div className="results-error-number">
+            <span className="results-error-label">Tracking #:</span>
+            <code>{number}</code>
+          </div>
+          <div className="results-error-actions">
+            <Link to="/" className="results-error-btn">
+              <Icon name="search" size={16} />
+              {t('results.retry')}
+            </Link>
+          </div>
         </div>
       )}
 

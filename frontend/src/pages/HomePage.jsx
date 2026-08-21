@@ -77,6 +77,7 @@ export default function HomePage() {
   const [input, setInput] = useState('')
   const navigate = useNavigate()
   const [recent, setRecent] = useState(loadRecent)
+  const [validationError, setValidationError] = useState('')
 
   const numbers = useMemo(() => parseTrackingNumbers(input), [input])
   const primary = numbers[0] ?? ''
@@ -84,6 +85,10 @@ export default function HomePage() {
   // Live auto-detection on the primary number (instant carrier detect).
   const candidates = useMemo(() => detectCarriers(primary), [primary])
   const detection = candidates[0] ?? null
+
+  // Show validation error when user has typed something but no tracking number was detected.
+  const trimmedInput = input.trim()
+  const showValidation = trimmedInput.length > 0 && !primary
 
   const queue = useMemo(
     () =>
@@ -99,11 +104,18 @@ export default function HomePage() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    if (primary) {
-      saveRecent(normalizeTrackingNumber(primary))
-      setRecent(loadRecent())
-      navigate(`/track/${encodeURIComponent(normalizeTrackingNumber(primary))}`)
+    if (!trimmedInput) {
+      setValidationError(t('error.empty'))
+      return
     }
+    if (!primary) {
+      setValidationError(t('error.invalidFormat'))
+      return
+    }
+    setValidationError('')
+    saveRecent(normalizeTrackingNumber(primary))
+    setRecent(loadRecent())
+    navigate(`/track/${encodeURIComponent(normalizeTrackingNumber(primary))}`)
   }
 
   // Barcode scan via camera (BarcodeDetector API on supported mobile browsers).
@@ -227,7 +239,7 @@ export default function HomePage() {
                 rows="2"
                 placeholder={t('hero.placeholder')}
                 value={input}
-                onChange={(event) => setInput(event.target.value)}
+                onChange={(event) => { setInput(event.target.value); if (validationError) setValidationError(''); }}
                 aria-label={t('hero.title')}
                 inputMode="text"
                 autoCapitalize="characters"
@@ -254,10 +266,17 @@ export default function HomePage() {
                 onChange={handleScanFile}
               />
             </div>
-            <button className="search-button" type="submit" disabled={!primary}>
+            <button className="search-button" type="submit" disabled={!trimmedInput}>
               {t('hero.cta')}
             </button>
           </form>
+
+          {(validationError || showValidation) && (
+            <p className="search-validation" role="alert">
+              <Icon name="alert-triangle" size={14} />
+              {validationError || t('error.invalidFormat')}
+            </p>
+          )}
 
           <p className="search-hint">
             {t('hero.hint')}

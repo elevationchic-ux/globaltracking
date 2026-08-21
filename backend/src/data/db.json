@@ -1,0 +1,24 @@
+{
+  "users": [],
+  "agents": [
+    {
+      "id": "agent-001",
+      "name": "Support Agent",
+      "email": "support@globaltrack.com",
+      "role": "agent",
+      "avatar": null,
+      "online": true,
+      "createdAt": "2026-08-20T17:39:06.592Z"
+    }
+  ],
+  "messages": [],
+  "trackingRequests": [],
+  "credits": [],
+  "apiKeys": [],
+  "alerts": [],
+  "stats": {
+    "totalTrackingRequests": 0,
+    "totalUsers": 0,
+    "totalChats": 0
+  }
+}
