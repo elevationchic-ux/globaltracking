@@ -51,7 +51,7 @@ const PAYMENT_VALIDATORS = {
     return null;
   },
   'apple-pay': (info) => {
-    // Apple Pay is tokenized — just need a confirmation
+    // Apple Pay is tokenized  just need a confirmation
     if (!info.holderName || info.holderName.trim().length < 2) return 'Name required';
     return null;
   },
@@ -103,7 +103,7 @@ router.post('/checkout', requireAuth, (req, res) => {
   const paymentId = `pay_${randomBytes(12).toString('hex')}`;
   const now = new Date().toISOString();
 
-  // 5. Process the payment (simulated — in production, call Stripe/Mobile Money/etc.)
+  // 5. Process the payment (simulated  in production, call Stripe/Mobile Money/etc.)
   // For alerts, create the alert with notification number
   if (item.type === 'alert') {
     if (!extra?.trackingNumber) {

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   Manifest Modal — professional shipment manifest overlay
+   Manifest Modal  professional shipment manifest overlay
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Trigger button ──────────────────────────────────────────────── */
@@ -436,7 +436,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Print styles — PDF download
+   Print styles  PDF download
    ═══════════════════════════════════════════════════════════════════ */
 @media print {
   @page {

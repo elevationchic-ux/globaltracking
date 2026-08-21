@@ -51,6 +51,8 @@ export default function TrackingManager({ authFetch }) {
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState(EMPTY_FORM)
   const [calculated, setCalculated] = useState(null)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   // Detail view state
   const [selected, setSelected] = useState(null)
   const [eventForm, setEventForm] = useState({ status: 'IN_TRANSIT', description: '', location: '', image: null, timestamp: '' })
@@ -86,6 +88,7 @@ export default function TrackingManager({ authFetch }) {
 
   async function handleCreate(e) {
     e.preventDefault()
+    setError('')
     const origin = { city: form.originCity, lat: parseFloat(form.originLat) || null, lng: parseFloat(form.originLng) || null }
     const destination = { city: form.destCity, lat: parseFloat(form.destLat) || null, lng: parseFloat(form.destLng) || null }
     const sender = { name: form.senderName || null, email: form.senderEmail || null, location: form.senderLocation || null }
@@ -110,9 +113,16 @@ export default function TrackingManager({ authFetch }) {
         setShowModal(false)
         setForm(EMPTY_FORM)
         setCalculated(null)
+        setSuccess(t('admin.trackingCreated') || 'Tracking request created successfully')
+        setTimeout(() => setSuccess(''), 4000)
         fetchData()
+      } else {
+        const data = await res.json().catch(() => null)
+        setError(data?.message || `Error ${res.status}`)
       }
-    } catch { /* ignore */ }
+    } catch (err) {
+      setError(err?.message || 'Network error')
+    }
   }
 
   async function handleDelete(id) {
@@ -182,10 +192,12 @@ export default function TrackingManager({ authFetch }) {
     <div>
       <div className="admin-section-header">
         <h3>{t('admin.trackingRequests')}</h3>
-        <button className="admin-btn admin-btn-primary" onClick={() => setShowModal(true)}>
+        <button className="admin-btn admin-btn-primary" onClick={() => { setError(''); setShowModal(true) }}>
           + {t('admin.addTracking')}
         </button>
       </div>
+
+      {success && <div style={{ background: '#f0fdf4', color: '#16a34a', padding: '10px 14px', borderRadius: 8, marginBottom: 12, fontSize: 13, border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', gap: 8 }}><Icon name="check" size={16} /> {success}</div>}
 
       <div className="admin-table-wrap">
         <table className="admin-table">
@@ -363,6 +375,7 @@ export default function TrackingManager({ authFetch }) {
             </div>
 
             <form onSubmit={handleCreate}>
+              {error && <div style={{ background: '#fef2f2', color: '#dc2626', padding: '8px 12px', borderRadius: 6, marginBottom: 12, fontSize: 13, border: '1px solid #fecaca' }}>{error}</div>}
               <div className="admin-form-row">
                 <div className="admin-form-group">
                   <label>{t('admin.trackingNumber')}</label>
@@ -386,9 +399,9 @@ export default function TrackingManager({ authFetch }) {
                 <input className="admin-form-input" type="datetime-local" value={form.departureAt} onChange={(e) => updateField('departureAt', e.target.value)} />
               </div>
 
-              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')}</h4>
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')} <span style={{ color: '#ef4444' }}>*</span></h4>
               <div className="admin-form-group">
-                <label>{t('admin.city')}</label>
+                <label>{t('admin.city')} <span style={{ color: '#ef4444' }}>*</span></label>
                 <input className="admin-form-input" value={form.originCity} onChange={(e) => updateField('originCity', e.target.value)} placeholder="Paris" required />
               </div>
               <div className="admin-form-row">
@@ -402,9 +415,9 @@ export default function TrackingManager({ authFetch }) {
                 </div>
               </div>
 
-              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.destination')}</h4>
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.destination')} <span style={{ color: '#ef4444' }}>*</span></h4>
               <div className="admin-form-group">
-                <label>{t('admin.city')}</label>
+                <label>{t('admin.city')} <span style={{ color: '#ef4444' }}>*</span></label>
                 <input className="admin-form-input" value={form.destCity} onChange={(e) => updateField('destCity', e.target.value)} placeholder="Cotonou" required />
               </div>
               <div className="admin-form-row">
