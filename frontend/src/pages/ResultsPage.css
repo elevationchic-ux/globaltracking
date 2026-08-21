@@ -172,6 +172,27 @@
   font-size: 0.9rem;
 }
 
+.transport-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.manifest-section {
+  border-style: dashed;
+}
+
+.manifest-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.5rem;
+}
+
 .status-badge {
   font-weight: 600;
   padding: 0.25rem 0.75rem;

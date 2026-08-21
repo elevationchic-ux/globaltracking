@@ -35,11 +35,13 @@ const STATUS_COLORS = {
   RETURNED: '#dc2626',
 }
 
+const TRANSPORT_MODES = ['air', 'ground', 'sea', 'rail']
+
 const EMPTY_FORM = {
   trackingNumber: '', carrier: '', status: 'INFO_RECEIVED',
   originCity: '', originLat: '', originLng: '',
   destCity: '', destLat: '', destLng: '',
-  departureAt: '',
+  departureAt: '', transportMode: 'air',
   senderName: '', senderEmail: '', senderLocation: '',
   receiverName: '', receiverEmail: '', receiverPhone: '', receiverAddress: '',
   product: '', shippingType: 'Priority shipping',
@@ -55,9 +57,15 @@ export default function TrackingManager({ authFetch }) {
   const [success, setSuccess] = useState('')
   // Detail view state
   const [selected, setSelected] = useState(null)
-  const [eventForm, setEventForm] = useState({ status: 'IN_TRANSIT', description: '', location: '', image: null, timestamp: '' })
+  const [eventForm, setEventForm] = useState({ status: 'IN_TRANSIT', description: '', location: '', lat: '', lng: '', transportMode: 'air', image: null, timestamp: '' })
   const [imagePreview, setImagePreview] = useState(null)
   const fileRef = useRef(null)
+  // Edit modal state
+  const [editingReq, setEditingReq] = useState(null)
+  const [editForm, setEditForm] = useState(null)
+  const [editCalculated, setEditCalculated] = useState(null)
+  const [editingEventId, setEditingEventId] = useState(null)
+  const [editEventForm, setEditEventForm] = useState(null)
 
   const fetchData = async () => {
     try {
@@ -170,6 +178,9 @@ export default function TrackingManager({ authFetch }) {
           status: eventForm.status,
           description: eventForm.description,
           location: eventForm.location || null,
+          lat: eventForm.lat || null,
+          lng: eventForm.lng || null,
+          transportMode: eventForm.transportMode || null,
           image: eventForm.image,
           timestamp: eventForm.timestamp ? new Date(eventForm.timestamp).toISOString() : undefined,
         }),
@@ -177,8 +188,152 @@ export default function TrackingManager({ authFetch }) {
       if (res.ok) {
         const data = await res.json().catch(() => null)
         if (data?.trackingRequest) setSelected(data.trackingRequest)
-        setEventForm({ status: 'IN_TRANSIT', description: '', location: '', image: null, timestamp: '' })
+        setEventForm({ status: 'IN_TRANSIT', description: '', location: '', lat: '', lng: '', transportMode: 'air', image: null, timestamp: '' })
         setImagePreview(null)
+        fetchData()
+      }
+    } catch { /* ignore */ }
+  }
+
+  // ── Edit modal helpers ──────────────────────────────────────────────
+  function openEditModal(req) {
+    setEditingReq(req)
+    setEditForm({
+      trackingNumber: req.trackingNumber || '',
+      carrier: req.carrier || '',
+      status: req.status || 'INFO_RECEIVED',
+      originCity: req.origin?.city || '',
+      originLat: req.origin?.lat != null ? String(req.origin.lat) : '',
+      originLng: req.origin?.lng != null ? String(req.origin.lng) : '',
+      destCity: req.destination?.city || '',
+      destLat: req.destination?.lat != null ? String(req.destination.lat) : '',
+      destLng: req.destination?.lng != null ? String(req.destination.lng) : '',
+      departureAt: req.departureAt ? req.departureAt.slice(0, 16) : '',
+      transportMode: req.transportMode || 'air',
+      senderName: req.sender?.name || '',
+      senderEmail: req.sender?.email || '',
+      senderLocation: req.sender?.location || '',
+      receiverName: req.receiver?.name || '',
+      receiverEmail: req.receiver?.email || '',
+      receiverPhone: req.receiver?.phone || '',
+      receiverAddress: req.receiver?.address || '',
+      product: req.product || '',
+      shippingType: req.shippingType || 'Priority shipping',
+    })
+    if (req.origin?.lat && req.destination?.lat) {
+      const dist = haversineDistance(
+        { lat: req.origin.lat, lng: req.origin.lng },
+        { lat: req.destination.lat, lng: req.destination.lng }
+      )
+      setEditCalculated({ distance: dist, duration: formatDuration(estimateDuration(dist)) })
+    } else {
+      setEditCalculated(null)
+    }
+  }
+
+  // Auto-recalculate distance for edit form
+  useEffect(() => {
+    if (!editForm) return
+    const oLat = parseFloat(editForm.originLat)
+    const oLng = parseFloat(editForm.originLng)
+    const dLat = parseFloat(editForm.destLat)
+    const dLng = parseFloat(editForm.destLng)
+    if (!isNaN(oLat) && !isNaN(oLng) && !isNaN(dLat) && !isNaN(dLng)) {
+      const dist = haversineDistance({ lat: oLat, lng: oLng }, { lat: dLat, lng: dLng })
+      const dur = estimateDuration(dist)
+      setEditCalculated({ distance: dist, duration: formatDuration(dur) })
+    } else {
+      setEditCalculated(null)
+    }
+  }, [editForm?.originLat, editForm?.originLng, editForm?.destLat, editForm?.destLng])
+
+  function updateEditField(field, value) {
+    setEditForm((f) => ({ ...f, [field]: value }))
+  }
+
+  async function handleUpdateSubmit(e) {
+    e.preventDefault()
+    if (!editingReq) return
+    const origin = { city: editForm.originCity, lat: parseFloat(editForm.originLat) || null, lng: parseFloat(editForm.originLng) || null }
+    const destination = { city: editForm.destCity, lat: parseFloat(editForm.destLat) || null, lng: parseFloat(editForm.destLng) || null }
+    const sender = { name: editForm.senderName || null, email: editForm.senderEmail || null, location: editForm.senderLocation || null }
+    const receiver = { name: editForm.receiverName || null, email: editForm.receiverEmail || null, phone: editForm.receiverPhone || null, address: editForm.receiverAddress || null }
+    try {
+      const res = await authFetch(`/api/admin/tracking/${editingReq.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          trackingNumber: editForm.trackingNumber,
+          carrier: editForm.carrier,
+          status: editForm.status,
+          origin, destination,
+          departureAt: editForm.departureAt || null,
+          transportMode: editForm.transportMode,
+          sender, receiver,
+          product: editForm.product || null,
+          shippingType: editForm.shippingType || null,
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json().catch(() => null)
+        if (data?.trackingRequest) {
+          setSelected(data.trackingRequest)
+          setEditingReq(data.trackingRequest)
+        }
+        setEditingReq(null)
+        setEditForm(null)
+        setSuccess(t('admin.trackingUpdated') || 'Tracking request updated')
+        setTimeout(() => setSuccess(''), 4000)
+        fetchData()
+      }
+    } catch { /* ignore */ }
+  }
+
+  async function handleDeleteEvent(evtId) {
+    if (!selected) return
+    if (!confirm(t('admin.confirmDeleteEvent'))) return
+    try {
+      const res = await authFetch(`/api/admin/tracking/${selected.id}/events/${evtId}`, { method: 'DELETE' })
+      if (res.ok) {
+        const data = await res.json().catch(() => null)
+        if (data?.trackingRequest) setSelected(data.trackingRequest)
+        fetchData()
+      }
+    } catch { /* ignore */ }
+  }
+
+  function startEditEvent(evt) {
+    setEditingEventId(evt.id)
+    setEditEventForm({
+      status: evt.status || 'IN_TRANSIT',
+      description: evt.description || '',
+      location: evt.location || '',
+      lat: evt.lat != null ? String(evt.lat) : '',
+      lng: evt.lng != null ? String(evt.lng) : '',
+      transportMode: evt.transportMode || 'air',
+      timestamp: evt.timestamp ? evt.timestamp.slice(0, 16) : '',
+    })
+  }
+
+  async function handleUpdateEvent(evtId) {
+    if (!selected || !editEventForm) return
+    try {
+      const res = await authFetch(`/api/admin/tracking/${selected.id}/events/${evtId}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          status: editEventForm.status,
+          description: editEventForm.description,
+          location: editEventForm.location || null,
+          lat: editEventForm.lat || null,
+          lng: editEventForm.lng || null,
+          transportMode: editEventForm.transportMode || null,
+          timestamp: editEventForm.timestamp ? new Date(editEventForm.timestamp).toISOString() : undefined,
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json().catch(() => null)
+        if (data?.trackingRequest) setSelected(data.trackingRequest)
+        setEditingEventId(null)
+        setEditEventForm(null)
         fetchData()
       }
     } catch { /* ignore */ }
@@ -235,7 +390,10 @@ export default function TrackingManager({ authFetch }) {
                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </td>
-                <td>
+                <td style={{ display: 'flex', gap: '0.35rem' }}>
+                  <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={(e) => { e.stopPropagation(); openEditModal(req) }}>
+                    {t('admin.edit')}
+                  </button>
                   <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={(e) => { e.stopPropagation(); handleDelete(req.id) }}>
                     {t('admin.delete')}
                   </button>
@@ -309,6 +467,13 @@ export default function TrackingManager({ authFetch }) {
                   <input className="admin-form-input" type="datetime-local" value={eventForm.timestamp} onChange={(e) => setEventForm((f) => ({ ...f, timestamp: e.target.value }))} />
                 </div>
                 <input className="admin-form-input" value={eventForm.location} onChange={(e) => setEventForm((f) => ({ ...f, location: e.target.value }))} placeholder={t('admin.eventLocation')} style={{ marginBottom: '0.5rem' }} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <input className="admin-form-input" type="number" step="any" value={eventForm.lat} onChange={(e) => setEventForm((f) => ({ ...f, lat: e.target.value }))} placeholder={t('admin.eventLat')} />
+                  <input className="admin-form-input" type="number" step="any" value={eventForm.lng} onChange={(e) => setEventForm((f) => ({ ...f, lng: e.target.value }))} placeholder={t('admin.eventLng')} />
+                  <select className="admin-form-select" value={eventForm.transportMode} onChange={(e) => setEventForm((f) => ({ ...f, transportMode: e.target.value }))}>
+                    {TRANSPORT_MODES.map((m) => <option key={m} value={m}>{t(`admin.${m}`)}</option>)}
+                  </select>
+                </div>
                 <textarea
                   className="admin-form-input"
                   rows={2}
@@ -331,7 +496,7 @@ export default function TrackingManager({ authFetch }) {
             </div>
 
             {/* Events Timeline */}
-            <div style={{ maxHeight: 250, overflowY: 'auto' }}>
+            <div style={{ maxHeight: 300, overflowY: 'auto' }}>
               {(selected.events || []).length === 0 && (
                 <p style={{ color: '#475569', textAlign: 'center', fontSize: '0.85rem', padding: '1rem' }}>{t('admin.noEvents')}</p>
               )}
@@ -344,18 +509,54 @@ export default function TrackingManager({ authFetch }) {
                   </div>
                   {/* Event content */}
                   <div style={{ flex: 1, paddingBottom: '0.5rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: STATUS_COLORS[evt.status] || '#94a3b8' }}>{evt.status}</span>
-                      <span style={{ fontSize: '0.7rem', color: '#64748b' }}>
-                        {new Date(evt.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                    {evt.description && <p style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '2px 0' }}>{evt.description}</p>}
-                    {evt.location && <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>📍 {evt.location}</span>}
-                    {evt.image && (
-                      <div style={{ marginTop: '0.35rem' }}>
-                        <img src={evt.image} alt="Proof" style={{ maxWidth: '100%', maxHeight: 160, borderRadius: 8, border: '1px solid #334155', objectFit: 'cover' }} />
+                    {editingEventId === evt.id && editEventForm ? (
+                      /* Inline edit form */
+                      <div style={{ background: '#1e293b', borderRadius: 8, padding: '0.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', marginBottom: '0.4rem' }}>
+                          <select className="admin-form-select" value={editEventForm.status} onChange={(e) => setEditEventForm((f) => ({ ...f, status: e.target.value }))}>
+                            {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                          <input className="admin-form-input" type="datetime-local" value={editEventForm.timestamp} onChange={(e) => setEditEventForm((f) => ({ ...f, timestamp: e.target.value }))} />
+                        </div>
+                        <input className="admin-form-input" value={editEventForm.description} onChange={(e) => setEditEventForm((f) => ({ ...f, description: e.target.value }))} placeholder={t('admin.eventDescription')} style={{ marginBottom: '0.4rem', fontSize: '0.8rem' }} />
+                        <input className="admin-form-input" value={editEventForm.location} onChange={(e) => setEditEventForm((f) => ({ ...f, location: e.target.value }))} placeholder={t('admin.eventLocation')} style={{ marginBottom: '0.4rem', fontSize: '0.8rem' }} />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.4rem', marginBottom: '0.4rem' }}>
+                          <input className="admin-form-input" type="number" step="any" value={editEventForm.lat} onChange={(e) => setEditEventForm((f) => ({ ...f, lat: e.target.value }))} placeholder="Lat" style={{ fontSize: '0.75rem' }} />
+                          <input className="admin-form-input" type="number" step="any" value={editEventForm.lng} onChange={(e) => setEditEventForm((f) => ({ ...f, lng: e.target.value }))} placeholder="Lng" style={{ fontSize: '0.75rem' }} />
+                          <select className="admin-form-select" value={editEventForm.transportMode} onChange={(e) => setEditEventForm((f) => ({ ...f, transportMode: e.target.value }))} style={{ fontSize: '0.75rem' }}>
+                            {TRANSPORT_MODES.map((m) => <option key={m} value={m}>{t(`admin.${m}`)}</option>)}
+                          </select>
+                        </div>
+                        <div style={{ display: 'flex', gap: '0.4rem' }}>
+                          <button className="admin-btn admin-btn-primary admin-btn-sm" onClick={() => handleUpdateEvent(evt.id)}>Save</button>
+                          <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => { setEditingEventId(null); setEditEventForm(null) }}>Cancel</button>
+                        </div>
                       </div>
+                    ) : (
+                      /* Display mode */
+                      <>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: STATUS_COLORS[evt.status] || '#94a3b8' }}>
+                            {evt.status}
+                            {evt.transportMode && <span style={{ marginLeft: '0.5rem', fontWeight: 400, opacity: 0.7 }}>{evt.transportMode === 'air' ? '✈' : evt.transportMode === 'sea' ? '🚢' : evt.transportMode === 'rail' ? '🚂' : '🚛'}</span>}
+                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <span style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                              {new Date(evt.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            <button onClick={() => startEditEvent(evt)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', fontSize: '0.7rem', padding: '0 2px' }} title={t('admin.edit')}>✎</button>
+                            <button onClick={() => handleDeleteEvent(evt.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: '0.7rem', padding: '0 2px' }} title={t('admin.deleteEvent')}>✕</button>
+                          </div>
+                        </div>
+                        {evt.description && <p style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '2px 0' }}>{evt.description}</p>}
+                        {evt.location && <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>📍 {evt.location}</span>}
+                        {evt.lat != null && evt.lng != null && <span style={{ fontSize: '0.65rem', color: '#64748b', marginLeft: '0.5rem' }}>({evt.lat}, {evt.lng})</span>}
+                        {evt.image && (
+                          <div style={{ marginTop: '0.35rem' }}>
+                            <img src={evt.image} alt="Proof" style={{ maxWidth: '100%', maxHeight: 160, borderRadius: 8, border: '1px solid #334155', objectFit: 'cover' }} />
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -397,6 +598,13 @@ export default function TrackingManager({ authFetch }) {
               <div className="admin-form-group">
                 <label>{t('admin.departureDateTime')}</label>
                 <input className="admin-form-input" type="datetime-local" value={form.departureAt} onChange={(e) => updateField('departureAt', e.target.value)} />
+              </div>
+
+              <div className="admin-form-group">
+                <label>{t('admin.transportMode')}</label>
+                <select className="admin-form-select" value={form.transportMode} onChange={(e) => updateField('transportMode', e.target.value)}>
+                  {TRANSPORT_MODES.map((m) => <option key={m} value={m}>{t(`admin.${m}`)}</option>)}
+                </select>
               </div>
 
               <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')} <span style={{ color: '#ef4444' }}>*</span></h4>
@@ -499,6 +707,154 @@ export default function TrackingManager({ authFetch }) {
                 </button>
                 <button type="submit" className="admin-btn admin-btn-primary">
                   {t('admin.create')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Edit Tracking Request Modal ────────────────────────────────── */}
+      {editingReq && editForm && (
+        <div className="admin-modal-overlay" onClick={() => { setEditingReq(null); setEditForm(null) }}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="admin-modal-header">
+              <h3>{t('admin.editTracking')}</h3>
+              <button className="admin-modal-close" onClick={() => { setEditingReq(null); setEditForm(null) }}>✕</button>
+            </div>
+
+            <form onSubmit={handleUpdateSubmit}>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>{t('admin.trackingNumber')}</label>
+                  <input className="admin-form-input" value={editForm.trackingNumber} onChange={(e) => updateEditField('trackingNumber', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>{t('admin.carrier')}</label>
+                  <input className="admin-form-input" value={editForm.carrier} onChange={(e) => updateEditField('carrier', e.target.value)} />
+                </div>
+              </div>
+
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>{t('admin.statusCol')}</label>
+                  <select className="admin-form-select" value={editForm.status} onChange={(e) => updateEditField('status', e.target.value)}>
+                    {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+                <div className="admin-form-group">
+                  <label>{t('admin.transportMode')}</label>
+                  <select className="admin-form-select" value={editForm.transportMode} onChange={(e) => updateEditField('transportMode', e.target.value)}>
+                    {TRANSPORT_MODES.map((m) => <option key={m} value={m}>{t(`admin.${m}`)}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="admin-form-group">
+                <label>{t('admin.departureDateTime')}</label>
+                <input className="admin-form-input" type="datetime-local" value={editForm.departureAt} onChange={(e) => updateEditField('departureAt', e.target.value)} />
+              </div>
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.origin')}</h4>
+              <div className="admin-form-group">
+                <label>{t('admin.city')}</label>
+                <input className="admin-form-input" value={editForm.originCity} onChange={(e) => updateEditField('originCity', e.target.value)} />
+              </div>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>{t('admin.latitude')}</label>
+                  <input className="admin-form-input" type="number" step="any" value={editForm.originLat} onChange={(e) => updateEditField('originLat', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>{t('admin.longitude')}</label>
+                  <input className="admin-form-input" type="number" step="any" value={editForm.originLng} onChange={(e) => updateEditField('originLng', e.target.value)} />
+                </div>
+              </div>
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>{t('admin.destination')}</h4>
+              <div className="admin-form-group">
+                <label>{t('admin.city')}</label>
+                <input className="admin-form-input" value={editForm.destCity} onChange={(e) => updateEditField('destCity', e.target.value)} />
+              </div>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>{t('admin.latitude')}</label>
+                  <input className="admin-form-input" type="number" step="any" value={editForm.destLat} onChange={(e) => updateEditField('destLat', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>{t('admin.longitude')}</label>
+                  <input className="admin-form-input" type="number" step="any" value={editForm.destLng} onChange={(e) => updateEditField('destLng', e.target.value)} />
+                </div>
+              </div>
+
+              {editCalculated && (
+                <div className="admin-distance-badge">
+                  <span><Icon name="diamond" size={12} /> {editCalculated.distance} km</span>
+                  <span><Icon name="clock" size={12} /> {editCalculated.duration}</span>
+                </div>
+              )}
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>Sender</h4>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Name</label>
+                  <input className="admin-form-input" value={editForm.senderName} onChange={(e) => updateEditField('senderName', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>Email</label>
+                  <input className="admin-form-input" type="email" value={editForm.senderEmail} onChange={(e) => updateEditField('senderEmail', e.target.value)} />
+                </div>
+              </div>
+              <div className="admin-form-group">
+                <label>Location</label>
+                <input className="admin-form-input" value={editForm.senderLocation} onChange={(e) => updateEditField('senderLocation', e.target.value)} />
+              </div>
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>Receiver</h4>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Name</label>
+                  <input className="admin-form-input" value={editForm.receiverName} onChange={(e) => updateEditField('receiverName', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>Phone</label>
+                  <input className="admin-form-input" value={editForm.receiverPhone} onChange={(e) => updateEditField('receiverPhone', e.target.value)} />
+                </div>
+              </div>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Email</label>
+                  <input className="admin-form-input" type="email" value={editForm.receiverEmail} onChange={(e) => updateEditField('receiverEmail', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>Address</label>
+                  <input className="admin-form-input" value={editForm.receiverAddress} onChange={(e) => updateEditField('receiverAddress', e.target.value)} />
+                </div>
+              </div>
+
+              <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '1rem 0 0.5rem' }}>Shipment Details</h4>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label>Product</label>
+                  <input className="admin-form-input" value={editForm.product} onChange={(e) => updateEditField('product', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>Shipping Type</label>
+                  <select className="admin-form-select" value={editForm.shippingType} onChange={(e) => updateEditField('shippingType', e.target.value)}>
+                    <option value="Priority shipping">Priority shipping</option>
+                    <option value="Express shipping">Express shipping</option>
+                    <option value="Standard shipping">Standard shipping</option>
+                    <option value="Economy shipping">Economy shipping</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+                <button type="button" className="admin-btn admin-btn-ghost" onClick={() => { setEditingReq(null); setEditForm(null) }}>
+                  {t('admin.cancel')}
+                </button>
+                <button type="submit" className="admin-btn admin-btn-primary">
+                  {t('admin.save')}
                 </button>
               </div>
             </form>

@@ -3,9 +3,10 @@ import { requireAuth, requireAdmin } from '../middleware/authGuard.js';
 import {
   getStats, getUsers, getAgents, getAgentById, createAgent, updateAgent, deleteAgent,
   getTrackingRequests, getTrackingRequestById, createTrackingRequest, updateTrackingRequest, deleteTrackingRequest,
-  getAllConversations, addMessage, addTrackingEvent,
+  getAllConversations, addMessage, addTrackingEvent, updateTrackingEvent, deleteTrackingEvent,
 } from '../data/db.js';
 import { haversineDistance, estimateDuration, formatDuration } from '../utils/haversine.js';
+import { generateTrackingNumber } from '../utils/trackingNumberGenerator.js';
 
 const router = Router();
 
@@ -102,8 +103,13 @@ router.post('/tracking', (req, res) => {
     durationHours = estimateDuration(distanceKm);
   }
 
+  // Auto-generate a carrier-format tracking number when none provided
+  const resolvedTrackingNumber = trackingNumber?.trim()
+    ? trackingNumber.trim()
+    : generateTrackingNumber(carrier);
+
   const trackingReq = createTrackingRequest({
-    trackingNumber,
+    trackingNumber: resolvedTrackingNumber,
     carrier,
     status,
     origin,
@@ -111,6 +117,7 @@ router.post('/tracking', (req, res) => {
     distanceKm,
     durationHours: durationHours ? formatDuration(durationHours) : null,
     departureAt: departureAt || null,
+    transportMode: req.body.transportMode || 'air',
     sender: sender || null,
     receiver: receiver || null,
     product: product || null,
@@ -140,13 +147,29 @@ router.delete('/tracking/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// --- Tracking Events (with photo proof) ---
+// --- Tracking Events (with photo proof, coordinates, transport mode) ---
 router.post('/tracking/:id/events', (req, res) => {
-  const { status, description, location, image, timestamp } = req.body;
-  const evt = addTrackingEvent(req.params.id, { status, description, location, image, timestamp });
+  const { status, description, location, lat, lng, transportMode, image, timestamp } = req.body;
+  const evt = addTrackingEvent(req.params.id, { status, description, location, lat, lng, transportMode, image, timestamp });
   if (!evt) return res.status(404).json({ error: 'NOT_FOUND', message: 'Tracking request not found.' });
   const updated = getTrackingRequestById(req.params.id);
   res.status(201).json({ event: evt, trackingRequest: updated });
+});
+
+// --- Event CRUD: update a single event ---
+router.put('/tracking/:id/events/:eventId', (req, res) => {
+  const evt = updateTrackingEvent(req.params.id, req.params.eventId, req.body);
+  if (!evt) return res.status(404).json({ error: 'NOT_FOUND', message: 'Event not found.' });
+  const updated = getTrackingRequestById(req.params.id);
+  res.json({ event: evt, trackingRequest: updated });
+});
+
+// --- Event CRUD: delete a single event ---
+router.delete('/tracking/:id/events/:eventId', (req, res) => {
+  const ok = deleteTrackingEvent(req.params.id, req.params.eventId);
+  if (!ok) return res.status(404).json({ error: 'NOT_FOUND', message: 'Event not found.' });
+  const updated = getTrackingRequestById(req.params.id);
+  res.json({ success: true, trackingRequest: updated });
 });
 
 export default router;

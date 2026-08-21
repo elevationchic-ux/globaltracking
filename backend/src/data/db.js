@@ -230,6 +230,7 @@ export function createTrackingRequest(data) {
     durationHours: data.durationHours || null,
     currentLocation: data.currentLocation || data.origin,
     departureAt: data.departureAt || null,
+    transportMode: data.transportMode || 'air',
     sender: data.sender || null,
     receiver: data.receiver || null,
     product: data.product || null,
@@ -266,6 +267,9 @@ export function addTrackingEvent(trackingId, event) {
     status: event.status || req.status,
     description: event.description || '',
     location: event.location || null,
+    lat: event.lat != null ? parseFloat(event.lat) : null,
+    lng: event.lng != null ? parseFloat(event.lng) : null,
+    transportMode: event.transportMode || null,
     image: event.image || null,
     timestamp: event.timestamp || new Date().toISOString(),
   };
@@ -277,9 +281,40 @@ export function addTrackingEvent(trackingId, event) {
   if (event.location) {
     req.currentLocation = event.location;
   }
+  if (event.transportMode) {
+    req.transportMode = event.transportMode;
+  }
   req.updatedAt = new Date().toISOString();
   save(db);
   return evt;
+}
+
+export function updateTrackingEvent(trackingId, eventId, updates) {
+  const req = db.trackingRequests.find((t) => t.id === trackingId);
+  if (!req) return null;
+  const evt = req.events.find((e) => e.id === eventId);
+  if (!evt) return null;
+  if (updates.status != null) evt.status = updates.status;
+  if (updates.description != null) evt.description = updates.description;
+  if (updates.location != null) evt.location = updates.location;
+  if (updates.lat != null) evt.lat = parseFloat(updates.lat);
+  if (updates.lng != null) evt.lng = parseFloat(updates.lng);
+  if (updates.transportMode != null) evt.transportMode = updates.transportMode;
+  if (updates.timestamp != null) evt.timestamp = updates.timestamp;
+  req.updatedAt = new Date().toISOString();
+  save(db);
+  return evt;
+}
+
+export function deleteTrackingEvent(trackingId, eventId) {
+  const req = db.trackingRequests.find((t) => t.id === trackingId);
+  if (!req) return false;
+  const idx = req.events.findIndex((e) => e.id === eventId);
+  if (idx === -1) return false;
+  req.events.splice(idx, 1);
+  req.updatedAt = new Date().toISOString();
+  save(db);
+  return true;
 }
 
 // --- Credits (token/coin system) ---

@@ -381,6 +381,69 @@ const isActive = (s) => ACTIVE_STATUSES.includes(s.status);
 const ALIASES_KEY = 'globaltrack:aliases';
 const THEME_KEY = 'globaltrack:theme';
 
+/**
+ * Convert admin API shipment data to the globe SHIPMENTS shape.
+ * The backend /api/shipments endpoint already returns data in this format,
+ * so this is mostly a pass-through with timezone enrichment.
+ */
+function adminToShipment(a) {
+  return {
+    ...a,
+    from: a.from || { name: 'Unknown', lat: 0, lng: 0, tz: 'UTC' },
+    to: a.to || { name: 'Unknown', lat: 0, lng: 0, tz: 'UTC' },
+  };
+}
+
+/**
+ * Compute real-time interpolated progress (0..1) for admin shipments.
+ * Uses the timeline events to find the last completed and next pending step,
+ * then linearly interpolates based on elapsed wall-clock time.
+ */
+function computeInterpolatedProgress(shipment) {
+  const timeline = shipment.timeline || [];
+  if (timeline.length === 0) return shipment.progress / 100 || 0;
+
+  const now = Date.now();
+  let lastCompletedIdx = -1;
+  let nextPendingIdx = -1;
+
+  for (let i = 0; i < timeline.length; i++) {
+    if (timeline[i].completed) {
+      lastCompletedIdx = i;
+    } else if (nextPendingIdx === -1) {
+      nextPendingIdx = i;
+    }
+  }
+
+  // All completed = 100%
+  if (nextPendingIdx === -1) return 1;
+  // None completed = start
+  if (lastCompletedIdx === -1) return 0;
+
+  const lastTime = timeline[lastCompletedIdx].time;
+  const nextTime = timeline[nextPendingIdx].time;
+
+  // If either time is 'Pending' or unparseable, fall back to simple ratio
+  const lastMs = new Date(lastTime).getTime();
+  const nextMs = new Date(nextTime).getTime();
+
+  if (isNaN(lastMs) || isNaN(nextMs) || nextMs <= lastMs) {
+    // Simple fallback: completed steps / total steps
+    return (lastCompletedIdx + 1) / timeline.length;
+  }
+
+  // Linear interpolation based on wall-clock time
+  const elapsed = now - lastMs;
+  const total = nextMs - lastMs;
+  const ratio = Math.min(1, Math.max(0, elapsed / total));
+
+  // Map back to overall progress (0..1)
+  const stepSize = 1 / timeline.length;
+  const baseProgress = (lastCompletedIdx + 1) / timeline.length;
+  const interpolated = baseProgress - stepSize + stepSize * ratio;
+  return Math.min(1, Math.max(0, interpolated));
+}
+
 const GlobalTrackContext = createContext(null);
 
 export const GlobalTrackProvider = ({ children }) => {
@@ -402,7 +465,37 @@ export const GlobalTrackProvider = ({ children }) => {
       /* storage unavailable */
     }
   }, []);
-  const shipments = SHIPMENTS;
+
+  // ── Fetch admin shipments from public API and merge with hardcoded data ──
+  const [adminShipments, setAdminShipments] = useState([]);
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchAdminShipments() {
+      try {
+        const res = await fetch('/api/shipments');
+        if (res.ok) {
+          const data = await res.json().catch(() => null);
+          if (!cancelled && data?.shipments) {
+            setAdminShipments(data.shipments.map(adminToShipment));
+          }
+        }
+      } catch {
+        /* API not available (e.g. dev without backend) — use hardcoded only */
+      }
+    }
+    fetchAdminShipments();
+    // Refresh every 30 seconds to pick up admin changes
+    const interval = setInterval(fetchAdminShipments, 30000);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, []);
+
+  // Merge hardcoded demo shipments with admin-created ones.
+  // Admin shipments that share a tracking number with a demo shipment are deduplicated.
+  const shipments = useMemo(() => {
+    const demoNums = new Set(SHIPMENTS.map((s) => s.trackingNumber));
+    const newAdmin = adminShipments.filter((a) => !demoNums.has(a.trackingNumber));
+    return [...SHIPMENTS, ...newAdmin];
+  }, [adminShipments]);
 
   // User-defined aliases ("Nike shoes  birthday") persisted locally.
   const [aliases, setAliases] = useState(() => {
@@ -453,10 +546,16 @@ export const GlobalTrackProvider = ({ children }) => {
   const setSpeed = useCallback((n) => setPlayback((p) => ({ ...p, speed: n })), []);
 
   // Live progress per shipment (0..1), initialized from static progress.
+  // Admin shipments use real-time interpolation between events.
   const initialProgress = useMemo(() => {
     const map = {};
     shipments.forEach((s) => {
-      map[s.id] = Math.max(0, Math.min(1, (s.progress ?? 0) / 100));
+      // Admin shipments (id starts with 'tr-') use interpolated progress
+      if (s.id?.startsWith('tr-')) {
+        map[s.id] = computeInterpolatedProgress(s);
+      } else {
+        map[s.id] = Math.max(0, Math.min(1, (s.progress ?? 0) / 100));
+      }
     });
     return map;
   }, [shipments]);
@@ -466,6 +565,11 @@ export const GlobalTrackProvider = ({ children }) => {
   // rAF animation clock. Per-frame values held in a ref, committed to state
   // on a ~20fps throttle to avoid re-render storms.
   const progressRef = useRef({ ...initialProgress });
+  // Keep ref in sync when shipments change (new admin data fetched)
+  useEffect(() => {
+    progressRef.current = { ...progressRef.current, ...initialProgress };
+    setProgressById((prev) => ({ ...prev, ...initialProgress }));
+  }, [initialProgress]);
   const playbackRef = useRef(playback);
   useEffect(() => {
     playbackRef.current = playback;
@@ -491,6 +595,8 @@ export const GlobalTrackProvider = ({ children }) => {
         const next = progressRef.current;
         for (const s of shipments) {
           if (!isActive(s)) continue;
+          // Admin shipments use real-time interpolation, not playback animation
+          if (s.id?.startsWith('tr-')) continue;
           let v = (next[s.id] ?? 0) + delta;
           if (v >= 1) v -= 1; // wrap 1 -> 0
           next[s.id] = v;

@@ -84,7 +84,7 @@ const LiveMapView = ({ shipment, focusStep, onClose }) => {
   // Real route figures  computed, never hardcoded.
   const routeStats = useMemo(() => {
     const distanceKm = haversineKm(shipment.from, shipment.to);
-    const hours = estimateTransitHours(distanceKm, shipment.mode === 'air' ? 'air' : 'ground');
+    const hours = estimateTransitHours(distanceKm, shipment.mode || 'ground');
     return { distanceKm, hours };
   }, [shipment]);
 
@@ -120,7 +120,11 @@ const LiveMapView = ({ shipment, focusStep, onClose }) => {
     const to = [shipment.to.lat, shipment.to.lng];
     const arc = arcBetween(from, to);
 
-    L.polyline(arc, { color: '#06b6d4', weight: 2.5, opacity: 0.85, dashArray: '6 8' }).addTo(map);
+    // Color the route by transport mode
+    const MODE_COLORS = { air: '#06b6d4', ground: '#22c55e', sea: '#3b82f6', rail: '#a855f7' };
+    const routeColor = MODE_COLORS[shipment.mode] || '#06b6d4';
+
+    L.polyline(arc, { color: routeColor, weight: 2.5, opacity: 0.85, dashArray: '6 8' }).addTo(map);
 
     // Origin / destination markers.
     L.marker(from, {
@@ -245,7 +249,7 @@ const LiveMapView = ({ shipment, focusStep, onClose }) => {
         </span>
         <span>
           {formatDistance(routeStats.distanceKm)} · {formatDuration(routeStats.hours)}{' '}
-          {shipment.mode === 'air' ? '✈' : '🚚'}
+          {shipment.mode === 'air' ? '✈' : shipment.mode === 'sea' ? '🚢' : shipment.mode === 'rail' ? '🚂' : '🚚'}
         </span>
       </div>
     </div>

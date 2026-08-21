@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import Globe from 'react-globe.gl';
-import { Plane, Truck, X } from 'lucide-react';
+import { Plane, Truck, Ship, TrainFront, X } from 'lucide-react';
 import { useGlobalTrack, LOGISTICS_HUBS } from '../context/GlobalTrackContext';
 
 // Theme → globe texture (three-globe example imgs, unpkg CDN).
@@ -59,6 +59,8 @@ const markerObjCache = new Map();
 const MARKER_SVGS = {
   air: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
   ground: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>`,
+  sea: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/><path d="M19 12V6l-7-3-7 3v2"/><path d="M12 3v9"/></svg>`,
+  rail: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>`,
 };
 
 const GlobeMap = () => {
@@ -245,7 +247,7 @@ const GlobeMap = () => {
       el.className = playback.isPlaying ? 'marker-glow marker-live' : 'marker-glow';
       el.style.cssText = `color: ${STATUS_COLORS[d.status]}; cursor: pointer; pointer-events: auto; line-height: 0;`;
       el.title = `${d.status} · ${d.carrier} → ${d.to.name}`;
-      el.innerHTML = MARKER_SVGS[d.mode === 'air' ? 'air' : 'ground'];
+      el.innerHTML = MARKER_SVGS[d.mode] || MARKER_SVGS.ground;
       return el;
     },
     [playback.isPlaying]
@@ -362,6 +364,10 @@ const GlobeMap = () => {
               <span className="text-white font-mono flex items-center">
                 {selectedShipment.mode === 'air' ? (
                   <Plane className="w-4 h-4 mr-1" />
+                ) : selectedShipment.mode === 'sea' ? (
+                  <Ship className="w-4 h-4 mr-1" />
+                ) : selectedShipment.mode === 'rail' ? (
+                  <TrainFront className="w-4 h-4 mr-1" />
                 ) : (
                   <Truck className="w-4 h-4 mr-1" />
                 )}

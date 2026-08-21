@@ -275,6 +275,15 @@ export default function ResultsPage() {
               <span className="shipment-label">{t('results.carrier')}</span>
               <span>{state.data.carrier.name}</span>
             </div>
+            {state.data.shipment.transportMode && (
+              <div className="shipment-row">
+                <span className="shipment-label">{t('results.transportMode')}</span>
+                <span className="transport-mode-badge">
+                  {state.data.shipment.transportMode === 'air' ? '✈' : state.data.shipment.transportMode === 'sea' ? '🚢' : state.data.shipment.transportMode === 'rail' ? '🚂' : '🚛'}
+                  {' '}{t(`admin.${state.data.shipment.transportMode}`) || state.data.shipment.transportMode}
+                </span>
+              </div>
+            )}
             {effectiveCarrier && (
               <div className="shipment-row">
                 <span className="shipment-label">{t('results.region')}</span>
@@ -291,7 +300,50 @@ export default function ResultsPage() {
               <span className="shipment-label">{t('results.destination')}</span>
               <span>{formatPlace(state.data.shipment.destination)}</span>
             </div>
+            {state.data.shipment.distanceKm && (
+              <div className="shipment-row">
+                <span className="shipment-label">{t('results.distance')}</span>
+                <span>{state.data.shipment.distanceKm} km</span>
+              </div>
+            )}
+            {state.data.shipment.durationHours && (
+              <div className="shipment-row">
+                <span className="shipment-label">{t('results.duration')}</span>
+                <span>{state.data.shipment.durationHours}</span>
+              </div>
+            )}
           </section>
+
+          {/* Shipment manifest: sender, receiver, product, shipping type */}
+          {(state.data.shipment.sender || state.data.shipment.receiver || state.data.shipment.product || state.data.shipment.shippingType) && (
+            <section className="shipment-card manifest-section">
+              <h3 className="manifest-title">{t('results.manifest')}</h3>
+              {state.data.shipment.sender && (state.data.shipment.sender.name || state.data.shipment.sender.location) && (
+                <div className="shipment-row">
+                  <span className="shipment-label">{t('results.sender')}</span>
+                  <span>{state.data.shipment.sender.name || '-'}{state.data.shipment.sender.location ? ` · ${state.data.shipment.sender.location}` : ''}</span>
+                </div>
+              )}
+              {state.data.shipment.receiver && (state.data.shipment.receiver.name || state.data.shipment.receiver.address) && (
+                <div className="shipment-row">
+                  <span className="shipment-label">{t('results.receiver')}</span>
+                  <span>{state.data.shipment.receiver.name || '-'}{state.data.shipment.receiver.address ? ` · ${state.data.shipment.receiver.address}` : ''}</span>
+                </div>
+              )}
+              {state.data.shipment.product && (
+                <div className="shipment-row">
+                  <span className="shipment-label">{t('results.product')}</span>
+                  <span>{state.data.shipment.product}</span>
+                </div>
+              )}
+              {state.data.shipment.shippingType && (
+                <div className="shipment-row">
+                  <span className="shipment-label">{t('results.shippingType')}</span>
+                  <span>{state.data.shipment.shippingType}</span>
+                </div>
+              )}
+            </section>
+          )}
 
           <section className="timeline-section">
             <h2>{t('results.history')}</h2>

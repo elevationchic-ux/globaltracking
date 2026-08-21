@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { Router } from 'express';
 import { getAdapterForTrackingNumber, listCarriers } from '../carriers/registry.js';
+import { getTrackingRequests } from '../data/db.js';
 
 const router = Router();
 
@@ -32,6 +33,90 @@ const setCached = (key, body) => {
 router.get('/carriers', (_req, res) => {
   res.json({ carriers: listCarriers() });
 });
+
+/**
+ * Public endpoint: return all admin-created tracking requests in a
+ * globe-friendly format.  No auth required (visitor-facing globe).
+ * Cached with a 30-second TTL to avoid hammering the data store.
+ */
+const SHIPMENTS_CACHE_TTL = 30 * 1000;
+let shipmentsCache = { body: null, expiresAt: 0 };
+
+router.get('/shipments', (_req, res) => {
+  if (shipmentsCache.body && Date.now() < shipmentsCache.expiresAt) {
+    return res.json(shipmentsCache.body);
+  }
+  const requests = getTrackingRequests();
+  const shipments = requests.map((req) => ({
+    id: req.id,
+    trackingNumber: req.trackingNumber,
+    status: statusToGlobe(req.status),
+    originCarrier: req.carrier || 'Unknown',
+    finalCarrier: req.carrier || 'Unknown',
+    service: req.shippingType || 'Standard',
+    weight: null,
+    pieces: 1,
+    from: {
+      name: req.origin?.city || 'Unknown',
+      lat: req.origin?.lat || 0,
+      lng: req.origin?.lng || 0,
+      tz: 'UTC',
+    },
+    to: {
+      name: req.destination?.city || 'Unknown',
+      lat: req.destination?.lat || 0,
+      lng: req.destination?.lng || 0,
+      tz: 'UTC',
+    },
+    mode: req.transportMode || 'air',
+    transportMode: modeLabel(req.transportMode),
+    elapsedTime: null,
+    distanceKm: req.distanceKm || null,
+    estimatedArrival: null,
+    progress: computeProgress(req),
+    timeline: (req.events || []).map((evt) => ({
+      label: evt.description || evt.status || 'Event',
+      completed: isEventCompleted(evt.status),
+      time: evt.timestamp || 'Pending',
+      tz: 'UTC',
+    })),
+    sender: req.sender || null,
+    receiver: req.receiver || null,
+    product: req.product || null,
+    shippingType: req.shippingType || null,
+    agent: { name: 'GlobalTrack', role: 'Admin', status: 'Online' },
+  }));
+  shipmentsCache = { body: { shipments }, expiresAt: Date.now() + SHIPMENTS_CACHE_TTL };
+  res.json(shipmentsCache.body);
+});
+
+function statusToGlobe(s) {
+  const map = {
+    INFO_RECEIVED: 'PENDING',
+    IN_TRANSIT: 'IN TRANSIT',
+    OUT_FOR_DELIVERY: 'OUT FOR DELIVERY',
+    DELIVERED: 'DELIVERED',
+    EXCEPTION: 'EXCEPTION',
+    RETURNED: 'EXCEPTION',
+  };
+  return map[s] || s;
+}
+
+function modeLabel(mode) {
+  const map = { air: 'Air Freight', ground: 'Ground Express', sea: 'Sea Freight', rail: 'Rail Freight' };
+  return map[mode] || 'Air Freight';
+}
+
+function computeProgress(req) {
+  const events = req.events || [];
+  if (events.length === 0) return 0;
+  const completed = events.filter((e) => isEventCompleted(e.status)).length;
+  return Math.round((completed / Math.max(events.length, 1)) * 100);
+}
+
+function isEventCompleted(status) {
+  return status === 'DELIVERED' || status === 'OUT_FOR_DELIVERY' || status === 'IN_TRANSIT';
+}
 
 router.get('/track/:number', async (req, res, next) => {
   try {
