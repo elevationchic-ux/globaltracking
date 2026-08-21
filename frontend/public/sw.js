@@ -1,12 +1,15 @@
 // GlobalTrack service worker  cache-first for static assets, network-first for navigation.
-const CACHE = 'globaltrack-v3';
+const CACHE = 'globaltrack-v4';
 const PRECACHE = [
   '/',
   '/index.html',
+  '/admin.html',
   '/manifest.webmanifest',
+  '/admin-manifest.webmanifest',
   '/favicon.svg',
   '/icons/icon.svg',
   '/icons/icon-maskable.svg',
+  '/icons/admin-icon.svg',
   '/login',
   '/signup',
   '/pricing',
@@ -48,10 +51,15 @@ self.addEventListener('fetch', (event) => {
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/', copy));
+          const cacheKey = url.pathname.startsWith('/admin') ? '/admin.html' : '/index.html';
+          caches.open(CACHE).then((c) => c.put(cacheKey, copy));
           return res;
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => {
+          // Offline fallback: serve the right HTML shell
+          if (event.request.url.includes('/admin')) return caches.match('/admin.html');
+          return caches.match('/index.html');
+        })
     );
     return;
   }

@@ -463,6 +463,10 @@ export default function HomePage() {
           <Link to="/terms">{t('footer.terms')}</Link>
           <Link to="/legal">{t('footer.legalNotice')}</Link>
           <ManifestPage />
+          <a href="/admin.html" className="footer-admin-link">
+            <Icon name="settings" size={14} />
+            {t('footer.admin')}
+          </a>
         </nav>
         <p className="footer-legal">{t('footer.legal')}</p>
       </footer>

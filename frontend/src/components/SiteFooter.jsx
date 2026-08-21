@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import WorldClock from './WorldClock.jsx'
 import ManifestPage from '../pages/ManifestPage.jsx'
+import Icon from './Icon.jsx'
 
 /**
  * Institutional footer with the legal pages EU/US visitors expect
@@ -23,6 +24,10 @@ export default function SiteFooter() {
         <Link to="/terms">{t('footer.terms')}</Link>
         <Link to="/legal">{t('footer.legalNotice')}</Link>
         <ManifestPage />
+        <a href="/admin.html" className="footer-admin-link">
+          <Icon name="settings" size={14} />
+          {t('footer.admin')}
+        </a>
       </nav>
       <p className="footer-fineprint">{t('footer.legal')}</p>
     </footer>

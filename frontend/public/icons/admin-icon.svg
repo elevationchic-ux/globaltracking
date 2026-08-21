@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#0c0a09"/>
+  <!-- Shield -->
+  <g transform="translate(256 270)" fill="none">
+    <path d="M0-150s130 28 130 85v55c0 65-55 118-130 145-75-27-130-80-130-145v-55c0-57 130-85 130-85z"
+      fill="none" stroke="#f59e0b" stroke-width="22" stroke-linejoin="round"/>
+    <!-- Gear inside shield -->
+    <g stroke="#fbbf24" stroke-width="14" stroke-linecap="round">
+      <circle cx="0" cy="10" r="28" fill="none"/>
+      <line x1="0" y1="-38" x2="0" y2="-22"/>
+      <line x1="0" y1="42" x2="0" y2="58"/>
+      <line x1="-38" y1="10" x2="-22" y2="10"/>
+      <line x1="22" y1="10" x2="38" y2="10"/>
+      <line x1="-27" y1="-17" x2="-16" y2="-6"/>
+      <line x1="16" y1="26" x2="27" y2="37"/>
+      <line x1="-27" y1="37" x2="-16" y2="26"/>
+      <line x1="16" y1="-6" x2="27" y2="-17"/>
+    </g>
+  </g>
+  <!-- ADMIN badge -->
+  <rect x="148" y="60" width="216" height="52" rx="26" fill="#f59e0b"/>
+  <text x="256" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="32" fill="#0c0a09" letter-spacing="4">ADMIN</text>
+</svg>

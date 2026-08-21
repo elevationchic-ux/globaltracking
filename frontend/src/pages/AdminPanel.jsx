@@ -11,11 +11,11 @@ import UserList from '../components/admin/UserList.jsx'
 import './AdminPanel.css'
 
 const SECTIONS = [
-  { id: 'dashboard', icon: '📊', label: 'admin.dashboard' },
-  { id: 'agents', icon: '👥', label: 'admin.agents' },
-  { id: 'chats', icon: '💬', label: 'admin.chats' },
-  { id: 'tracking', icon: '📦', label: 'admin.tracking' },
-  { id: 'users', icon: '👤', label: 'admin.users' },
+  { id: 'dashboard', icon: 'bar-chart', label: 'admin.dashboard' },
+  { id: 'agents', icon: 'building', label: 'admin.agents' },
+  { id: 'chats', icon: 'message-circle', label: 'admin.chats' },
+  { id: 'tracking', icon: 'package', label: 'admin.tracking' },
+  { id: 'users', icon: 'user', label: 'admin.users' },
 ]
 
 export default function AdminPanel() {
@@ -49,6 +49,12 @@ export default function AdminPanel() {
 
   return (
     <div className="admin-shell">
+      {/* Mobile backdrop */}
+      <div
+        className={`admin-sidebar-backdrop ${sidebarOpen ? 'admin-backdrop-visible' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
       {/* Sidebar */}
       <aside className={`admin-sidebar ${sidebarOpen ? 'admin-sidebar-open' : ''}`}>
         <div className="admin-sidebar-header">
@@ -66,7 +72,7 @@ export default function AdminPanel() {
               className={`admin-nav-item ${section === s.id ? 'active' : ''}`}
               onClick={() => { setSection(s.id); setSidebarOpen(false) }}
             >
-              <span className="admin-nav-icon">{s.icon}</span>
+              <span className="admin-nav-icon"><Icon name={s.icon} size={18} /></span>
               <span className="admin-nav-label">{t(s.label)}</span>
             </button>
           ))}
@@ -80,8 +86,8 @@ export default function AdminPanel() {
       {/* Main content */}
       <div className="admin-main">
         <header className="admin-topbar">
-          <button className="admin-menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
-            ☰
+          <button className="admin-menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle menu">
+            <Icon name="menu" size={20} />
           </button>
           <h2 className="admin-page-title">{t(SECTIONS.find((s) => s.id === section)?.label || '')}</h2>
           <div className="admin-topbar-right">

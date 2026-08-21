@@ -76,6 +76,7 @@ const dictionaries = {
     'footer.privacy': 'Privacy Policy',
     'footer.terms': 'Terms of Use',
     'footer.legalNotice': 'Legal Notice',
+    'footer.admin': 'Admin',
     'footer.disclaimerShort':
       'GlobalTrack is an independent tracking tool  we are neither the seller nor the carrier of your goods.',
     'consent.text':
@@ -574,7 +575,8 @@ const dictionaries = {
     'footer.about': 'À propos',
     'footer.privacy': 'Politique de confidentialité',
     'footer.terms': 'Conditions d’utilisation',
-    'footer.legalNotice': 'Mentions légales',
+    'footer.legalNotice': 'Mentions l\u00e9gales',
+    'footer.admin': 'Admin',
     'footer.disclaimerShort':
       'GlobalTrack est un outil de suivi indépendant  nous ne sommes ni le vendeur ni le transporteur de vos marchandises.',
     'consent.text':
@@ -1071,6 +1073,7 @@ const dictionaries = {
     'footer.privacy': 'Política de privacidad',
     'footer.terms': 'Condiciones de uso',
     'footer.legalNotice': 'Aviso legal',
+    'footer.admin': 'Admin',
     'footer.disclaimerShort':
       'GlobalTrack es una herramienta de seguimiento independiente  no somos ni el vendedor ni el transportista de tus mercancías.',
     'consent.text':
@@ -1564,6 +1567,7 @@ const dictionaries = {
     'footer.privacy': 'Datenschutzerklärung',
     'footer.terms': 'Nutzungsbedingungen',
     'footer.legalNotice': 'Impressum',
+    'footer.admin': 'Admin',
     'footer.disclaimerShort':
       'GlobalTrack ist ein unabhängiges Tracking-Tool  wir sind weder Verkäufer noch Carrier deiner Ware.',
     'consent.text':
